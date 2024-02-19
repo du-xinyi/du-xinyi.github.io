@@ -108,4 +108,8 @@
   {% endunless %}
 
   {% include metadata-hook.html %}
+
+  {% if site.baidu-analysis %}
+    {% include baidu-analysis.html %}
+  {% endif %}
 </head>
