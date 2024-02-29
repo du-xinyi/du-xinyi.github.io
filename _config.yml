@@ -63,13 +63,11 @@ analytics:
   goatcounter:
     id: # fill in your GoatCounter ID
 
-<<<<<<< HEAD
-baidu-analysis: 1e6443d237dbba1ff310838e51fc2016
-=======
 # Pageviews settings
 pageviews:
   provider: # now only supports 'goatcounter'
->>>>>>> source/master
+
+baidu-analysis: 1e6443d237dbba1ff310838e51fc2016
 
 # Prefer color scheme setting.
 #
