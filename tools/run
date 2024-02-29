@@ -2,4 +2,4 @@
 #
 # Run jekyll serve and then launch the site
 
-bundle exec jekyll s
+bundle exec jekyll s --post 3000 
