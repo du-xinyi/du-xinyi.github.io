@@ -27,7 +27,6 @@ sudo apt-get install -y libssl-dev
 ### 添加udev规则
 ```bash
 sudo cp config/99-realsense-libusb.rules /etc/udev/rules.d/
-sudo cp config/99-realsense-d4xx-mipi-dfu.rules  /etc/udev/rules.d/
 sudo udevadm control --reload-rules && udevadm trigger 
 ```
 
