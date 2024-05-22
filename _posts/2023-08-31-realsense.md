@@ -3,7 +3,6 @@ title: RealSense
 date: 2023-08-31 18:30:00 +0800
 categories: [Notepad]
 tags: [ros, intel, realsense]
-img_path: 'posts/2023-08-31-realsense/'
 math: true
 ---
 
@@ -41,7 +40,7 @@ sudo make install
 
 ### 测试安装结果
 终端输入`realsense-viewer`，若能打开如下界面则安装成功。  
-![Alt text](realsense-viewer.png)
+![Alt text](posts/2023-08-31-realsense/realsense-viewer.png)
 
 ## 配置realsense ros
 - 方法一 apt安装

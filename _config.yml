@@ -95,10 +95,10 @@ theme_mode: # [light | dark]
 # will be added to all media resources (site avatar, posts' images, audio and video files) paths starting with '/'
 #
 # e.g. 'https://cdn.com'
-img_cdn: "https://raw.githubusercontent.com/du-xinyi/du-xinyi.github.io/master/assets/img/"
+cdn: "https://raw.githubusercontent.com/du-xinyi/du-xinyi.github.io/master/assets/img/"
 
 # the avatar on sidebar, support local or CORS resources
-avatar: avatar/avatar.png
+avatar: "avatar/avatar.png"
 
 # The URL of the site-wide social preview image used in SEO `og:image` meta tag.
 # It can be overridden by a customized `page.image` in front matter.

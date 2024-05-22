@@ -3,7 +3,6 @@ title: 容器
 date: 2023-10-21 21:30:00 +0800
 categories: [C++]
 tags: [c++, 容器]
-img_path: 'posts/2023-10-21-container/'
 math: true
 ---
 
