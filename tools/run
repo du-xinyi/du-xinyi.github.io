@@ -2,9 +2,6 @@
 #
 # Run jekyll serve and then launch the site
 
-<<<<<<< HEAD
-bundle exec jekyll s --port 3000
-=======
 prod=false
 command="bundle exec jekyll s -l"
 host="127.0.0.1"
@@ -51,4 +48,3 @@ fi
 
 echo -e "\n> $command\n"
 eval "$command"
->>>>>>> source/master
