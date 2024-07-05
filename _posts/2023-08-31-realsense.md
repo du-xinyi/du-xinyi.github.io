@@ -1,21 +1,25 @@
 ---
 title: RealSense
 date: 2023-08-31 18:30:00 +0800
-categories: [Notepad]
-tags: [ros, intel, realsense]
+categories: [ Notepad ]
+tags: [ ros, intel, realsense ]
 math: true
 ---
 
 # RealSense环境配置
+
 ## 安装librealsense
+
 参考librealsense的github官方教程[distribution_linux](https://github.com/IntelRealSense/librealsense/blob/master/doc/distribution_linux.md)
 
 ### 下载librealsense源码
+
 ```bash
 git clone https://github.com/IntelRealSense/librealsense.git
 ```
 
 ### 安装依赖项
+
 ```bash
 sudo apt-get install -y libudev-dev pkg-config libgtk-3-dev
 sudo apt-get install -y libusb-1.0-0-dev pkg-config
@@ -24,12 +28,14 @@ sudo apt-get install -y libssl-dev
 ```
 
 ### 添加udev规则
+
 ```bash
 sudo cp config/99-realsense-libusb.rules /etc/udev/rules.d/
 sudo udevadm control --reload-rules && udevadm trigger 
 ```
 
 ### 编译librealsense
+
 ```bash
 mkdir build
 cd build
@@ -39,16 +45,19 @@ sudo make install
 ```
 
 ### 测试安装结果
+
 终端输入`realsense-viewer`，若能打开如下界面则安装成功。  
 ![Alt text](posts/2023-08-31-realsense/realsense-viewer.png)
 
 ## 配置realsense ros
+
 - 方法一 apt安装
 
 ```bash
 sudo apt install ros-noetic-realsense2-camera ros-noetic-realsense2-camera-dbgsym ros-noetic-realsense2-description
 sudo apt install ros-noetic-ddynamic-reconfigure
 ```
+
 - 方法二 下载realsense ros包
 
 ```bash
@@ -57,39 +66,51 @@ git clone https://github.com/IntelRealSense/realsense-ros.git
 git clone https://github.com/pal-robotics/ddynamic_reconfigure.git
 cd ~/catkin_ws && catkin_make
 ```
+
 **注意realsense ros1和ros2的分支**
 
-## 安装rgbd-launch并测试编译结果 
+## 安装rgbd-launch并测试编译结果
+
 ```bash
 sudo apt-get install ros-noetic-rgbd-launch
 ```
+
 ```bash
 roslaunch realsense2_camera demo_pointcloud.launch 
 ```
+
 ![Alt text](pointcloud.png)  
 **写在最后**  
 使用`rosrun rqt_reconfigure rqt_reconfigure`时可能会出现
+
 ```bash
 ValueError: PyCapsule_GetPointer called with incorrect name
 ```
+
 的错误，解决方法如下
 
 卸载PyQt5，替换为python3-pyqt5
+
 ```bash
 sudo pip uninstall PyQt5
 sudo apt-get install python3-pyqt5
 ```
+
 再重新安装rqt-reconfigure
+
 ```bash
 sudo apt-get purge ros-noetic-rqt-reconfigure
 sudo apt-get install ros-noetic-rqt-reconfigure
 ```
 
 # ROS环境开发
+
 ## launch文件
+
 - enable_depth
 
-布尔型变量，默认为`true`，用于指定传感器是否发布深度相关Topic。其主要影响`/camera/depth/`相关Topic的发布。  
+布尔型变量，默认为`true`，用于指定传感器是否发布深度相关Topic。其主要影响`/camera/depth/`相关Topic的发布。
+
 ```bash
 /camera/depth/camera_info
 /camera/depth/color/points
@@ -107,7 +128,8 @@ sudo apt-get install ros-noetic-rqt-reconfigure
 
 - enable_depth
 
-布尔型变量，默认为`true`，用于指定传感器是否发布深度相关Topic。其主要影响/camera/depth/相关Topic的发布。  
+布尔型变量，默认为`true`，用于指定传感器是否发布深度相关Topic。其主要影响/camera/depth/相关Topic的发布。
+
 ```bash
 /camera/depth/camera_info
 /camera/depth/color/points
@@ -125,7 +147,9 @@ sudo apt-get install ros-noetic-rqt-reconfigure
 
 - enable_infra
 
-一共包括`enable_infra`、`enable_infra1`、`enable_infra2`三个变量，用于控制是否输出红外影像。`enable_infra1`、`enable_infra2`分别表示左、右红外相机的影像。这三个变量默认都为false。其主要影响`/camera/infra1/`和`/camera/infra2/`相关Topic的发布。  
+一共包括`enable_infra`、`enable_infra1`、`enable_infra2`三个变量，用于控制是否输出红外影像。`enable_infra1`、`enable_infra2`
+分别表示左、右红外相机的影像。这三个变量默认都为false。其主要影响`/camera/infra1/`和`/camera/infra2/`相关Topic的发布。
+
 ```bash
 /camera/infra1/camera_info
 /camera/infra1/image_rect_raw
@@ -151,12 +175,14 @@ sudo apt-get install ros-noetic-rqt-reconfigure
 /camera/infra2/image_rect_raw/theora/parameter_descriptions
 /camera/infra2/image_rect_raw/theora/parameter_updates
 ```
+
 **注意**  
 `enable_infra`并不会真正影响红外影像的发布，真正影像开关的是`enable_infra1`和`enable_infra2`
 
 - enable_color
 
-布尔型变量，默认为`true`，用于指定RGB相机是否发布RGB影像相关Topic。其主要影响`/camera/color/`相关Topic的发布。  
+布尔型变量，默认为`true`，用于指定RGB相机是否发布RGB影像相关Topic。其主要影响`/camera/color/`相关Topic的发布。
+
 ```bash
 /camera/color/camera_info
 /camera/color/image_raw
@@ -173,7 +199,8 @@ sudo apt-get install ros-noetic-rqt-reconfigure
 
 - enable_gyro
 
-布尔型变量，默认为`false`，用于指定陀螺仪是否发布相关Topic。其主要影响`/camera/gyro/`相关Topic的发布。  
+布尔型变量，默认为`false`，用于指定陀螺仪是否发布相关Topic。其主要影响`/camera/gyro/`相关Topic的发布。
+
 ```bash
 /camera/gyro/imu_info
 /camera/gyro/sample
@@ -181,7 +208,8 @@ sudo apt-get install ros-noetic-rqt-reconfigure
 
 - enable_accel
 
-布尔型变量，默认为`false`，用于指定加速度计是否发布相关Topic。其主要影响`/camera/accel/`相关Topic的发布。  
+布尔型变量，默认为`false`，用于指定加速度计是否发布相关Topic。其主要影响`/camera/accel/`相关Topic的发布。
+
 ```bash
 /camera/accel/imu_info
 /camera/accel/sample
@@ -193,7 +221,10 @@ sudo apt-get install ros-noetic-rqt-reconfigure
 
 - align_depth
 
-布尔型变量，默认为`false`，用于将图像对齐，其并不会修改之前发出的Topic，而是重新发出两类多个Topic：`/camera/aligned_depth_to_color`和`/camera/aligned_depth_to_infra1`。  
+布尔型变量，默认为`false`
+，用于将图像对齐，其并不会修改之前发出的Topic，而是重新发出两类多个Topic：`/camera/aligned_depth_to_color`
+和`/camera/aligned_depth_to_infra1`。
+
 ```bash
 /camera/aligned_depth_to_color/camera_info
 /camera/aligned_depth_to_color/image_raw
@@ -221,11 +252,13 @@ sudo apt-get install ros-noetic-rqt-reconfigure
 ```
 
 ## 启动相机节点
+
 ```bash
 roslaunch realsense2_camera rs_camera.launch
 ```
 
 ### 发布的Topic
+
 - 带有info的Topic: 获得传感器相关信息
 - 带有compress的Topic: 经过压缩后的数据流，大小更小。但同时数据的质量可能会有一定的下降
 - 带有raw的Topic: 与压缩的数据流对应，未经过压缩的原始数据流
@@ -234,7 +267,9 @@ roslaunch realsense2_camera rs_camera.launch
 - 其它Topic: 获得加速度计或陀螺仪的数据，订阅/camera/gyro/sample和/camera/accel/sample
 
 ### 修改参数
+
 #### 支持的分辨率和帧率
+
 - 单目相机(RGB影像)
   - 分辨率： 320×180,320×240,424×240,640×360,640×480,848×480,960×540,1280×720,1920×1080
   - 帧率： 6,15,30,60
@@ -248,7 +283,9 @@ roslaunch realsense2_camera rs_camera.launch
 > 注：需要同时修改分辨率和帧率才能保证参数生效
 
 ### camera_info参数
+
 以彩色图像为例
+
 ```bash
 header: 
   seq: 1
@@ -273,10 +310,11 @@ roi:
   do_rectify: False
 ---
 ```
+
 - header: 标准消息头  
   seq: 表示消息的序列ID，连续递增  
   stamp: 包括两个字段 secs（秒）和nsecs（纳秒），表示消息的时间戳  
-  frame_id：与此数据相关联的帧ID  
+  frame_id：与此数据相关联的帧ID
 - height: 图像的高度，以像素为单位
 - width: 图像的宽度，以像素为单位
 - distortion_model: 相机的畸变模型，通常是"plumb_bob"，表示针孔相机模型
@@ -285,10 +323,10 @@ roi:
 
 $$
 k = \begin{bmatrix}
-    fx & 0 & cx \\
-    0 & fy & cy \\
-    0 & 0 & 1
-    \end{bmatrix}
+fx & 0 & cx \\
+0 & fy & cy \\
+0 & 0 & 1
+\end{bmatrix}
 $$
 
 - R: 旋转矩阵，通常是单位矩阵，表示相机坐标系和图像坐标系之间的旋转关系
@@ -296,13 +334,14 @@ $$
 
 $$
 p = \begin{bmatrix}
-    fx^{'} & 0      & cx^{'} & Tx \\
-    0      & fy^{'} & cy^{'} & Ty \\
-    0      & 0      & 1      & 0
-    \end{bmatrix}
+fx^{'} & 0 & cx^{'} & Tx \\
+0 & fy^{'} & cy^{'} & Ty \\
+0 & 0 & 1 & 0
+\end{bmatrix}
 $$
 
 左侧3*3矩阵是相机的内参矩阵，可能与相机内参K不同。对于单目相机Tx=Ty=0。对于双目相机，Tx和Ty有所不同。
+
 - binning_x: 沿x轴的像素采样因子，通常为0
 - binning_y: 沿y轴的像素采样因子，通常为0
 - roi: 感兴趣区域（ROI）的描述，包括x和y偏移、高度、宽度以及是否进行校正
