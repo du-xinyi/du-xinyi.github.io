@@ -200,5 +200,24 @@ eval "$(register-python-argcomplete3 colcon)"
 
 [一键配置脚本](https://github.com/du-xinyi/du-xinyi.github.io/releases/download/origin/zsh.sh)
 
-## 
+## 双系统时间错误
 
+在Linux中安装`ntpdate`
+
+```bash
+sudo apt-get install ntpdate
+```
+
+更新本地时间
+
+```bash
+sudo ntpdate time.windows.com
+```
+
+最后，更新硬件：
+
+```bash
+sudo hwclock --localtime --systohc
+```
+
+[一键配置脚本](https://github.com/du-xinyi/du-xinyi.github.io/releases/download/origin/time.sh)
