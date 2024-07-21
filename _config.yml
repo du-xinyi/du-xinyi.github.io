@@ -16,7 +16,7 @@ timezone: Asia/Shanghai
 
 title: 守心如一 # the main title
 
-tagline: 拾花鸟之一趣 照月风之长路 # it will display as the sub-title
+tagline: 拾花鸟之一趣 照月风之长路 # it will display as the subtitle
 
 description: >- # used by seo meta and the atom feed
   堕落的黑光个人博客
@@ -26,10 +26,10 @@ description: >- # used by seo meta and the atom feed
 url: "https://du-xinyi.github.io"
 
 github:
-  username: du-xinyi # change to your github username
+  username: du-xinyi # change to your GitHub username
 
 twitter:
-  username: fallendarklight # change to your twitter username
+  username: fallendarklight # change to your Twitter username
 
 social:
   # Change to your full name.
@@ -38,8 +38,8 @@ social:
   email: du-xinyi@foxmail.com # change to your email address
   links:
     # The first element serves as the copyright owner's link
-    - https://twitter.com/fallendarklight # change to your twitter homepage
-    - https://github.com/du-xinyi # change to your github homepage
+    - https://twitter.com/fallendarklight # change to your Twitter homepage
+    - https://github.com/du-xinyi # change to your Github homepage
     # Uncomment below to add more social links
     # - https://www.facebook.com/username
     # - https://www.linkedin.com/in/username
