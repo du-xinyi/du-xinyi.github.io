@@ -200,7 +200,9 @@ eval "$(register-python-argcomplete3 colcon)"
 
 [一键配置脚本](https://github.com/du-xinyi/du-xinyi.github.io/releases/download/origin/zsh.sh)
 
-## 双系统时间错误
+## 时间相关
+
+### 双系统时间错误
 
 在Linux中安装`ntpdate`
 
@@ -221,3 +223,183 @@ sudo hwclock --localtime --systohc
 ```
 
 [一键配置脚本](https://github.com/du-xinyi/du-xinyi.github.io/releases/download/origin/time.sh)
+
+### 修改启动等待时间为0
+
+```bash
+sudo vim /etc/grub.d/30_os-prober
+```
+
+修改
+
+```bash
+set timeout=0
+```
+
+```bash
+sudo vim /etc/default/grub
+```
+
+修改
+
+```bash
+GRUB_TIMEOUT=0
+```
+
+最后更新`grub.cfg`文件，使改动生效
+
+```bash
+sudo update-grub
+```
+
+### 修改系统重启默认等待时间
+
+```bash
+sudo vim /etc/systemd/system.conf
+```
+
+将`#DefaultTimeoutStopSec=90s`取消注释，并将`DefaultTimeoutStopSec=90s`改为`DefaultTimeoutStopSec=3s`
+
+**千万不要修改`DefaultTimeoutStartSec`，若修改时间太短，时间将不足以支持系统启动。如果不慎修改，在grub引导中选择recovery模式的root终端，用vim将其改回来**
+
+## 显卡相关
+
+### 查询功率限制
+
+```bash
+nvidia-smi -q | grep 'Power Limit'
+```
+
+![Alt text](posts/2023-08-29-optimization/nvidia-smi.png)  
+
+### 设置持久模式
+
+持久模式是一种让GPU驱动程序在系统启动时就加载并一直保持运行的模式，可以避免在每次运行GPU应用程序时重新初始化GPU的开销
+
+```bash
+sudo nvidia-smi -pm 1
+```
+
+#### 开机自启
+
+```bash
+sudo vim /lib/systemd/system/nvidia-persistenced.service
+```
+
+添加如下内容
+
+```bash
+[Unit]
+Description=NVIDIA Persistence Mode
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/sudo /usr/bin/nvidia-smi -pm 1
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target
+```
+{: file='nvidia-persistenced.service' }
+
+重新加载 systemd 配置
+  
+```bash 
+sudo systemctl daemon-reload
+```
+
+开机自启
+
+```bash 
+sudo systemctl enable nvidia-persistenced.service
+sudo systemctl start nvidia-persistenced.service
+```
+
+### 设置功耗
+
+```bash
+sudo nvidia-smi -pl 140
+```
+
+#### 开机自启
+
+```bash
+sudo vim /lib/systemd/system/nvidia-power.service
+```
+
+```bash
+[Unit]
+Description=NVIDIA Power Restrict
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/sudo /usr/bin/nvidia-smi -pl 140
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target
+```
+{: file='nvidia-power.service' }
+
+重新加载 systemd 配置
+  
+```bash 
+sudo systemctl daemon-reload
+```
+
+开机自启
+
+```bash 
+sudo systemctl enable nvidia-power.service
+sudo systemctl start nvidia-power.service
+```
+
+使用.run安装的显卡驱动可能不支持此方法修改功耗
+
+### nvidia-powerd
+
+在30系及以后的显卡中，使用了一种新类型的服务nvidia-powerd对显卡功耗进行控制操作
+
+```bash
+sudo nvidia-powerd
+```
+
+#### 开机自启
+
+```bash
+sudo systemctl enable nvidia-powerd
+```
+
+添加sudo权限
+
+```bash
+sudo vim nvidia-powerd.service
+```
+
+将`ExecStart=/usr/bin/nvidia-powerd`修改为`ExecStart=/usr/bin/sudo /usr/bin/nvidia-powerd`
+
+添加`D-Bus`权限
+
+```bash
+sudo vim /etc/dbus-1/system.d/nvidia-powerd.conf
+```
+
+添加如下内容
+
+```bash
+<!DOCTYPE busconfig PUBLIC "-//freedesktop//DTD D-Bus Bus Configuration 1.0//EN"
+"http://www.freedesktop.org/standards/dbus/1.0/busconfig.dtd">
+<busconfig>
+  <policy user="root">
+    <allow own="nvidia.powerd.server"/>
+    <allow send_destination="nvidia.powerd.server"/>
+    <allow receive_sender="nvidia.powerd.server"/>
+  </policy>
+</busconfig>
+```
+
+启用服务
+
+```bash
+sudo systemctl start nvidia-powerd
+```
