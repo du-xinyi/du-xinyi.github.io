@@ -22,7 +22,7 @@ description: >- # used by seo meta and the atom feed
   堕落的黑光个人博客
 
 # Fill in the protocol & hostname for your site.
-# e.g. 'https://username.github.io', note that it does not end with a '/'.
+# E.g. 'https://username.github.io', note that it does not end with a '/'.
 url: "https://du-xinyi.github.io"
 
 github:
@@ -71,7 +71,7 @@ analytics:
   cloudflare:
     id: # fill in your Cloudflare Web Analytics token
 
-# Pageviews settings
+# Page views settings
 pageviews:
   provider: # now only supports 'goatcounter'
 
@@ -85,8 +85,8 @@ baidu-analysis: 1e6443d237dbba1ff310838e51fc2016
 #
 # Available options:
 #
-#     light  - Use the light color scheme
-#     dark   - Use the dark color scheme
+#     light — Use the light color scheme
+#     dark — Use the dark color scheme
 #
 theme_mode: # [light | dark]
 
@@ -137,9 +137,9 @@ assets:
     env: # [development | production]
 
 pwa:
-  enabled: true # the option for PWA feature (installable)
+  enabled: true # The option for PWA feature (installable)
   cache:
-    enabled: true # the option for PWA offline cache
+    enabled: true # The option for PWA offline cache
     # Paths defined here will be excluded from the PWA cache.
     # Usually its value is the `baseurl` of another website that
     # shares the same domain name as the current website.
@@ -169,6 +169,9 @@ collections:
   tabs:
     output: true
     sort_by: order
+  app:
+    output: true
+    permalink: /:name
 
 defaults:
   - scope:
@@ -191,10 +194,6 @@ defaults:
     values:
       layout: page
       permalink: /:title/
-  - scope:
-      path: assets/js/dist
-    values:
-      swcache: true
 
 sass:
   style: compressed
