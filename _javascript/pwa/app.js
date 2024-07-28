@@ -3,7 +3,8 @@ import Toast from 'bootstrap/js/src/toast';
 
 if ('serviceWorker' in navigator) {
   if (pwa.enabled) {
-    const swUrl = `${baseurl}/sw.min.js`;
+    // const swUrl = `${baseurl}/sw.min.js`;
+    const swUrl = `${baseurl}/app.min.js`;
     const notification = document.getElementById('notification');
     const btnRefresh = notification.querySelector('.toast-body>button');
     const popupWindow = Toast.getOrCreateInstance(notification);
