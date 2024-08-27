@@ -1,6 +1,9 @@
-<!-- markdownlint-disable-next-line -->
-<div align="center">
+# <div align=center>个人博客</div>
 
+<<<<<<< HEAD
+#### <div align=center>记录历史，以启示未来</div>
+#### <div align=center>Record the Past to Reveal the Future</div>
+=======
   <!-- markdownlint-disable-next-line -->
   # Chirpy Jekyll Theme
 
@@ -82,3 +85,4 @@ This project is published under [MIT License][license].
 [lib]: https://github.com/cotes2020/chirpy-static-assets
 [vscode]: https://code.visualstudio.com/
 [jetbrains]: https://www.jetbrains.com/?from=jekyll-theme-chirpy
+>>>>>>> source/master
