@@ -90,6 +90,47 @@ $$
 
 **矩阵乘法的顺序是从右到左，即最先旋转的矩阵在最右边**
 
+即坐标系$\textbf{B}$的初始位姿与坐标系$\textbf{A}$重合，首先$\textbf{B}$相对于$\textbf{A}$的z轴顺时针旋转30度，再沿$\textbf{A}$的x轴正方向移动12个单位，并沿$\textbf{A}$的y轴正方向移动6个单位，点$\textbf{p}$在$\textbf{B}$的描述为$^{B}\textbf{p}=[3, 7, 0]^T$，则在$\textbf{A}$的描述$^{A}\textbf{p}$为
+
+$$
+^{A}_{B}R = R_{(z, 30^{\circ})} = 
+\begin{bmatrix}
+\cos(30^{\circ}) & -\sin(30^{\circ}) & 0 & 0 \\
+\sin(30^{\circ}) & \cos(30^{\circ}) & 0 & 0 \\
+0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 1 \\
+\end{bmatrix}
+$$
+
+$$
+^{A}P_{B_o} = 
+\begin{bmatrix}
+12 \\
+6 \\
+0
+\end{bmatrix}
+$$
+
+$$
+^{A}P = ^{A}_{B}R^{B}\textbf{p} + ^{A}P_{B_o} =
+\begin{bmatrix}
+-0.902 \\
+7.562 \\
+0
+\end{bmatrix}
++ 
+\begin{bmatrix}
+12 \\
+6 \\
+0
+\end{bmatrix} = 
+\begin{bmatrix}
+11.098 \\
+13.562 \\
+0
+\end{bmatrix}
+$$
+
 ## 翻转
 
 ### 绕xy平面的翻转（翻转z轴）
