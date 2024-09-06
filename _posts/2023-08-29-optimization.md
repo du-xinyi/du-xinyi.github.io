@@ -169,6 +169,26 @@ zsh的配置在用户当前目录的`.zshrc`里
     ```
     {: file='.zshrc' }
 
+- conda-zsh-completion  
+  `conda-zsh-completion`是conda的自动补全插件
+  安装步骤：
+  - 把插件下载到本地的`~/.oh-my-zsh/custom/plugins`目录
+    ```bash
+     git clone https://github.com/esc/conda-zsh-completion $ZSH_CUSTOM/plugins/conda-zsh-completion
+    ```
+    {: file='~/.oh-my-zsh/custom/plugins' }
+
+  - 在`.zshrc`中，把`conda-zsh-completion`加入插件列表
+    ```yaml
+    plugins=(
+        # other plugins...
+        conda-zsh-completion  # 插件之间使用空格隔开
+    )
+    ```
+    {: file='.zshrc' }
+
+  - 开启新的终端或执行`source ~/.zshrc`
+
 #### 额外设置
 
 1. 在`.zshrc`中额外添加
