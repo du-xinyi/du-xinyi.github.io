@@ -58,6 +58,22 @@ LANGUAGE=zh_cn /usr/bin/google-chrome-stable $@
 
 [一键配置脚本](https://github.com/du-xinyi/du-xinyi.github.io/releases/download/origin/google-chinesization.sh)
 
+## pip补全
+
+`pip`提供了自动补全命令，但需要手动开启
+
+```bash
+pip completion --bash >> ~/.bashrc
+```
+{: file="bash终端" }
+
+```zsh
+pip completion --zsh >> ~/.zshrc
+```
+{: file="zsh终端" }
+
+执行如上命令，重启终端后`pip`即可进行自动补全
+
 ## zsh
 
 众所周知，大部分的Linux发行版的默认命令解释器是bash，Mac默认的是zsh。相比于默认的bash，zsh有更多的自定义选项，并支持扩展。因此zsh可以实现更强大的命令补全，命令高亮等一系列功能。不过代价就是启动速度会比原生的bash慢，这一点在添加了较多环境后尤为明显。  
