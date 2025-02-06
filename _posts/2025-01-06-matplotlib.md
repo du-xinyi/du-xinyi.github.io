@@ -1,6 +1,6 @@
 ---
 title: Matplotlib
-date: 2024-10-05 12:30:00 +0800
+date: 2024-01-06 12:30:00 +0800
 categories: [ Notepad ]
 tags: [ python ]
 ---
