@@ -403,16 +403,29 @@ sudo nvidia-powerd
 #### 开机自启
 
 ```bash
-sudo systemctl enable nvidia-powerd
+sudo vim /etc/systemd/system/nvidia-powerd.service
 ```
 
-添加sudo权限
+添加如下内容
 
 ```bash
-sudo vim nvidia-powerd.service
+[Unit]
+Description=NVIDIA Power Daemon
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/nvidia-powerd
+
+[Install]
+WantedBy=multi-user.target
 ```
 
-将`ExecStart=/usr/bin/nvidia-powerd`修改为`ExecStart=/usr/bin/sudo /usr/bin/nvidia-powerd`
+重新加载systemd配置
+
+```bash
+sudo systemctl daemon-reload
+```
 
 添加`D-Bus`权限
 
@@ -437,5 +450,5 @@ sudo vim /etc/dbus-1/system.d/nvidia-powerd.conf
 启用服务
 
 ```bash
-sudo systemctl start nvidia-powerd
+sudo systemctl enable nvidia-powerd
 ```
