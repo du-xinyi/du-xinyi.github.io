@@ -227,8 +227,8 @@ sudo apt-get install python3-argcomplete
 然后在source环境前加上
 
 ```yaml
-eval "$(register-python-argcomplete3 ros2)"
-eval "$(register-python-argcomplete3 colcon)"
+eval "$(register-python-argcomplete ros2)"
+eval "$(register-python-argcomplete colcon)"
 ```
 {: file='.zshrc' }
 
@@ -256,6 +256,12 @@ sudo ntpdate time.windows.com
 
 ```bash
 sudo hwclock --localtime --systohc
+```
+
+ubuntu24.04需要使用如下方式更新硬件
+
+```bash
+sudo timedatectl set-local-rtc 1
 ```
 
 [一键配置脚本](https://github.com/du-xinyi/du-xinyi.github.io/releases/download/origin/time.sh)
