@@ -1,8 +1,8 @@
 ---
 title: Matplotlib
 date: 2024-01-06 12:30:00 +0800
-categories: [ Notepad ]
-tags: [ python ]
+categories: [ Notepad, Python ]
+tags: [ Python ]
 ---
 
 # matplotlib相关笔记

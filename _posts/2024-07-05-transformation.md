@@ -1,8 +1,8 @@
 ---
 title: 齐次变换矩阵
 date: 2024-07-05 12:30:00 +0800
-categories: [ Notepad ]
-tags: [ linear algebra ]
+categories: [ Notepad, Math ]
+tags: [ Linear Algebra ]
 math: True
 ---
 

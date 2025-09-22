@@ -1,13 +1,12 @@
 ---
 title: RealSense
 date: 2023-08-31 18:30:00 +0800
-categories: [ Notepad ]
-tags: [ ros, intel, realsense ]
+categories: [ Notepad, Camera ]
+tags: [ Camera, ROS ]
 math: true
 ---
 
 # RealSense环境配置
-
 ## 安装librealsense
 
 参考librealsense的github官方教程[distribution_linux](https://github.com/IntelRealSense/librealsense/blob/master/doc/distribution_linux.md)
@@ -49,37 +48,29 @@ sudo make install
 终端输入`realsense-viewer`，若能打开如下界面则安装成功。  
 ![Alt text](posts/2023-08-31-realsense/realsense-viewer.png)
 
+# ROS环境开发
 ## 配置realsense ros
 
-- 方法一 apt安装
-
 ```bash
-sudo apt install ros-noetic-realsense2-camera ros-noetic-realsense2-camera-dbgsym ros-noetic-realsense2-description
-sudo apt install ros-noetic-ddynamic-reconfigure
-```
+sudo apt install ros-noetic-ddynamic-reconfigure ros-noetic-rgbd-launch
 
-- 方法二 下载realsense ros包
-
-```bash
 cd ~/catkin_ws/src
+
 git clone https://github.com/IntelRealSense/realsense-ros.git
-git clone https://github.com/pal-robotics/ddynamic_reconfigure.git
+
 cd ~/catkin_ws && catkin_make
 ```
 
 **注意realsense ros1和ros2的分支**
 
-## 安装rgbd-launch并测试编译结果
-
-```bash
-sudo apt-get install ros-noetic-rgbd-launch
-```
+## 测试编译结果
 
 ```bash
 roslaunch realsense2_camera demo_pointcloud.launch 
 ```
 
 ![Alt text](posts/2023-08-31-realsense/pointcloud.png)  
+
 **写在最后**  
 使用`rosrun rqt_reconfigure rqt_reconfigure`时可能会出现
 
@@ -102,8 +93,6 @@ sudo apt-get install python3-pyqt5
 sudo apt-get purge ros-noetic-rqt-reconfigure
 sudo apt-get install ros-noetic-rqt-reconfigure
 ```
-
-# ROS环境开发
 
 ## launch文件
 
@@ -267,7 +256,6 @@ roslaunch realsense2_camera rs_camera.launch
 - 其它Topic: 获得加速度计或陀螺仪的数据，订阅/camera/gyro/sample和/camera/accel/sample
 
 ### 修改参数
-
 #### 支持的分辨率和帧率
 
 - 单目相机(RGB影像)

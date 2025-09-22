@@ -1,12 +1,11 @@
 ---
 title: Optimize
 date: 2023-08-29 12:30:00 +0800
-categories: [ Notepad ]
-tags: [ linux, optimize ]
+categories: [ Notepad, Linux ]
+tags: [ Linux, Optimize ]
 ---
 
 # ubuntu优化
-
 ## 谷歌浏览器汉化
 
 在ubuntu内更改Chrome的语言时，并没有像是windows的`以这种语言显示Google Chrome`
@@ -237,7 +236,6 @@ eval "$(register-python-argcomplete colcon)"
 [一键配置脚本](https://github.com/du-xinyi/du-xinyi.github.io/releases/download/origin/zsh.sh)
 
 ## 时间相关
-
 ### 双系统时间错误
 
 在Linux中安装`ntpdate`
@@ -305,7 +303,6 @@ sudo vim /etc/systemd/system.conf
 **千万不要修改`DefaultTimeoutStartSec`，若修改时间太短，时间将不足以支持系统启动。如果不慎修改，在grub引导中选择recovery模式的root终端，用vim将其改回来**
 
 ## 显卡相关
-
 ### 查询功率限制
 
 ```bash
