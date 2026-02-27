@@ -73,6 +73,81 @@ pip completion --zsh >> ~/.zshrc
 
 执行如上命令，重启终端后`pip`即可进行自动补全
 
+## swap分区扩容
+
+在大内存机器（如 64GB）上，默认安装时通常只会分配较小的 swap（例如 2GB）。  
+虽然物理内存足够，但在以下场景中仍然可能触发 OOM（Out Of Memory）：
+
+- 大型 C++ 工程编译（如 OpenCV / ROS 全编译）
+- 深度学习训练
+- 多进程程序
+- Docker 容器叠加
+- 数据集加载瞬时暴涨
+
+因此建议配置 适量 swap 作为缓冲区，防止进程被系统直接杀死
+
+### 查看当前 swap 状态
+
+```bash
+free -h
+swapon --show
+```
+
+| 物理内存 | 推荐 swap |
+| :------: | :-------: |
+|  ------  |  -------  |
+|   16GB   |   4–8GB   |
+|   32GB   |  8–16GB   |
+|   64GB   |   16GB    |
+|  128GB+  |  16–32GB  |
+
+### 使用 swapfile 扩容
+
+关闭旧 swap
+```bash
+sudo swapoff /swapfile
+```
+
+删除旧文件
+```bash
+sudo rm /swapfile
+```
+
+创建新的 swapfile（示例 16GB）
+```bash
+sudo fallocate -l 16G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+```
+
+### 优化 swap 使用策略
+
+Linux 默认 swappiness = 60，表示较积极使用 swap。对于开发机器建议调低。  
+
+查看当前值
+```bash
+cat /proc/sys/vm/swappiness
+```
+
+临时修改
+```bash
+sudo sysctl vm.swappiness=10
+```
+
+永久生效
+```bash
+echo 'vm.swappiness=10' | sudo tee -a /etc/sysctl.conf
+```
+
+|     场景     | 推荐值 |
+| :----------: | :----: |
+| ------------ | -----  |
+|   桌面开发   |   10   |
+|    服务器    | 10–20  |
+| 内存较小机器 |   30   |
+
+
 ## zsh
 
 众所周知，大部分的Linux发行版的默认命令解释器是bash，Mac默认的是zsh。相比于默认的bash，zsh有更多的自定义选项，并支持扩展。因此zsh可以实现更强大的命令补全，命令高亮等一系列功能。不过代价就是启动速度会比原生的bash慢，这一点在添加了较多环境后尤为明显。  
