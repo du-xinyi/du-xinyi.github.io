@@ -105,48 +105,98 @@ swapon --show
 
 关闭旧 swap
 ```bash
-sudo swapoff /swapfile
+sudo swapoff /swap.img
 ```
 
 删除旧文件
 ```bash
-sudo rm /swapfile
+sudo rm /swap.img
 ```
 
-创建新的 swapfile（示例 16GB）
+创建新的 swap（示例 16GB）
 ```bash
-sudo fallocate -l 16G /swapfile
-sudo chmod 600 /swapfile
-sudo mkswap /swapfile
-sudo swapon /swapfile
+sudo fallocate -l 16G /swap.img
+sudo chmod 600 /swap.img
+sudo mkswap /swap.img
+sudo swapon /swap.img
 ```
 
-### 优化 swap 使用策略
+如果文件名不为`swap.img`，需要修改`/etc/fstab`，确保如下行正确
 
-Linux 默认 swappiness = 60，表示较积极使用 swap。对于开发机器建议调低。  
-
-查看当前值
 ```bash
-cat /proc/sys/vm/swappiness
+/swap.img none swap sw 0 0
 ```
+{: file="/etc/fstab" }
 
-临时修改
+### 启用 zswap
+
+`zSwap`是Linux内核的一个功能，它为交换页提供了一个压缩的回写缓存，作为一种虚拟内存压缩形式  
+
+开启`zswap`
 ```bash
-sudo sysctl vm.swappiness=10
+echo 1 | sudo tee /sys/module/zswap/parameters/enabled
 ```
 
 永久生效
 ```bash
-echo 'vm.swappiness=10' | sudo tee -a /etc/sysctl.conf
+sudo sed -i 's/^GRUB_CMDLINE_LINUX_DEFAULT="/GRUB_CMDLINE_LINUX_DEFAULT="zswap.enabled=1 zswap.compressor=lz4 zswap.max_pool_percent=20 /' /etc/default/grub && \
 ```
 
-|     场景     | 推荐值 |
-| :----------: | :----: |
-| ------------ | -----  |
-|   桌面开发   |   10   |
-|    服务器    | 10–20  |
-| 内存较小机器 |   30   |
+更新设置
+```bash
+sudo update-grub
+```
 
+### sysctl 内核优化
+
+内核优化
+```bash
+sudo tee /etc/sysctl.d/99-memory-opt.conf > /dev/null << 'EOF'
+vm.swappiness=10
+vm.overcommit_memory=1
+vm.overcommit_ratio=90
+vm.vfs_cache_pressure=50
+EOF
+```
+
+更新设置
+```bash
+sudo sysctl --system
+```
+
+参数详解：
+- vm.swappiness  
+控制系统使用 swap 的“积极程度”。默认为`60`，数值越小，越倾向使用物理内存。对于开发机器建议调低
+
+  |     场景     | 推荐值 |
+  | :----------: | :----: |
+  | ------------ | -----  |
+  |   桌面开发   |   10   |
+  |    服务器    | 10–20  |
+  | 内存较小机器 |   30   |
+
+- vm.overcommit_memory  
+控制内存分配策略
+
+  |      值      |       含义       |
+  | :----------: | :--------------: |
+  | ------------ |      -----       |
+  |      0       | 默认（内核估算） |
+  |      1       |   允许过度分配   |
+  |      2       |     严格限制     |
+
+- vm.overcommit_ratio  
+`overcommit_memory=2` 时才严格生效，表示可分配内存比例（%）
+
+- vm.vfs_cache_pressure  
+控制 inode/dentry 缓存回收速度
+
+  |      值      |    行为    |
+  | :----------: | :--------: |
+  | ------------ |   -----    |
+  |     100      |    默认    |
+  |     <100     | 更保留缓存 |
+  |     >100     |  更快回收  |
 
 ## zsh
 
@@ -313,7 +363,7 @@ eval "$(register-python-argcomplete colcon)"
 ## 时间相关
 ### 双系统时间错误
 
-在Linux中安装`ntpdate`
+安装`ntpdate`
 
 ```bash
 sudo apt-get install ntpdate
@@ -325,13 +375,7 @@ sudo apt-get install ntpdate
 sudo ntpdate time.windows.com
 ```
 
-最后，更新硬件：
-
-```bash
-sudo hwclock --localtime --systohc
-```
-
-ubuntu24.04需要使用如下方式更新硬件
+更新硬件
 
 ```bash
 sudo timedatectl set-local-rtc 1
