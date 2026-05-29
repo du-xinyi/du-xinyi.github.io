@@ -441,7 +441,7 @@ sudo nvidia-smi -pm 1
 #### 开机自启
 
 ```bash
-sudo vim /lib/systemd/system/nvidia-persistenced.service
+sudo vim /etc/systemd/system/nvidia-persistenced.service
 ```
 
 添加如下内容
@@ -452,7 +452,7 @@ Description=NVIDIA Persistence Mode
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/sudo /usr/bin/nvidia-smi -pm 1
+ExecStart=/usr/bin/nvidia-smi -pm 1
 RemainAfterExit=true
 
 [Install]
@@ -482,7 +482,7 @@ sudo nvidia-smi -pl 140
 #### 开机自启
 
 ```bash
-sudo vim /lib/systemd/system/nvidia-power.service
+sudo vim /etc/systemd/system/nvidia-power.service
 ```
 
 ```bash
@@ -491,7 +491,7 @@ Description=NVIDIA Power Restrict
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/sudo /usr/bin/nvidia-smi -pl 140
+ExecStart=/usr/bin/nvidia-smi -pl 140
 RemainAfterExit=true
 
 [Install]
@@ -547,26 +547,6 @@ WantedBy=multi-user.target
 
 ```bash
 sudo systemctl daemon-reload
-```
-
-添加`D-Bus`权限
-
-```bash
-sudo vim /etc/dbus-1/system.d/nvidia-powerd.conf
-```
-
-添加如下内容
-
-```bash
-<!DOCTYPE busconfig PUBLIC "-//freedesktop//DTD D-Bus Bus Configuration 1.0//EN"
-"http://www.freedesktop.org/standards/dbus/1.0/busconfig.dtd">
-<busconfig>
-  <policy user="root">
-    <allow own="nvidia.powerd.server"/>
-    <allow send_destination="nvidia.powerd.server"/>
-    <allow receive_sender="nvidia.powerd.server"/>
-  </policy>
-</busconfig>
 ```
 
 启用服务
