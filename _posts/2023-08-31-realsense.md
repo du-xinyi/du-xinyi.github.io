@@ -2,8 +2,8 @@
 title: RealSense
 description: 记录 RealSense 开发环境、librealsense、ROS 驱动与相机参数配置
 date: 2023-08-31 18:30:00 +0800
-categories: [ Notepad, Camera ]
-tags: [ Camera, ROS ]
+categories: [ Robotics, ROS ]
+tags: [ RealSense, Camera, ROS ]
 math: true
 ---
 
