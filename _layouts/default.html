@@ -81,6 +81,10 @@ layout: compress
       {% include {{ _include_path }} %}
     {% endfor %}
 
+    {% if page.collapsible_sections %}
+      {% include collapsible-sections.html %}
+    {% endif %}
+
     {% include_cached search-loader.html lang=lang %}
   </body>
 </html>

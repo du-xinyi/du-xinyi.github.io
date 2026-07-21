@@ -1,0 +1,61 @@
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const content = document.querySelector('article > .content');
+    if (!content) return;
+
+    const headings = Array.from(content.querySelectorAll(':scope > h2'));
+
+    headings.forEach((heading) => {
+      const details = document.createElement('details');
+      const summary = document.createElement('summary');
+      const body = document.createElement('div');
+
+      details.className = 'collapsible-section';
+      body.className = 'collapsible-section-body';
+
+      content.insertBefore(details, heading);
+      details.append(summary, body);
+      summary.appendChild(heading);
+
+      while (details.nextElementSibling && details.nextElementSibling.tagName !== 'H2') {
+        body.appendChild(details.nextElementSibling);
+      }
+    });
+
+    const revealHashTarget = () => {
+      if (!window.location.hash) return;
+
+      let id;
+      try {
+        id = decodeURIComponent(window.location.hash.slice(1));
+      } catch {
+        id = window.location.hash.slice(1);
+      }
+
+      const target = document.getElementById(id);
+      const section = target?.closest('.collapsible-section');
+      if (!section) return;
+
+      section.open = true;
+      requestAnimationFrame(() => target.scrollIntoView());
+    };
+
+    document.addEventListener('click', (event) => {
+      const link = event.target.closest('a[href^="#"]');
+      if (!link) return;
+
+      let id;
+      try {
+        id = decodeURIComponent(link.hash.slice(1));
+      } catch {
+        id = link.hash.slice(1);
+      }
+
+      const section = document.getElementById(id)?.closest('.collapsible-section');
+      if (section) section.open = true;
+    });
+
+    window.addEventListener('hashchange', revealHashTarget);
+    revealHashTarget();
+  });
+</script>
