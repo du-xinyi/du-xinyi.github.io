@@ -65,7 +65,10 @@
   color: var(--topbar-text-color);
   text-align: center;
   width: 70%;
+  overflow: hidden;
+  text-overflow: ellipsis;
   word-break: keep-all;
+  white-space: nowrap;
 
   @include bp.lt(bp.get(lg)) {
     display: block;
