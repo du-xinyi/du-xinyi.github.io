@@ -1,6 +1,6 @@
 ---
 title: 齐次变换矩阵
-description: 推导三维空间中的平移、旋转、坐标系变换与齐次变换矩阵。
+description: 推导三维空间中的平移、旋转、坐标系变换与齐次变换矩阵
 date: 2024-07-05 12:30:00 +0800
 categories: [ Notepad, Math ]
 tags: [ Linear Algebra ]

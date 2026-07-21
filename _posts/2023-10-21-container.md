@@ -1,6 +1,6 @@
 ---
 title: Container
-description: 梳理 C++ STL 序列、关联与无序容器的特性、接口和使用方式。
+description: 梳理 C++ STL 序列、关联与无序容器的特性、接口和使用方式
 date: 2023-10-21 21:30:00 +0800
 categories: [ Notepad, C++ ]
 tags: [ C++ ]
