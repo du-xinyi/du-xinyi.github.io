@@ -2,6 +2,7 @@
 title: PyTorch Layers
 description: 整理 PyTorch 卷积、池化与转置卷积层的输出尺寸计算方法
 date: 2024-07-10 12:30:00 +0800
+permalink: /posts/pytorch/
 categories: [ Development, Python ]
 tags: [ PyTorch, Python, Deep Learning ]
 math: True

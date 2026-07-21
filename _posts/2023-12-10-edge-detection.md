@@ -2,6 +2,7 @@
 title: Edge Detection
 description: 介绍图像边缘检测的评价标准、Canny 流程及常见梯度算子
 date: 2023-12-10 20:30:00 +0800
+permalink: /posts/edge/
 categories: [ Computer Vision, OpenCV ]
 tags: [ OpenCV, Edge Detection, Image Processing ]
 math: true
@@ -22,9 +23,9 @@ math: true
    一般情况下，使用高斯平滑滤波器卷积降噪
 1. 计算梯度幅值和方向
   1. 运用一对卷积阵列 (分别作用于x和y方向)  
-     ![Alt text](posts/2023-12-10-edge/卷积整列.png)
+     ![Alt text](posts/2023-12-10-edge-detection/卷积整列.png)
   2. 计算梯度幅值和方向  
-     ![Alt text](posts/2023-12-10-edge/梯度幅值.png)  
+     ![Alt text](posts/2023-12-10-edge-detection/梯度幅值.png)  
      梯度方向一般为0, 45, 90, 135
 2. 非极大值抑制
    这一步排除非边缘像素， 仅仅保留了一些细线条(候选边缘)。

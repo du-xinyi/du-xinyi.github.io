@@ -2,6 +2,7 @@
 title: C++ Lambda Expressions
 description: 介绍现代 C++ Lambda 表达式的语法、捕获方式与典型使用场景
 date: 2023-11-13 18:30:00 +0800
+permalink: /posts/lambda/
 categories: [ Development, C++ ]
 tags: [ C++, Lambda ]
 ---
@@ -33,7 +34,7 @@ void abssort(float* x, unsigned n)
 
 ## Lambda表达式语法定义
 
-![Alt text](posts/2023-11-13-lambda/语法定义.png)
+![Alt text](posts/2023-11-13-cpp-lambda-expressions/语法定义.png)
 
 1. 捕获列表。在C++规范中也称为Lambda导入器，捕获列表总是出现在Lambda函数的开始处。实际上，[]
    是Lambda引出符。编译器根据该引出符判断接下来的代码是否是Lambda函数，捕获列表能够捕捉上下文中的变量以供Lambda函数使用。

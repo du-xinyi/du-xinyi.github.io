@@ -2,6 +2,7 @@
 title: Git Workflow
 description: 整理 Git 远程仓库、分支同步、提交修改与常用操作流程
 date: 2024-01-11 12:30:00 +0800
+permalink: /posts/git/
 categories: [ Development, Tooling ]
 tags: [ Git, Version Control, GitHub ]
 math: true
@@ -22,7 +23,7 @@ git clone https://github.com/du-xinyi/du-xinyi.github.io.git
 {: file='clone分支代码'}
 
 此时查看remote信息只有分支代码
-![Alt text](posts/2024-01-11-git/remote_origin.png)
+![Alt text](posts/2024-01-11-git-workflow/remote_origin.png)
 
 添加源项目地址（命名为source）
 
@@ -32,7 +33,7 @@ git remote add source https://github.com/cotes2020/jekyll-theme-chirpy.git
 {:file='添加源项目地址'}
 
 此时remote信息包含有源仓库信息
-![Alt text](posts/2024-01-11-git/remote_update.png)
+![Alt text](posts/2024-01-11-git-workflow/remote_update.png)
 
 fetch源项目
 

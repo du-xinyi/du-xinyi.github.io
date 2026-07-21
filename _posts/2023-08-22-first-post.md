@@ -2,12 +2,13 @@
 title: First Post
 description: 记录历史，以启示未来
 date: 2023-08-22 20:30:00 +0800
+permalink: /posts/hello/
 categories: [ Life, Journal ]
 tags: [ Journal ]
 pin: true
 pin_order: 1
 image:
-  path: https://raw.githubusercontent.com/du-xinyi/du-xinyi.github.io/master/assets/img/posts/2023-08-22-hello/origin.jpg
+  path: https://raw.githubusercontent.com/du-xinyi/du-xinyi.github.io/master/assets/img/posts/2023-08-22-first-post/origin.jpg
   width: 1200
   height: 630
 ---

@@ -2,6 +2,7 @@
 title: Docker Configuration
 description: 记录 Docker 用户权限、服务代理、容器网络及常用配置方法
 date: 2024-01-11 12:30:00 +0800
+permalink: /posts/docker/
 categories: [ Systems, Linux ]
 tags: [ Docker, Linux, Containers ]
 math: true

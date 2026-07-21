@@ -2,6 +2,7 @@
 title: ZeroMQ Messaging
 description: 概览 ZeroMQ 的通信模式、传输协议及分布式消息场景中的特点
 date: 2025-05-17 12:30:00 +0800
+permalink: /posts/zmq/
 categories: [ Development, Distributed Systems ]
 tags: [ ZeroMQ, C++, Python ]
 ---

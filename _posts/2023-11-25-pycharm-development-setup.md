@@ -2,6 +2,7 @@
 title: PyCharm Development Setup
 description: 整理 PyCharm 中 ROS 解释器、OpenCV 冲突与代理环境的配置方法
 date: 2023-11-25 12:30:00 +0800
+permalink: /posts/pycharm/
 categories: [ Development, Tooling ]
 tags: [ PyCharm, IDE, ROS ]
 ---
@@ -14,11 +15,11 @@ tags: [ PyCharm, IDE, ROS ]
 
 PyCharm在设置项目解释器后默认是没有添加ros的环境，在`设置->文件->项目->Python解释器->python解释器`中，选择全部显示
 
-![Alt text](posts/2023-11-25-pycharm/python.png)
+![Alt text](posts/2023-11-25-pycharm-development-setup/python.png)
 
 选择最右侧的`查看解释器路径`
 
-![Alt text](posts/2023-11-25-pycharm/site.png)
+![Alt text](posts/2023-11-25-pycharm-development-setup/site.png)
 
 由此可以看出，在PyCharm中没有包含ros的库，将其添加进解释器路径即可进行ros开发
 
@@ -29,10 +30,10 @@ PyCharm在设置项目解释器后默认是没有添加ros的环境，在`设置
 ros安装的cv_bridge库会与pip安装的opencv相关环境存在冲突，进而会导致与opencv相关的代码出现各种问题。  
 在编辑配置中设置环境变量，添加`LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/ros/noetic/lib`
 
-![alt text](posts/2023-11-25-pycharm/opencv.png)
+![alt text](posts/2023-11-25-pycharm-development-setup/opencv.png)
 
 ### 代理设置
 
 在编辑配置中设置环境变量，添加`http_proxy=http://127.0.0.1:7897;https_proxy=http://127.0.0.1:7897`
 
-![alt text](posts/2023-11-25-pycharm/proxy.png)
+![alt text](posts/2023-11-25-pycharm-development-setup/proxy.png)

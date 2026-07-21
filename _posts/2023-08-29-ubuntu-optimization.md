@@ -2,6 +2,7 @@
 title: Ubuntu Optimization
 description: 汇总 Ubuntu 的语言、内存、时间、显卡及常用系统优化配置
 date: 2023-08-29 12:30:00 +0800
+permalink: /posts/optimization/
 categories: [ Systems, Linux ]
 tags: [ Ubuntu, Linux ]
 ---
@@ -267,7 +268,7 @@ sudo vim /etc/systemd/system.conf
 nvidia-smi -q | grep 'Power Limit'
 ```
 
-![Alt text](posts/2023-08-29-optimization/nvidia-smi.png)  
+![Alt text](posts/2023-08-29-ubuntu-optimization/nvidia-smi.png)  
 
 ### 设置持久模式
 

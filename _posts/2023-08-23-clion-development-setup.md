@@ -2,6 +2,7 @@
 title: CLion Development Setup
 description: 整理 CLion 在 51 单片机、ROS 等开发场景中的环境配置与调试方法
 date: 2023-08-23 20:30:00 +0800
+permalink: /posts/clion/
 categories: [ Development, Tooling ]
 tags: [ CLion, IDE, ROS ]
 ---
@@ -11,7 +12,7 @@ tags: [ CLion, IDE, ROS ]
 ### 51开发
 #### 安装插件
 
-![Alt text](posts/2023-08-23-clion/plugin.png)  
+![Alt text](posts/2023-08-23-clion-development-setup/plugin.png)  
 通过<https://raw.githubusercontent.com/platformio/platformio-core-installer/master/get-platformio.py>
 下载`get-platformio.py`文件后使用python运行。随后在`设置->语言和框架`中设置platformiod的路径。  
 windows和linux稍有不同  
@@ -53,11 +54,11 @@ ln -s ~/.platformio/penv/bin/piodebuggdb /usr/local/bin/piodebuggdb
 
 - 选择芯片
 
-![Alt text](posts/2023-08-23-clion/choose.png)  
+![Alt text](posts/2023-08-23-clion-development-setup/choose.png)  
 以`STC89C52`为例  
 待环境构建完成后（第一次需下载文件有点慢）  
 在CMakeListsPrivate.txt文件中
-![Alt text](posts/2023-08-23-clion/basic.png)  
+![Alt text](posts/2023-08-23-clion-development-setup/basic.png)  
 windows在include_directories后添加
 
 ```text
@@ -75,9 +76,9 @@ include_directories("$ENV{HOME}/.platformio/packages/toolchain-sdcc/share/sdcc/n
 {: file="CMakeListsPrivate.txt" }
 
 跳转到`8052.h`头文件中，将`#include <8051.h>`改为`#include "8051.h"`并添加`#include "lint.h"`  
-![Alt text](posts/2023-08-23-clion/8052.png)  
+![Alt text](posts/2023-08-23-clion-development-setup/8052.png)  
 跳转到`8051.h`头文件中，在开头添加上`#include "lint.h"`  
-![Alt text](posts/2023-08-23-clion/8051.png)  
+![Alt text](posts/2023-08-23-clion-development-setup/8051.png)  
 然后可正常编写程序。  
 **注意，位定义和中断与keil不同！**
 
@@ -167,7 +168,7 @@ clion .
 {: file="构建目录" }
 
 生成器修改为`Unix Makefiles`  
-![Alt text](posts/2023-08-23-clion/ros.png)
+![Alt text](posts/2023-08-23-clion-development-setup/ros.png)
 
 ### ROS2开发
 #### 启动CLion
@@ -186,16 +187,16 @@ clion .
 {: file='启动clion'}
 
 在`文件->打开`选择工作空间下`build`文件夹下`compile_commands.json`。作为项目打开
-![Alt text](posts/2023-08-23-clion/compile_commands.png)
+![Alt text](posts/2023-08-23-clion-development-setup/compile_commands.png)
 
 然后在`工具->编译数据库->更改项目根`选择工作空间作为根目录
-![Alt text](posts/2023-08-23-clion/workspace.png)
+![Alt text](posts/2023-08-23-clion-development-setup/workspace.png)
 
 #### 编译工程
 
 在`文件->设置->工具->外部工具`点击`+`号，新增一个工具。具体填写内容就是之前编译ros2工作空间的命令。程序填写`colcon`
 ，实参填写`build --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -G Ninja`，工作目录选择ros2的工作空间。
-![Alt text](posts/2023-08-23-clion/external_tools.png)
+![Alt text](posts/2023-08-23-clion-development-setup/external_tools.png)
 
 保存后在`工具->外部工具`选择`colcon build`，此时可以编译整个工作空间。
 
@@ -216,12 +217,12 @@ clion .
 2、创建自定义构建目标  
 在`文件->设置->构建、执行、部署->自定义构建目标`点击`+`号，新增一个目标。在`构建`
 中添加外部工具，选择功能包下的`cmake_commands.bat`，并将工作目录选择为功能包的构建目录
-![Alt text](posts/2023-08-23-clion/custom_build_target.png)
+![Alt text](posts/2023-08-23-clion-development-setup/custom_build_target.png)
 
 3、配置run/debug功能  
 在`添加配置->编辑配置`点击`+`号，选择自定义构建应用程序，在`目标`选择上一步生成的构建目标，在`可执行文件`
 选择功能包编译出的可执行文件，删除`执行前`中的构建。
-![Alt text](posts/2023-08-23-clion/custom_build_application.png)
+![Alt text](posts/2023-08-23-clion-development-setup/custom_build_application.png)
 
 4、断点调试  
 在功能包的CMakeLists.txt中添加`SET(CMAKE_BUILD_TYPE "Debug")`

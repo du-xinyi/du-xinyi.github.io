@@ -2,6 +2,7 @@
 title: Conda Environment Management
 description: 整理 Conda 环境创建、包管理、配置查看与常用命令
 date: 2025-02-06 12:30:00 +0800
+permalink: /posts/conda/
 categories: [ Development, Python ]
 tags: [ Conda, Python ]
 ---

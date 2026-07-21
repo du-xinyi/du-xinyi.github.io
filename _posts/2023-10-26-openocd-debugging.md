@@ -2,6 +2,7 @@
 title: OpenOCD Debugging
 description: 记录 OpenOCD 的源码编译、调试适配器配置及嵌入式调试方法
 date: 2023-10-26 20:30:00 +0800
+permalink: /posts/openocd/
 categories: [ Embedded, Debugging ]
 tags: [ OpenOCD, Embedded, Debugging ]
 ---
@@ -77,7 +78,7 @@ sudo apt install -y libcapstone-dev perl python3-ply
 {: file='配置软件包'}
 
 如果全套安装的话，执行完`./configure`最后会显示如下内容  
-![configuration](posts/2023-10-26-openocd/configuration.png)
+![configuration](posts/2023-10-26-openocd-debugging/configuration.png)
 
 缺少相关驱动的话相关`debug adapter`的后面则是`no`，最后
 
@@ -89,7 +90,7 @@ sudo make install
 
 此时使用`openocd -v`则可查看`openocd`的版本
 
-![Alt text](posts/2023-10-26-openocd/openocd_version.png)
+![Alt text](posts/2023-10-26-openocd-debugging/openocd_version.png)
 
 但是还没完，此时的`openocd`需要`sudo`才能使用，如果要免`sudo`的话需要额外添加`udev`规则
 
