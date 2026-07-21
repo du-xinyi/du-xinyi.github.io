@@ -1,5 +1,5 @@
 ---
-title: Matplotlib
+title: Matplotlib Visualization
 description: 汇总 Matplotlib 常用图表、坐标轴、样式、标记与子图配置
 date: 2025-01-06 12:30:00 +0800
 categories: [ Development, Python ]
