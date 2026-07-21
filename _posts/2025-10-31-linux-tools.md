@@ -2,7 +2,6 @@
 title: Linux Tools
 description: 整理 Linux 下 SSH、压缩、传输、检索及系统管理等常用工具
 date: 2025-10-31 12:30:00 +0800
-permalink: /posts/tool/
 categories: [ Systems, Linux ]
 tags: [ Linux, CLI, SSH ]
 ---

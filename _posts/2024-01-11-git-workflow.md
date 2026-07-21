@@ -2,7 +2,6 @@
 title: Git Workflow
 description: 整理 Git 远程仓库、分支同步、提交修改与常用操作流程
 date: 2024-01-11 12:30:00 +0800
-permalink: /posts/git/
 categories: [ Development, Tooling ]
 tags: [ Git, Version Control, GitHub ]
 math: true

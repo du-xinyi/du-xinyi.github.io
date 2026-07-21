@@ -2,7 +2,6 @@
 title: Linux Mounting
 description: 汇总 Linux 文件系统类型、挂载方式、配置参数与常见操作
 date: 2025-09-22 12:30:00 +0800
-permalink: /posts/mount/
 categories: [ Systems, Linux ]
 tags: [ Linux, Filesystem, Mount ]
 ---

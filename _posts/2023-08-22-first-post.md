@@ -2,7 +2,6 @@
 title: First Post
 description: 记录历史，以启示未来
 date: 2023-08-22 20:30:00 +0800
-permalink: /posts/hello/
 categories: [ Life, Journal ]
 tags: [ Journal ]
 pin: true

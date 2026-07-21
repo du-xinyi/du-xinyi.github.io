@@ -2,7 +2,6 @@
 title: Field of View
 description: 介绍焦距与传感器尺寸对水平、垂直及对角视场角的影响和计算
 date: 2024-10-05 12:30:00 +0800
-permalink: /posts/fov/
 categories: [ Computer Vision, Camera ]
 tags: [ Camera, Optics ]
 math: True

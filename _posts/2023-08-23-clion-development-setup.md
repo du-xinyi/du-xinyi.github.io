@@ -2,7 +2,6 @@
 title: CLion Development Setup
 description: 整理 CLion 在 51 单片机、ROS 等开发场景中的环境配置与调试方法
 date: 2023-08-23 20:30:00 +0800
-permalink: /posts/clion/
 categories: [ Development, Tooling ]
 tags: [ CLion, IDE, ROS ]
 ---

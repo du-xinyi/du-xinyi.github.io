@@ -2,7 +2,6 @@
 title: Ubuntu Optimization
 description: 汇总 Ubuntu 的语言、内存、时间、显卡及常用系统优化配置
 date: 2023-08-29 12:30:00 +0800
-permalink: /posts/optimization/
 categories: [ Systems, Linux ]
 tags: [ Ubuntu, Linux ]
 ---

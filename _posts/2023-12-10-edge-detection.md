@@ -2,7 +2,6 @@
 title: Edge Detection
 description: 介绍图像边缘检测的评价标准、Canny 流程及常见梯度算子
 date: 2023-12-10 20:30:00 +0800
-permalink: /posts/edge/
 categories: [ Computer Vision, OpenCV ]
 tags: [ OpenCV, Edge Detection, Image Processing ]
 math: true

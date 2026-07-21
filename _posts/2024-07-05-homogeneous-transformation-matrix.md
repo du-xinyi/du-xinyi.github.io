@@ -2,7 +2,6 @@
 title: Homogeneous Transformation Matrix
 description: 推导三维空间中的平移、旋转、坐标系变换与齐次变换矩阵
 date: 2024-07-05 12:30:00 +0800
-permalink: /posts/transformation/
 categories: [ Mathematics, Linear Algebra ]
 tags: [ Linear Algebra, Coordinate Transform, Robotics ]
 math: True

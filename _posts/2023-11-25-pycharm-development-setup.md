@@ -2,7 +2,6 @@
 title: PyCharm Development Setup
 description: 整理 PyCharm 中 ROS 解释器、OpenCV 冲突与代理环境的配置方法
 date: 2023-11-25 12:30:00 +0800
-permalink: /posts/pycharm/
 categories: [ Development, Tooling ]
 tags: [ PyCharm, IDE, ROS ]
 ---

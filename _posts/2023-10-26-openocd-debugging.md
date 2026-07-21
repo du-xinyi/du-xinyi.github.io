@@ -2,7 +2,6 @@
 title: OpenOCD Debugging
 description: 记录 OpenOCD 的源码编译、调试适配器配置及嵌入式调试方法
 date: 2023-10-26 20:30:00 +0800
-permalink: /posts/openocd/
 categories: [ Embedded, Debugging ]
 tags: [ OpenOCD, Embedded, Debugging ]
 ---

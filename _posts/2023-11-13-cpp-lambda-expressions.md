@@ -2,7 +2,6 @@
 title: C++ Lambda Expressions
 description: 介绍现代 C++ Lambda 表达式的语法、捕获方式与典型使用场景
 date: 2023-11-13 18:30:00 +0800
-permalink: /posts/lambda/
 categories: [ Development, C++ ]
 tags: [ C++, Lambda ]
 ---

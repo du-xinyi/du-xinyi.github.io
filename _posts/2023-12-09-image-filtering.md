@@ -2,7 +2,6 @@
 title: Image Filtering
 description: 梳理图像滤波原理及均值、高斯、中值、双边等 OpenCV 滤波方法
 date: 2023-12-09 22:30:00 +0800
-permalink: /posts/filter/
 categories: [ Computer Vision, OpenCV ]
 tags: [ OpenCV, Filtering, Image Processing ]
 math: true
