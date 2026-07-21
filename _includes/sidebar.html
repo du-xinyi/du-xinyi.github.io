@@ -11,7 +11,13 @@
       {%- endif -%}
     </a>
 
-    <a class="site-title d-block" href="{{ '/' | relative_url }}">{{ site.title }}</a>
+    {%- assign title_parts = site.title | split: ' | ' -%}
+    <a class="site-title d-block" href="{{ '/' | relative_url }}">
+      <span class="site-title-primary">{{ title_parts[0] }}</span>
+      {%- if title_parts.size > 1 -%}
+        <span class="site-title-english">{{ title_parts[1] }}</span>
+      {%- endif -%}
+    </a>
     <p class="site-subtitle fst-italic mb-0">{{ site.tagline }}</p>
   </header>
   <!-- .profile-wrapper -->
