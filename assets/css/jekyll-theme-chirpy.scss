@@ -10,6 +10,76 @@
 
 /* append your custom style below */
 
+/* A restrained glass surface inspired by Apple's translucent interfaces. */
+body {
+  background:
+    radial-gradient(
+      circle at 85% 0%,
+      color-mix(in srgb, var(--link-color) 9%, transparent) 0,
+      transparent 32rem
+    ),
+    var(--main-bg);
+  background-attachment: fixed;
+}
+
+#sidebar,
+#topbar-wrapper,
+#post-list .post-preview,
+#sidebar .sidebar-actions {
+  -webkit-backdrop-filter: saturate(160%) blur(18px);
+  backdrop-filter: saturate(160%) blur(18px);
+}
+
+#sidebar {
+  background: color-mix(in srgb, var(--sidebar-bg) 78%, transparent);
+  border-right-color: color-mix(in srgb, var(--text-color) 10%, transparent);
+  box-shadow: inset -1px 0 rgb(255 255 255 / 8%);
+}
+
+#topbar-wrapper {
+  background: color-mix(in srgb, var(--topbar-bg) 82%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--text-color) 8%, transparent);
+  box-shadow: 0 0.35rem 1.25rem rgb(0 0 0 / 4%);
+}
+
+#post-list .post-preview {
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--text-color) 10%, transparent);
+  background: color-mix(in srgb, var(--card-bg) 76%, transparent);
+  box-shadow:
+    inset 0 1px rgb(255 255 255 / 12%),
+    0 0.6rem 1.8rem rgb(0 0 0 / 7%);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+
+  &:hover {
+    border-color: color-mix(in srgb, var(--text-color) 16%, transparent);
+    box-shadow:
+      inset 0 1px rgb(255 255 255 / 16%),
+      0 0.9rem 2.25rem rgb(0 0 0 / 11%);
+    transform: translateY(-2px);
+  }
+}
+
+#sidebar .sidebar-actions {
+  background: color-mix(in srgb, var(--sidebar-btn-bg) 68%, transparent);
+  box-shadow:
+    inset 0 1px rgb(255 255 255 / 14%),
+    0 0.3rem 0.9rem rgb(0 0 0 / 8%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #post-list .post-preview {
+    transition: none;
+
+    &:hover {
+      transform: none;
+    }
+  }
+}
+
 /* Keep the bilingual site name readable in the narrow sidebar. */
 #sidebar {
   .site-title-primary,
