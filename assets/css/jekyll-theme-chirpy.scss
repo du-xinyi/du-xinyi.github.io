@@ -15,13 +15,13 @@ body {
   background:
     radial-gradient(
       circle at 88% 4%,
-      color-mix(in srgb, var(--link-color) 13%, transparent) 0,
-      transparent 34rem
+      color-mix(in srgb, #0a84ff 16%, transparent) 0,
+      transparent 30rem
     ),
     radial-gradient(
       circle at 18% 92%,
-      color-mix(in srgb, #af52de 8%, transparent) 0,
-      transparent 30rem
+      color-mix(in srgb, #af52de 13%, transparent) 0,
+      transparent 26rem
     ),
     var(--main-bg);
   background-attachment: fixed;
