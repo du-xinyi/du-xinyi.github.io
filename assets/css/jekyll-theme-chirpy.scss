@@ -12,6 +12,17 @@
 
 /* Layered glass surfaces inspired by Apple's translucent interfaces. */
 body {
+  position: relative;
+  isolation: isolate;
+  background: var(--main-bg);
+}
+
+body::before {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  content: '';
+  pointer-events: none;
   background:
     radial-gradient(
       circle at 88% 4%,
@@ -24,7 +35,7 @@ body {
       transparent 26rem
     ),
     var(--main-bg);
-  background-attachment: fixed;
+  transform: translateZ(0);
 }
 
 #sidebar,
@@ -95,7 +106,7 @@ body {
 }
 
 @mixin light-glass {
-  body {
+  body::before {
     background:
       radial-gradient(
         circle at 88% 4%,
@@ -108,7 +119,6 @@ body {
         transparent 27rem
       ),
       var(--main-bg);
-    background-attachment: fixed;
   }
 
   #sidebar {
@@ -176,7 +186,7 @@ html[data-mode='light'] {
 }
 
 @mixin dark-glass {
-  body {
+  body::before {
     background:
       radial-gradient(
         circle at 88% 4%,
@@ -189,7 +199,6 @@ html[data-mode='light'] {
         transparent 24rem
       ),
       var(--main-bg);
-    background-attachment: fixed;
   }
 
   #post-list .post-preview {
@@ -272,6 +281,10 @@ html[data-mode='dark'] {
         font-size: 1.5rem;
         font-weight: 400;
         transition: transform 0.2s ease;
+      }
+
+      > .anchor {
+        display: none;
       }
     }
   }
