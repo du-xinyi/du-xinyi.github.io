@@ -3,8 +3,21 @@
     const content = document.querySelector('article > .content');
     if (!content) return;
 
-    const wrapHeadings = (container, tagName, sectionClass, bodyClass) => {
-      const headings = Array.from(container.querySelectorAll(`:scope > ${tagName.toLowerCase()}`));
+    const collapsibleLevels = new Set({{ page.collapsible_sections | jsonify }});
+    const levelConfig = {
+      2: ['collapsible-section', 'collapsible-section-body'],
+      3: ['collapsible-subsection', 'collapsible-subsection-body'],
+      4: ['collapsible-detail', 'collapsible-detail-body']
+    };
+    const bodySelector = Object.values(levelConfig)
+      .map(([, bodyClass]) => `.${bodyClass}`)
+      .join(', ');
+
+    const wrapHeadings = (container, level, sectionClass, bodyClass) => {
+      const tagName = `H${level}`;
+      const headings = Array.from(container.children).filter(
+        (element) => element.tagName === tagName
+      );
 
       headings.forEach((heading) => {
         const details = document.createElement('details');
@@ -18,21 +31,28 @@
         details.append(summary, body);
         summary.appendChild(heading);
 
-        while (details.nextElementSibling && details.nextElementSibling.tagName !== tagName) {
-          body.appendChild(details.nextElementSibling);
+        while (details.nextElementSibling) {
+          const sibling = details.nextElementSibling;
+          const headingMatch = sibling.tagName.match(/^H([1-6])$/);
+
+          if (headingMatch && Number(headingMatch[1]) <= level) break;
+          body.appendChild(sibling);
         }
       });
     };
 
-    wrapHeadings(content, 'H2', 'collapsible-section', 'collapsible-section-body');
+    [...collapsibleLevels]
+      .map(Number)
+      .sort((a, b) => a - b)
+      .forEach((level) => {
+        const config = levelConfig[level];
+        if (!config) return;
 
-    content.querySelectorAll('.collapsible-section-body').forEach((sectionBody) => {
-      wrapHeadings(sectionBody, 'H3', 'collapsible-subsection', 'collapsible-subsection-body');
-    });
-
-    content.querySelectorAll('.collapsible-subsection-body').forEach((subsectionBody) => {
-      wrapHeadings(subsectionBody, 'H4', 'collapsible-detail', 'collapsible-detail-body');
-    });
+        const containers = [content, ...content.querySelectorAll(bodySelector)];
+        containers.forEach((container) => {
+          wrapHeadings(container, level, ...config);
+        });
+      });
 
     const revealTarget = (target) => {
       if (!target) return false;
