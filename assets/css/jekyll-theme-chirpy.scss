@@ -378,10 +378,27 @@ html[data-mode='dark'] {
 }
 
 #markdown-toc {
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
 
   + .collapsible-section {
-    margin-top: 0.75rem;
-    border-top: 1px solid color-mix(in srgb, var(--text-color) 8%, transparent);
+    position: relative;
+    margin-top: 1rem;
+    padding-top: 0.5rem;
+
+    &::before {
+      position: absolute;
+      top: 0;
+      right: 8%;
+      left: 8%;
+      height: 1px;
+      content: '';
+      background: linear-gradient(
+        90deg,
+        transparent,
+        color-mix(in srgb, var(--text-color) 9%, transparent) 24%,
+        color-mix(in srgb, var(--text-color) 9%, transparent) 76%,
+        transparent
+      );
+    }
   }
 }
