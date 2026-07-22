@@ -184,22 +184,31 @@ $sidebar-display: 'sidebar-display'; /* the attribute for sidebar display */
       margin-bottom: 1.75rem;
     }
 
-    $btn-size: 1.75rem;
+    $btn-size: 2rem;
+
+    .sidebar-actions {
+      overflow: hidden;
+      border: 1px solid var(--sidebar-border-color);
+      border-radius: calc($btn-size / 2);
+      background-color: var(--sidebar-btn-bg);
+      box-shadow: 0 0.125rem 0.4rem rgb(0 0 0 / 6%);
+    }
 
     %button {
       width: $btn-size;
       height: $btn-size;
-      margin-bottom: $btn-mb; // multi line gap
-      border-radius: 50%;
+      margin: 0;
+      border: 0;
+      border-radius: 0;
       color: var(--sidebar-btn-color);
-      background-color: var(--sidebar-btn-bg);
+      background-color: transparent;
       text-align: center;
       display: flex;
       align-items: center;
       justify-content: center;
 
       &:not(:focus-visible) {
-        box-shadow: var(--sidebar-border-color) 0 0 0 1px;
+        box-shadow: none;
       }
 
       &:hover {
@@ -212,12 +221,8 @@ $sidebar-display: 'sidebar-display'; /* the attribute for sidebar display */
       @extend %sidebar-link-hover;
       @extend %clickable-transition;
 
-      &:not(:last-child) {
-        margin-right: v.$sb-btn-gap;
-
-        @include bp.xxxl {
-          margin-right: v.$sb-btn-gap-lg;
-        }
+      &:not(:first-child) {
+        border-left: 1px solid var(--sidebar-border-color);
       }
     }
 
@@ -229,21 +234,9 @@ $sidebar-display: 'sidebar-display'; /* the attribute for sidebar display */
       @extend %button;
       @extend %sidebar-links;
       @extend %sidebar-link-hover;
-    }
 
-    .icon-border {
-      @extend %no-cursor;
-      @include mx.ml-mr(calc((v.$sb-btn-gap - $btn-border-width) / 2));
-
-      background-color: var(--sidebar-btn-color);
-      content: '';
-      width: $btn-border-width;
-      height: $btn-border-width;
-      border-radius: 50%;
-      margin-bottom: $btn-mb;
-
-      @include bp.xxxl {
-        @include mx.ml-mr(calc((v.$sb-btn-gap-lg - $btn-border-width) / 2));
+      + a {
+        border-left: 1px solid var(--sidebar-border-color);
       }
     }
   } /* .sidebar-bottom */
