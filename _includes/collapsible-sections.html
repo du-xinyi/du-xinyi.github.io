@@ -3,24 +3,44 @@
     const content = document.querySelector('article > .content');
     if (!content) return;
 
-    const headings = Array.from(content.querySelectorAll(':scope > h2'));
+    const wrapHeadings = (container, tagName, sectionClass, bodyClass) => {
+      const headings = Array.from(container.querySelectorAll(`:scope > ${tagName.toLowerCase()}`));
 
-    headings.forEach((heading) => {
-      const details = document.createElement('details');
-      const summary = document.createElement('summary');
-      const body = document.createElement('div');
+      headings.forEach((heading) => {
+        const details = document.createElement('details');
+        const summary = document.createElement('summary');
+        const body = document.createElement('div');
 
-      details.className = 'collapsible-section';
-      body.className = 'collapsible-section-body';
+        details.className = sectionClass;
+        body.className = bodyClass;
 
-      content.insertBefore(details, heading);
-      details.append(summary, body);
-      summary.appendChild(heading);
+        container.insertBefore(details, heading);
+        details.append(summary, body);
+        summary.appendChild(heading);
 
-      while (details.nextElementSibling && details.nextElementSibling.tagName !== 'H2') {
-        body.appendChild(details.nextElementSibling);
-      }
+        while (details.nextElementSibling && details.nextElementSibling.tagName !== tagName) {
+          body.appendChild(details.nextElementSibling);
+        }
+      });
+    };
+
+    wrapHeadings(content, 'H2', 'collapsible-section', 'collapsible-section-body');
+
+    content.querySelectorAll('.collapsible-section-body').forEach((sectionBody) => {
+      wrapHeadings(sectionBody, 'H3', 'collapsible-subsection', 'collapsible-subsection-body');
     });
+
+    const revealTarget = (target) => {
+      if (!target) return false;
+
+      let section = target.closest('details');
+      while (section) {
+        section.open = true;
+        section = section.parentElement.closest('details');
+      }
+
+      return true;
+    };
 
     const revealHashTarget = () => {
       if (!window.location.hash) return;
@@ -33,10 +53,7 @@
       }
 
       const target = document.getElementById(id);
-      const section = target?.closest('.collapsible-section');
-      if (!section) return;
-
-      section.open = true;
+      if (!revealTarget(target)) return;
       requestAnimationFrame(() => target.scrollIntoView());
     };
 
@@ -51,8 +68,7 @@
         id = link.hash.slice(1);
       }
 
-      const section = document.getElementById(id)?.closest('.collapsible-section');
-      if (section) section.open = true;
+      revealTarget(document.getElementById(id));
     });
 
     window.addEventListener('hashchange', revealHashTarget);
