@@ -299,7 +299,7 @@ html[data-mode='dark'] {
 }
 
 .collapsible-subsection {
-  margin: 0.25rem 0;
+  margin: 0.4rem 0;
   border-bottom: 1px solid color-mix(in srgb, var(--text-color) 7%, transparent);
 
   > summary {
@@ -315,7 +315,17 @@ html[data-mode='dark'] {
       align-items: center;
       justify-content: space-between;
       margin: 0;
-      padding: 0.8rem 0.25rem;
+      padding: 0.9rem 0.75rem;
+      border-inline-start: 3px solid transparent;
+      border-radius: 0.65rem;
+      font-size: 1.2rem;
+      font-weight: 600;
+      line-height: 1.4;
+      letter-spacing: 0.01em;
+      transition:
+        color 0.2s ease,
+        background-color 0.2s ease,
+        border-color 0.2s ease;
 
       &::after {
         content: '›';
@@ -328,12 +338,18 @@ html[data-mode='dark'] {
     }
   }
 
-  &[open] > summary > h3::after {
-    transform: rotate(90deg);
+  &[open] > summary > h3 {
+    color: var(--heading-color);
+    background: color-mix(in srgb, var(--link-color) 8%, transparent);
+    border-inline-start-color: color-mix(in srgb, var(--link-color) 55%, transparent);
+
+    &::after {
+      transform: rotate(90deg);
+    }
   }
 
   .collapsible-subsection-body {
-    padding: 0.25rem 0.25rem 0.9rem;
+    padding: 0.65rem 0.75rem 1.15rem;
   }
 }
 
