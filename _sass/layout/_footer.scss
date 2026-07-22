@@ -4,9 +4,9 @@
 @use '../abstracts/placeholders';
 
 footer {
-  background-color: var(--main-bg);
+  background-color: transparent;
   height: v.$footer-height;
-  border-top: 1px solid var(--main-border-color);
+  border-top: 0;
 
   @extend %text-xs;
 
