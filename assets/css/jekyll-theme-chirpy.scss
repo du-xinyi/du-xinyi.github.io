@@ -337,6 +337,46 @@ html[data-mode='dark'] {
   }
 }
 
+.collapsible-detail {
+  margin: 0.2rem 0 0.2rem 0.75rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--text-color) 5%, transparent);
+
+  > summary {
+    cursor: pointer;
+    list-style: none;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    > h4 {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 0;
+      padding: 0.7rem 0.35rem;
+      font-size: 1.05rem;
+
+      &::after {
+        content: '›';
+        margin-left: 1rem;
+        color: var(--text-muted-color);
+        font-size: 1.1rem;
+        font-weight: 400;
+        transition: transform 0.2s ease;
+      }
+    }
+  }
+
+  &[open] > summary > h4::after {
+    transform: rotate(90deg);
+  }
+
+  .collapsible-detail-body {
+    padding: 0.2rem 0.35rem 0.8rem;
+  }
+}
+
 #markdown-toc {
   margin-bottom: 0.75rem;
 
