@@ -176,7 +176,7 @@ $sidebar-display: 'sidebar-display'; /* the attribute for sidebar display */
     padding-left: 2rem;
     padding-right: 1rem;
     margin-bottom: 1.5rem;
-    gap: 0.5rem;
+    gap: 1rem;
 
     @include bp.xxxl {
       padding-left: 2.75rem;
