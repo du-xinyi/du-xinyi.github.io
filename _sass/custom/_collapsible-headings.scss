@@ -1,0 +1,171 @@
+/* Optional heading folds enabled through Front Matter. */
+.heading-fold {
+  .anchor {
+    display: none !important;
+  }
+
+  > summary {
+    cursor: pointer;
+    list-style: none;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    > h2,
+    > h3,
+    > h4 {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 0;
+      transition:
+        color 0.2s ease,
+        background-color 0.2s ease,
+        border-color 0.2s ease;
+
+      &::after {
+        margin-left: 1rem;
+        color: var(--text-muted-color);
+        font-weight: 400;
+        content: '›';
+        transition: transform 0.2s ease;
+      }
+    }
+  }
+
+  &[open] > summary {
+    > h2,
+    > h3,
+    > h4 {
+      &::after {
+        transform: rotate(90deg);
+      }
+    }
+  }
+
+  &[data-heading-level='2'] {
+    margin: 1.75rem 0;
+    border-bottom: 1px solid var(--main-border-color);
+
+    > summary > h2 {
+      padding: 1rem 0.9rem;
+      border: 1px solid color-mix(in srgb, var(--text-color) 7%, transparent);
+      border-inline-start: 4px solid
+        color-mix(in srgb, var(--link-color) 55%, transparent);
+      border-radius: 0.8rem;
+      background: linear-gradient(
+        100deg,
+        color-mix(in srgb, var(--link-color) 9%, transparent),
+        color-mix(in srgb, var(--link-color) 2%, transparent) 70%
+      );
+      box-shadow: inset 0 1px 0 color-mix(in srgb, white 28%, transparent);
+      font-size: 1.55rem;
+      font-weight: 650;
+      line-height: 1.35;
+      letter-spacing: 0.01em;
+
+      &::after {
+        font-size: 1.5rem;
+      }
+    }
+
+    &[open] > summary > h2 {
+      border-inline-start-color: color-mix(in srgb, var(--link-color) 75%, transparent);
+      background: linear-gradient(
+        100deg,
+        color-mix(in srgb, var(--link-color) 13%, transparent),
+        color-mix(in srgb, var(--link-color) 3%, transparent) 72%
+      );
+    }
+
+    > .heading-fold__body {
+      padding-top: 0.75rem;
+    }
+  }
+
+  &[data-heading-level='3'] {
+    margin: 0.4rem 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--text-color) 7%, transparent);
+
+    > summary > h3 {
+      padding: 0.9rem 0.75rem;
+      border-inline-start: 3px solid transparent;
+      border-radius: 0.65rem;
+      font-size: 1.2rem;
+      font-weight: 600;
+      line-height: 1.4;
+      letter-spacing: 0.01em;
+
+      &::after {
+        font-size: 1.25rem;
+      }
+    }
+
+    &[open] > summary > h3 {
+      color: var(--heading-color);
+      background: color-mix(in srgb, var(--link-color) 8%, transparent);
+      border-inline-start-color: color-mix(in srgb, var(--link-color) 55%, transparent);
+    }
+
+    > .heading-fold__body {
+      padding: 0.65rem 0.75rem 1.15rem;
+    }
+  }
+
+  &[data-heading-level='4'] {
+    margin: 0.3rem 0 0.3rem 0.75rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--text-color) 5%, transparent);
+
+    > summary > h4 {
+      padding: 0.78rem 0.7rem;
+      border-inline-start: 2px solid transparent;
+      border-radius: 0.55rem;
+      font-size: 1.08rem;
+      font-weight: 500;
+      line-height: 1.4;
+
+      &::after {
+        font-size: 1.1rem;
+      }
+    }
+
+    &[open] > summary > h4 {
+      color: var(--heading-color);
+      background: color-mix(in srgb, var(--link-color) 6%, transparent);
+      border-inline-start-color: color-mix(in srgb, var(--link-color) 42%, transparent);
+      font-weight: 650;
+    }
+
+    > .heading-fold__body {
+      margin-top: 0.35rem;
+      padding: 0.45rem 0.7rem 1.2rem;
+    }
+  }
+}
+
+#markdown-toc {
+  margin-bottom: 1.5rem;
+
+  + .heading-fold[data-heading-level='2'] {
+    position: relative;
+    margin-top: 1.5rem;
+    padding-top: 0.75rem;
+
+    &::before {
+      position: absolute;
+      top: 0;
+      right: 8%;
+      left: 8%;
+      height: 1px;
+      content: '';
+      background: linear-gradient(
+        90deg,
+        transparent,
+        color-mix(in srgb, var(--text-color) 9%, transparent) 24%,
+        color-mix(in srgb, var(--text-color) 9%, transparent) 76%,
+        transparent
+      );
+    }
+  }
+}
