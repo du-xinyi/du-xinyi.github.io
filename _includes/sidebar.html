@@ -47,13 +47,15 @@
   </nav>
 
   <div class="sidebar-bottom d-flex align-items-center w-100">
-    <div class="sidebar-actions d-flex align-items-center">
-      {% unless site.theme_mode %}
+    {% unless site.theme_mode %}
+      <div class="sidebar-actions sidebar-theme-actions d-flex align-items-center">
         <button type="button" class="btn btn-link nav-link" aria-label="Switch Mode" id="mode-toggle">
           <i class="fas fa-adjust"></i>
         </button>
-      {% endunless %}
+      </div>
+    {% endunless %}
 
+    <div class="sidebar-actions sidebar-contact-actions d-flex align-items-center">
       {% for entry in site.data.contact %}
         {%- assign url = null -%}
 
