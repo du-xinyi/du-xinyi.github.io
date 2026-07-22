@@ -175,6 +175,46 @@ html[data-mode='light'] {
   }
 }
 
+@mixin dark-glass {
+  body {
+    background:
+      radial-gradient(
+        circle at 88% 4%,
+        color-mix(in srgb, #0a84ff 26%, transparent) 0,
+        transparent 28rem
+      ),
+      radial-gradient(
+        circle at 18% 92%,
+        color-mix(in srgb, #af52de 22%, transparent) 0,
+        transparent 24rem
+      ),
+      var(--main-bg);
+    background-attachment: fixed;
+  }
+
+  #post-list .post-preview {
+    background:
+      linear-gradient(135deg, rgb(255 255 255 / 10%), transparent 44%),
+      color-mix(in srgb, var(--card-bg) 58%, transparent);
+
+    &:hover {
+      background:
+        linear-gradient(135deg, rgb(255 255 255 / 14%), transparent 46%),
+        color-mix(in srgb, var(--card-bg) 63%, transparent);
+    }
+  }
+}
+
+html[data-mode='dark'] {
+  @include dark-glass;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-mode]) {
+    @include dark-glass;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   #post-list .post-preview {
     transition: none;
