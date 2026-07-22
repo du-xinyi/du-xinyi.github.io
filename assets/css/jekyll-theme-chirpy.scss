@@ -259,6 +259,10 @@ html[data-mode='dark'] {
   margin: 1.5rem 0;
   border-bottom: 1px solid var(--main-border-color);
 
+  .anchor {
+    display: none !important;
+  }
+
   > summary {
     cursor: pointer;
     list-style: none;
@@ -283,9 +287,6 @@ html[data-mode='dark'] {
         transition: transform 0.2s ease;
       }
 
-      > .anchor {
-        display: none;
-      }
     }
   }
 
