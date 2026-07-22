@@ -377,8 +377,8 @@ html[data-mode='dark'] {
   }
 }
 
-/* Compact ingredient tables used by the Cookbook. */
-.collapsible-section .table-wrapper {
+/* Unified glass rendering for Markdown tables. */
+.table-wrapper {
   overflow: hidden;
   margin: 0.75rem 0 1rem;
   border: 1px solid color-mix(in srgb, var(--text-color) 10%, transparent);
@@ -445,7 +445,7 @@ html[data-mode='dark'] {
 }
 
 @media (max-width: 576px) {
-  .collapsible-section .table-wrapper {
+  .table-wrapper {
     margin: 0.65rem 0 0.85rem;
     border-radius: 0.7rem;
 
