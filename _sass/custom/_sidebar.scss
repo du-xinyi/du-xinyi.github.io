@@ -1,0 +1,20 @@
+/* Keep the bilingual site name readable in the narrow sidebar. */
+#sidebar {
+  .site-title-primary,
+  .site-title-english {
+    display: block;
+  }
+
+  .site-title-english {
+    margin-top: 0.35rem;
+    font-size: 0.48em;
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: 0.01em;
+  }
+
+  .site-subtitle {
+    margin-top: 0.65rem;
+    line-height: 1.5;
+  }
+}
