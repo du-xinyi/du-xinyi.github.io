@@ -30,6 +30,10 @@
       wrapHeadings(sectionBody, 'H3', 'collapsible-subsection', 'collapsible-subsection-body');
     });
 
+    content.querySelectorAll('.collapsible-subsection-body').forEach((subsectionBody) => {
+      wrapHeadings(subsectionBody, 'H4', 'collapsible-detail', 'collapsible-detail-body');
+    });
+
     const revealTarget = (target) => {
       if (!target) return false;
 
