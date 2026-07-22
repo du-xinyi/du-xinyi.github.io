@@ -11,10 +11,6 @@
 /* append your custom style below */
 
 /* Layered glass surfaces inspired by Apple's translucent interfaces. */
-html {
-  background: var(--main-bg);
-}
-
 body {
   background:
     radial-gradient(
@@ -28,6 +24,7 @@ body {
       transparent 30rem
     ),
     var(--main-bg);
+  background-attachment: fixed;
 }
 
 #sidebar,
@@ -102,12 +99,12 @@ body {
     background:
       radial-gradient(
         circle at 88% 4%,
-        color-mix(in srgb, #0a84ff 18%, transparent) 0,
+        color-mix(in srgb, #0a84ff 13%, transparent) 0,
         transparent 35rem
       ),
       radial-gradient(
         circle at 18% 92%,
-        color-mix(in srgb, #af52de 11%, transparent) 0,
+        color-mix(in srgb, #af52de 8%, transparent) 0,
         transparent 31rem
       ),
       var(--main-bg);
