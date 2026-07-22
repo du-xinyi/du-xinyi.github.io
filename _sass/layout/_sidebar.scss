@@ -3,8 +3,6 @@
 @use '../abstracts/breakpoints' as bp;
 @use '../abstracts/placeholders';
 
-$btn-border-width: 3px;
-$btn-mb: 0.5rem;
 $sidebar-display: 'sidebar-display'; /* the attribute for sidebar display */
 
 #sidebar {
