@@ -11,6 +11,10 @@
 /* append your custom style below */
 
 /* Layered glass surfaces inspired by Apple's translucent interfaces. */
+html {
+  background: var(--main-bg);
+}
+
 body {
   background:
     radial-gradient(
