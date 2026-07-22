@@ -286,7 +286,6 @@ html[data-mode='dark'] {
         font-weight: 400;
         transition: transform 0.2s ease;
       }
-
     }
   }
 
@@ -296,6 +295,45 @@ html[data-mode='dark'] {
 
   .collapsible-section-body {
     padding-top: 0.5rem;
+  }
+}
+
+.collapsible-subsection {
+  margin: 0.25rem 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--text-color) 7%, transparent);
+
+  > summary {
+    cursor: pointer;
+    list-style: none;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    > h3 {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 0;
+      padding: 0.8rem 0.25rem;
+
+      &::after {
+        content: '›';
+        margin-left: 1rem;
+        color: var(--text-muted-color);
+        font-size: 1.25rem;
+        font-weight: 400;
+        transition: transform 0.2s ease;
+      }
+    }
+  }
+
+  &[open] > summary > h3::after {
+    transform: rotate(90deg);
+  }
+
+  .collapsible-subsection-body {
+    padding: 0.25rem 0.25rem 0.9rem;
   }
 }
 
