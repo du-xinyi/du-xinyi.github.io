@@ -8,6 +8,12 @@
     cursor: pointer;
     list-style: none;
 
+    &:focus-visible {
+      outline: 2px solid color-mix(in srgb, var(--link-color) 70%, transparent);
+      outline-offset: 3px;
+      border-radius: 0.8rem;
+    }
+
     &::-webkit-details-marker {
       display: none;
     }
@@ -166,6 +172,22 @@
         color-mix(in srgb, var(--text-color) 9%, transparent) 76%,
         transparent
       );
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heading-fold {
+    > summary {
+      > h2,
+      > h3,
+      > h4 {
+        transition: none;
+
+        &::after {
+          transition: none;
+        }
+      }
     }
   }
 }
