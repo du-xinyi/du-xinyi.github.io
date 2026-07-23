@@ -1,4 +1,4 @@
-/* Layered glass surfaces inspired by Apple's translucent interfaces. */
+/* Translucent materials inspired by Apple's macOS / visionOS interfaces. */
 body {
   position: relative;
   isolation: isolate;
@@ -7,183 +7,162 @@ body {
 
 body::before {
   position: fixed;
-  inset: 0;
+  inset: -10% -5%;
   z-index: -1;
   content: '';
   pointer-events: none;
   background:
     radial-gradient(
       circle at 88% 4%,
-      color-mix(in srgb, #0a84ff 16%, transparent) 0,
-      transparent 30rem
+      color-mix(in srgb, #0a84ff 32%, transparent) 0,
+      transparent 34rem
     ),
     radial-gradient(
       circle at 18% 92%,
-      color-mix(in srgb, #af52de 13%, transparent) 0,
-      transparent 26rem
+      color-mix(in srgb, #af52de 26%, transparent) 0,
+      transparent 30rem
+    ),
+    radial-gradient(
+      circle at 55% 45%,
+      color-mix(in srgb, #64d2ff 18%, transparent) 0,
+      transparent 42rem
+    ),
+    radial-gradient(
+      circle at 78% 88%,
+      color-mix(in srgb, #ff9f0a 14%, transparent) 0,
+      transparent 32rem
     ),
     var(--main-bg);
   transform: translateZ(0);
+  animation: glass-drift 36s ease-in-out infinite alternate;
+}
+
+@keyframes glass-drift {
+  from {
+    background-position:
+      0 0,
+      0 0,
+      0 0,
+      0 0,
+      0 0,
+      0 0;
+  }
+
+  to {
+    background-position:
+      -3rem 2rem,
+      2rem -3rem,
+      4rem 3rem,
+      -4rem -2rem,
+      3rem 2rem,
+      0 0;
+  }
 }
 
 #sidebar,
 #topbar-wrapper,
 #post-list .post-preview,
 #sidebar .sidebar-actions {
-  -webkit-backdrop-filter: saturate(185%) blur(24px);
-  backdrop-filter: saturate(185%) blur(24px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
 }
 
 #sidebar {
-  background:
-    linear-gradient(145deg, rgb(255 255 255 / 11%), transparent 42%),
-    color-mix(in srgb, var(--sidebar-bg) 72%, transparent);
-  border-right-color: color-mix(in srgb, var(--text-color) 12%, transparent);
-  box-shadow:
-    inset -1px 0 rgb(255 255 255 / 10%),
-    0.6rem 0 2rem rgb(0 0 0 / 4%);
+  background: color-mix(in srgb, var(--sidebar-bg) 82%, transparent);
+  border-right-color: color-mix(in srgb, var(--text-color) 8%, transparent);
 }
 
 #topbar-wrapper {
-  background:
-    linear-gradient(120deg, rgb(255 255 255 / 12%), transparent 48%),
-    color-mix(in srgb, var(--main-bg) 68%, transparent);
-  border-bottom: 1px solid color-mix(in srgb, var(--text-color) 10%, transparent);
-  box-shadow:
-    inset 0 1px rgb(255 255 255 / 12%),
-    0 0.45rem 1.5rem rgb(0 0 0 / 5%);
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: color-mix(in srgb, var(--main-bg) 72%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--text-color) 8%, transparent);
 }
 
 #post-list .post-preview {
   overflow: hidden;
-  border: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
-  background:
-    linear-gradient(135deg, rgb(255 255 255 / 13%), transparent 44%),
-    color-mix(in srgb, var(--card-bg) 70%, transparent);
-  box-shadow:
-    inset 0 1px rgb(255 255 255 / 18%),
-    inset 0 -1px rgb(255 255 255 / 5%),
-    0 0.75rem 2.2rem rgb(0 0 0 / 8%);
+  border: 0.5px solid color-mix(in srgb, var(--text-color) 9%, transparent);
+  background: color-mix(in srgb, var(--card-bg) 78%, transparent);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 4%);
   transition:
     transform 0.25s ease,
     box-shadow 0.25s ease,
     border-color 0.25s ease;
 
   &:hover {
-    border-color: color-mix(in srgb, var(--text-color) 19%, transparent);
-    background:
-      linear-gradient(135deg, rgb(255 255 255 / 17%), transparent 46%),
-      color-mix(in srgb, var(--card-bg) 74%, transparent);
+    border-color: color-mix(in srgb, var(--text-color) 14%, transparent);
     box-shadow:
-      inset 0 1px rgb(255 255 255 / 22%),
-      inset 0 -1px rgb(255 255 255 / 7%),
-      0 1rem 2.8rem rgb(0 0 0 / 12%);
-    transform: translateY(-3px) scale(1.002);
+      0 1px 3px rgb(0 0 0 / 5%),
+      0 0.75rem 1.75rem rgb(0 0 0 / 7%);
+    transform: translateY(-2px);
   }
 }
 
 #sidebar .sidebar-actions {
-  border-color: color-mix(in srgb, var(--text-color) 14%, transparent);
-  background:
-    linear-gradient(145deg, rgb(255 255 255 / 18%), transparent 55%),
-    color-mix(in srgb, var(--sidebar-btn-bg) 60%, transparent);
-  box-shadow:
-    inset 0 1px rgb(255 255 255 / 22%),
-    inset 0 -1px rgb(255 255 255 / 6%),
-    0 0.4rem 1.1rem rgb(0 0 0 / 10%);
+  border-color: color-mix(in srgb, var(--text-color) 10%, transparent);
+  background: color-mix(in srgb, var(--sidebar-btn-bg) 72%, transparent);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 4%);
 }
 
 @mixin light-glass {
   body::before {
     background:
       radial-gradient(
-        ellipse 58rem 42rem at 74% 12%,
-        rgb(10 132 255 / 15%) 0,
+        ellipse 60rem 44rem at 78% 8%,
+        rgb(10 132 255 / 26%) 0,
         transparent 72%
       ),
       radial-gradient(
-        ellipse 52rem 38rem at 24% 78%,
-        rgb(175 82 222 / 18%) 0,
+        ellipse 54rem 40rem at 16% 82%,
+        rgb(175 82 222 / 30%) 0,
+        transparent 72%
+      ),
+      radial-gradient(
+        ellipse 50rem 38rem at 60% 55%,
+        rgb(255 55 95 / 14%) 0,
+        transparent 72%
+      ),
+      radial-gradient(
+        ellipse 42rem 34rem at 88% 92%,
+        rgb(255 159 10 / 20%) 0,
+        transparent 70%
+      ),
+      radial-gradient(
+        ellipse 46rem 36rem at 6% 18%,
+        rgb(100 210 255 / 16%) 0,
         transparent 72%
       ),
       var(--main-bg);
   }
 
   #sidebar {
-    background:
-      linear-gradient(145deg, rgb(255 255 255 / 36%), transparent 44%),
-      color-mix(in srgb, var(--sidebar-bg) 62%, transparent);
-    border-right-color: rgb(71 85 105 / 16%);
-    box-shadow:
-      inset -1px 0 rgb(255 255 255 / 62%),
-      0.7rem 0 2.2rem rgb(71 85 105 / 9%);
+    background: rgb(250 250 252 / 58%);
+    border-right-color: rgb(0 0 0 / 6%);
   }
 
   #topbar-wrapper {
-    background:
-      linear-gradient(120deg, rgb(255 255 255 / 48%), transparent 50%),
-      color-mix(in srgb, white 58%, transparent);
-    border-bottom-color: rgb(71 85 105 / 14%);
-    box-shadow:
-      inset 0 1px rgb(255 255 255 / 80%),
-      0 0.5rem 1.6rem rgb(71 85 105 / 9%);
+    background: rgb(248 248 250 / 56%);
+    border-bottom-color: rgb(0 0 0 / 6%);
   }
 
   #post-list .post-preview {
-    position: relative;
-    border-color: rgb(71 85 105 / 18%);
-    background:
-      linear-gradient(135deg, rgb(255 255 255 / 30%), transparent 48%),
-      rgb(255 255 255 / 22%);
-    box-shadow:
-      inset 0 1px rgb(255 255 255 / 78%),
-      inset 0 -1px rgb(255 255 255 / 24%),
-      0 0.8rem 2.4rem rgb(71 85 105 / 12%);
-
-    &::before {
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-      background:
-        linear-gradient(
-          115deg,
-          rgb(255 255 255 / 48%) 0,
-          rgb(255 255 255 / 12%) 34%,
-          transparent 58%
-        );
-      opacity: 0.55;
-    }
-
-    > * {
-      position: relative;
-      z-index: 1;
-    }
+    border-color: rgb(0 0 0 / 7%);
+    background: rgb(255 255 255 / 58%);
+    box-shadow: 0 1px 3px rgb(0 0 0 / 4%);
 
     &:hover {
-      border-color: rgb(71 85 105 / 25%);
-      background:
-        linear-gradient(135deg, rgb(255 255 255 / 38%), transparent 50%),
-        rgb(255 255 255 / 28%);
+      border-color: rgb(0 0 0 / 10%);
       box-shadow:
-        inset 0 1px rgb(255 255 255 / 88%),
-        inset 0 -1px rgb(255 255 255 / 30%),
-        0 1rem 3rem rgb(71 85 105 / 16%);
-
-      &::before {
-        opacity: 0.72;
-      }
+        0 1px 3px rgb(0 0 0 / 5%),
+        0 0.9rem 2rem rgb(0 0 0 / 7%);
     }
   }
 
   #sidebar .sidebar-actions {
-    border-color: rgb(71 85 105 / 18%);
-    background:
-      linear-gradient(145deg, rgb(255 255 255 / 60%), transparent 58%),
-      color-mix(in srgb, white 48%, transparent);
-    box-shadow:
-      inset 0 1px rgb(255 255 255 / 90%),
-      inset 0 -1px rgb(255 255 255 / 32%),
-      0 0.45rem 1.2rem rgb(71 85 105 / 14%);
+    border-color: rgb(0 0 0 / 8%);
+    background: rgb(255 255 255 / 52%);
+    box-shadow: 0 1px 2px rgb(0 0 0 / 4%);
   }
 }
 
@@ -202,27 +181,55 @@ html[data-bs-theme='light'] {
     background:
       radial-gradient(
         circle at 88% 4%,
-        color-mix(in srgb, #0a84ff 26%, transparent) 0,
-        transparent 28rem
+        color-mix(in srgb, #0a84ff 34%, transparent) 0,
+        transparent 34rem
       ),
       radial-gradient(
         circle at 18% 92%,
-        color-mix(in srgb, #af52de 22%, transparent) 0,
-        transparent 24rem
+        color-mix(in srgb, #af52de 30%, transparent) 0,
+        transparent 30rem
+      ),
+      radial-gradient(
+        circle at 55% 45%,
+        color-mix(in srgb, #64d2ff 18%, transparent) 0,
+        transparent 44rem
+      ),
+      radial-gradient(
+        circle at 78% 88%,
+        color-mix(in srgb, #ff9f0a 12%, transparent) 0,
+        transparent 34rem
       ),
       var(--main-bg);
   }
 
+  #sidebar {
+    background: rgb(28 28 31 / 58%);
+    border-right-color: rgb(255 255 255 / 8%);
+  }
+
+  #topbar-wrapper {
+    background: rgb(22 22 25 / 56%);
+    border-bottom-color: rgb(255 255 255 / 8%);
+  }
+
   #post-list .post-preview {
-    background:
-      linear-gradient(135deg, rgb(255 255 255 / 10%), transparent 44%),
-      color-mix(in srgb, var(--card-bg) 58%, transparent);
+    border-color: rgb(255 255 255 / 9%);
+    background: rgb(35 35 39 / 54%);
+    box-shadow: 0 1px 3px rgb(0 0 0 / 30%);
 
     &:hover {
-      background:
-        linear-gradient(135deg, rgb(255 255 255 / 14%), transparent 46%),
-        color-mix(in srgb, var(--card-bg) 63%, transparent);
+      border-color: rgb(255 255 255 / 14%);
+      background: rgb(40 40 44 / 60%);
+      box-shadow:
+        0 1px 3px rgb(0 0 0 / 32%),
+        0 0.9rem 2rem rgb(0 0 0 / 38%);
     }
+  }
+
+  #sidebar .sidebar-actions {
+    border-color: rgb(255 255 255 / 10%);
+    background: rgb(46 46 51 / 54%);
+    box-shadow: 0 1px 2px rgb(0 0 0 / 28%);
   }
 }
 
@@ -237,6 +244,10 @@ html[data-bs-theme='dark'] {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  body::before {
+    animation: none;
+  }
+
   #post-list .post-preview {
     transition: none;
 
