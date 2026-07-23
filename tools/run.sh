@@ -50,6 +50,16 @@ if [ -e /proc/1/cgroup ] && grep -q docker /proc/1/cgroup; then
   command="$command --force_polling"
 fi
 
+if ! command -v npm >/dev/null 2>&1; then
+  echo "> npm is required to build frontend assets." >&2
+  exit 1
+fi
+
+if [ ! -x node_modules/.bin/rollup ]; then
+  echo -e "\n> npm ci\n"
+  npm ci --ignore-scripts --no-audit --no-fund || exit 1
+fi
+
 echo -e "\n> npm run build:js\n"
 npm run build:js || exit 1
 
