@@ -17,7 +17,32 @@ async function updateServiceWorker() {
   }
 
   const registrations = await navigator.serviceWorker.getRegistrations();
-  await Promise.all(registrations.map((registration) => registration.update()));
+
+  await Promise.all(
+    registrations.map(async (registration) => {
+      await registration.update();
+
+      const installingWorker = registration.installing;
+      if (!installingWorker) {
+        return;
+      }
+
+      await new Promise((resolve) => {
+        const timeout = window.setTimeout(resolve, 3000);
+
+        installingWorker.addEventListener('statechange', () => {
+          if (
+            installingWorker.state === 'installed' ||
+            installingWorker.state === 'activated' ||
+            installingWorker.state === 'redundant'
+          ) {
+            window.clearTimeout(timeout);
+            resolve();
+          }
+        });
+      });
+    })
+  );
 
   const waitingWorker = registrations
     .map((registration) => registration.waiting)
