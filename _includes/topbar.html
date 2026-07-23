@@ -56,6 +56,16 @@
       {% endif %}
     </div>
 
+    <a
+      id="cache-refresh"
+      class="btn btn-link"
+      href="{{ page.url | relative_url }}?refresh=1"
+      aria-label="Force Refresh"
+      title="Check for updates and reload"
+    >
+      <i class="fa-solid fa-arrows-rotate fa-fw"></i>
+    </a>
+
     <button type="button" id="search-trigger" class="btn btn-link" aria-label="Search">
       <i class="fas fa-search fa-fw"></i>
     </button>
