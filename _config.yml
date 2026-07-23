@@ -100,7 +100,7 @@ theme_mode: # [light | dark]
 cdn: "https://raw.githubusercontent.com/du-xinyi/du-xinyi.github.io/master/assets/img/"
 
 # the avatar on sidebar, support local or CORS resources
-avatar: "avatar/avatar.png"
+avatar: "https://avatars.githubusercontent.com/u/73220784?v=4"
 
 # The URL of the site-wide social preview image used in SEO `og:image` meta tag.
 # It can be overridden by a customized `page.image` in front matter.
