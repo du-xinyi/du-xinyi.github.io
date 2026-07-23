@@ -49,7 +49,7 @@ jobs:
         run: npm ci --ignore-scripts --no-audit --no-fund
 
       - name: Build frontend assets
-        run: npm run build:js
+        run: npm run build
 
       - name: Lint frontend
         run: npm test
