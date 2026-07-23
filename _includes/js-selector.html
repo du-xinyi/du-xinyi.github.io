@@ -62,7 +62,7 @@
 
 {% capture script %}/assets/js/dist/{{ js }}.min.js{% endcapture %}
 
-<script defer src="{{ script | relative_url }}"></script>
+<script defer src="{{ script | relative_url }}?v={{ site.time | date: '%s' }}"></script>
 
 {% if page.math %}
   <!-- MathJax -->

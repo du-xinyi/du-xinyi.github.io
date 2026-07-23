@@ -79,13 +79,15 @@
     {% endfor %}
   {% endunless %}
 
+  {% assign asset_version = site.time | date: '%s' %}
+
   <!-- Bootstrap -->
   {% unless jekyll.environment == 'production' %}
     <link rel="stylesheet" href="{{ site.data.origin.cors.bootstrap.css }}">
   {% endunless %}
 
   <!-- Theme style -->
-  <link rel="stylesheet" href="{{ '/assets/css/site.css' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/assets/css/site.css' | relative_url }}?v={{ asset_version }}">
 
   <!-- Web Font -->
   <link rel="stylesheet" href="{{ site.data.origin[type].webfonts | relative_url }}">
@@ -110,7 +112,7 @@
 
   <!-- Scripts -->
 
-  <script src="{{ '/assets/js/dist/theme.min.js' | relative_url }}"></script>
+  <script src="{{ '/assets/js/dist/theme.min.js' | relative_url }}?v={{ asset_version }}"></script>
 
   {% include js-selector.html lang=lang %}
 
