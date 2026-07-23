@@ -46,8 +46,9 @@ export function initCacheRefresh() {
     return;
   }
 
-  button.addEventListener('click', async () => {
-    button.disabled = true;
+  button.addEventListener('click', async (event) => {
+    event.preventDefault();
+    button.setAttribute('aria-disabled', 'true');
     button.classList.add('refreshing');
 
     try {
