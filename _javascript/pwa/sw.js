@@ -25,6 +25,53 @@ function verifyUrl(url) {
   return true;
 }
 
+function shouldRefreshFromNetwork(request) {
+  const url = new URL(request.url);
+
+  return (
+    request.mode === 'navigate' ||
+    url.searchParams.has('v') ||
+    url.searchParams.has('refresh')
+  );
+}
+
+async function cacheResponse(request, response) {
+  if (
+    purge ||
+    request.method !== 'GET' ||
+    !response ||
+    !response.ok ||
+    !verifyUrl(request.url)
+  ) {
+    return;
+  }
+
+  const cache = await caches.open(swconf.cacheName);
+  await cache.put(request, response.clone());
+}
+
+async function networkFirst(request) {
+  try {
+    const response = await fetch(request);
+    await cacheResponse(request, response);
+    return response;
+  } catch {
+    return caches.match(request);
+  }
+}
+
+async function cacheFirst(request) {
+  const cachedResponse = await caches.match(request);
+
+  if (cachedResponse) {
+    return cachedResponse;
+  }
+
+  const response = await fetch(request);
+  await cacheResponse(request, response);
+  return response;
+}
+
 self.addEventListener('install', (event) => {
   if (purge) {
     return;
@@ -67,26 +114,8 @@ self.addEventListener('fetch', (event) => {
   }
 
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      if (response) {
-        return response;
-      }
-
-      return fetch(event.request).then((response) => {
-        const url = event.request.url;
-
-        if (purge || event.request.method !== 'GET' || !verifyUrl(url)) {
-          return response;
-        }
-
-        // See: <https://developers.google.com/web/fundamentals/primers/service-workers#cache_and_return_requests>
-        let responseToCache = response.clone();
-
-        caches.open(swconf.cacheName).then((cache) => {
-          cache.put(event.request, responseToCache);
-        });
-        return response;
-      });
-    })
+    shouldRefreshFromNetwork(event.request)
+      ? networkFirst(event.request)
+      : cacheFirst(event.request)
   );
 });
