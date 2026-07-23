@@ -39,6 +39,17 @@ jobs:
         id: pages
         uses: actions/configure-pages@v4
 
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install frontend dependencies
+        run: npm install --ignore-scripts --no-audit --no-fund
+
+      - name: Lint frontend
+        run: npm test
+
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
