@@ -85,7 +85,7 @@
       );
     }
 
-    > .heading-fold__body {
+    > .heading-fold-body {
       padding-top: 0.75rem;
     }
   }
@@ -114,7 +114,7 @@
       border-inline-start-color: color-mix(in srgb, var(--link-color) 55%, transparent);
     }
 
-    > .heading-fold__body {
+    > .heading-fold-body {
       padding: 0.65rem 0.75rem 1.15rem;
     }
   }
@@ -143,7 +143,7 @@
       font-weight: 650;
     }
 
-    > .heading-fold__body {
+    > .heading-fold-body {
       margin-top: 0.35rem;
       padding: 0.45rem 0.7rem 1.2rem;
     }
