@@ -6,6 +6,23 @@ categories: [ Development, Tooling ]
 tags: [ JetBrains, CLion, PyCharm, IDE, PlatformIO, ROS ]
 ---
 
+## 通用设置
+
+### 运行与调试环境变量
+
+CLion 和 PyCharm 的环境变量入口相同：进入`运行 -> 编辑配置`，在对应运行配置的`环境变量`中添加项目所需变量。动态库路径、代理等仅对当前运行配置生效的内容，统一在此处维护。
+
+### 代理设置
+
+在运行配置的环境变量中添加：
+
+```text
+http_proxy=http://127.0.0.1:7897
+https_proxy=http://127.0.0.1:7897
+```
+
+![代理环境变量配置](posts/2023-11-25-jetbrains-ide-setup/proxy.png)
+
 ## CLion
 ### 51 单片机开发
 #### 安装插件
@@ -243,13 +260,10 @@ PyCharm 在设置项目解释器后默认是没有添加ROS 环境，在`设置-
 
 #### OpenCV 冲突
 
-ROS 安装的cv_bridge库会与pip 安装的OpenCV 相关环境存在冲突，进而会导致与opencv相关的代码出现各种问题。  
-在编辑配置中设置环境变量，添加`LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/ros/noetic/lib`
+ROS 安装的 `cv_bridge` 可能与 pip 安装的 OpenCV 环境发生冲突，导致相关代码运行异常。在通用设置所述的运行配置环境变量中添加：
 
-![alt text](posts/2023-11-25-jetbrains-ide-setup/opencv.png)
+```text
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/ros/noetic/lib
+```
 
-### 代理设置
-
-在编辑配置中设置环境变量，添加`http_proxy=http://127.0.0.1:7897;https_proxy=http://127.0.0.1:7897`
-
-![alt text](posts/2023-11-25-jetbrains-ide-setup/proxy.png)
+![OpenCV 环境变量配置](posts/2023-11-25-jetbrains-ide-setup/opencv.png)
