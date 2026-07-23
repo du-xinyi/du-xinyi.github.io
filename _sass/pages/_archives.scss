@@ -69,14 +69,15 @@
       @extend %text-ellipsis;
 
       &:nth-child(odd) {
-        background-color: var(--main-bg, #ffffff);
+        border-radius: 0.45rem;
+        background-color: transparent;
         background-image: linear-gradient(
           to left,
-          #ffffff,
-          #fbfbfb,
-          #fbfbfb,
-          #fbfbfb,
-          #ffffff
+          transparent,
+          color-mix(in srgb, var(--tb-odd-bg) 72%, transparent) 18%,
+          color-mix(in srgb, var(--tb-odd-bg) 86%, transparent) 50%,
+          color-mix(in srgb, var(--tb-odd-bg) 72%, transparent) 82%,
+          transparent
         );
       }
 
