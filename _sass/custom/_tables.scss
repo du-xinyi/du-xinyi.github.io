@@ -28,11 +28,6 @@
         color: var(--heading-color);
         font-size: 0.9rem;
         font-weight: 650;
-        text-align: left !important;
-
-        &:last-child {
-          text-align: right !important;
-        }
       }
     }
 
@@ -50,16 +45,9 @@
       }
 
       td {
-        width: 50%;
         padding: 0.65rem 0.9rem;
         font-size: 0.95rem;
-        text-align: left !important;
         white-space: normal;
-
-        &:last-child {
-          text-align: right !important;
-          white-space: nowrap;
-        }
       }
     }
   }
