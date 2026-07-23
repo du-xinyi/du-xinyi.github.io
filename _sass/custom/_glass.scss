@@ -163,12 +163,12 @@ body::before {
   }
 }
 
-html[data-mode='light'] {
+html[data-bs-theme='light'] {
   @include light-glass;
 }
 
 @media (prefers-color-scheme: light) {
-  html:not([data-mode]) {
+  html:not([data-bs-theme]) {
     @include light-glass;
   }
 }
@@ -202,12 +202,12 @@ html[data-mode='light'] {
   }
 }
 
-html[data-mode='dark'] {
+html[data-bs-theme='dark'] {
   @include dark-glass;
 }
 
 @media (prefers-color-scheme: dark) {
-  html:not([data-mode]) {
+  html:not([data-bs-theme]) {
     @include dark-glass;
   }
 }
