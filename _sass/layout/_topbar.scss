@@ -87,3 +87,34 @@
     display: block;
   }
 }
+
+#cache-refresh {
+  color: var(--topbar-text-color);
+  text-decoration: none;
+  margin-left: auto;
+  margin-right: 0.5rem;
+
+  &:hover {
+    color: var(--text-muted-highlight-color);
+  }
+
+  &.refreshing {
+    pointer-events: none;
+    opacity: 0.65;
+
+    i {
+      animation: cache-refresh-spin 0.75s linear infinite;
+    }
+  }
+
+  @include bp.lt(bp.get(lg)) {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+@keyframes cache-refresh-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
