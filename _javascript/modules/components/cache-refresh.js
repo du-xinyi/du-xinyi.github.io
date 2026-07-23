@@ -11,16 +11,30 @@ function cleanRefreshParam() {
   window.history.replaceState(null, '', url);
 }
 
-async function clearSiteCache() {
-  if ('serviceWorker' in navigator) {
-    const registrations = await navigator.serviceWorker.getRegistrations();
-    await Promise.all(registrations.map((registration) => registration.unregister()));
+async function updateServiceWorker() {
+  if (!('serviceWorker' in navigator)) {
+    return false;
   }
 
-  if ('caches' in window) {
-    const cacheNames = await window.caches.keys();
-    await Promise.all(cacheNames.map((name) => window.caches.delete(name)));
+  const registrations = await navigator.serviceWorker.getRegistrations();
+  await Promise.all(registrations.map((registration) => registration.update()));
+
+  const waitingWorker = registrations
+    .map((registration) => registration.waiting)
+    .find(Boolean);
+
+  if (!waitingWorker) {
+    return false;
   }
+
+  waitingWorker.postMessage('SKIP_WAITING');
+  return true;
+}
+
+function reloadWithCacheBuster() {
+  const url = new URL(window.location.href);
+  url.searchParams.set(REFRESH_PARAM, Date.now().toString());
+  window.location.replace(url);
 }
 
 export function initCacheRefresh() {
@@ -37,11 +51,16 @@ export function initCacheRefresh() {
     button.classList.add('refreshing');
 
     try {
-      await clearSiteCache();
-    } finally {
-      const url = new URL(window.location.href);
-      url.searchParams.set(REFRESH_PARAM, Date.now().toString());
-      window.location.replace(url);
+      const activatingUpdate = await updateServiceWorker();
+
+      if (activatingUpdate) {
+        window.setTimeout(reloadWithCacheBuster, 1500);
+        return;
+      }
+    } catch {
+      // Reloading with a unique URL still bypasses a stale document response.
     }
+
+    reloadWithCacheBuster();
   });
 }
