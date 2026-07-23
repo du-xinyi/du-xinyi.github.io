@@ -1,7 +1,13 @@
-import { back2top, loadTooltip, modeWatcher } from '../components';
+import {
+  back2top,
+  initCacheRefresh,
+  loadTooltip,
+  modeWatcher
+} from '../components';
 
 export function basic() {
   modeWatcher();
+  initCacheRefresh();
   back2top();
   loadTooltip();
 }
