@@ -322,7 +322,8 @@ $sidebar-display: 'sidebar-display'; /* the attribute for sidebar display */
           opacity: 0.65;
         }
 
-        .dropdown-item {
+        .dropdown-item,
+        .cache-refresh-item {
           border-radius: 0.5rem;
           color: var(--sidebar-muted-color);
           font-size: 90%;
@@ -353,6 +354,14 @@ $sidebar-display: 'sidebar-display'; /* the attribute for sidebar display */
           }
 
           &#cache-refresh {
+            width: 100%;
+            padding: var(--bs-dropdown-item-padding-y)
+              var(--bs-dropdown-item-padding-x);
+            border: 0;
+            background-color: transparent;
+            text-align: inherit;
+            white-space: nowrap;
+
             &:disabled {
               opacity: 0.65;
               pointer-events: none;
