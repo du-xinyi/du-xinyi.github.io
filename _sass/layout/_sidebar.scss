@@ -200,6 +200,21 @@ $sidebar-display: 'sidebar-display'; /* the attribute for sidebar display */
       margin-left: auto;
     }
 
+    .sidebar-theme-actions {
+      position: relative;
+      overflow: visible;
+
+      .dropdown-menu {
+        inset: auto auto calc(100% + 0.5rem) 0 !important;
+        margin: 0 !important;
+        transform: none !important;
+
+        &:not(.show) {
+          display: none;
+        }
+      }
+    }
+
     %button {
       width: $btn-size;
       height: $btn-size;
@@ -293,7 +308,6 @@ $sidebar-display: 'sidebar-display'; /* the attribute for sidebar display */
           display: flex;
           flex-direction: column;
           gap: 0.25rem;
-          left: -0.25rem !important;
           -webkit-animation: menu-pop 0.2s ease-out;
           animation: menu-pop 0.2s ease-out;
         }

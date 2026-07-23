@@ -60,13 +60,15 @@
         <i class="fa-regular fa-moon" data-theme-mode="dark"></i>
       {%- endcapture -%}
 
-      <div class="sidebar-actions sidebar-theme-actions d-flex align-items-center">
+      <div class="sidebar-actions sidebar-theme-actions btn-group dropup d-flex align-items-center">
         <button
           type="button"
           class="btn btn-link nav-link"
           aria-label="Switch Mode"
+          aria-expanded="false"
           id="mode-toggle"
           data-bs-toggle="dropdown"
+          data-bs-auto-close="true"
         >
           {{- icon_light -}}
           {{- icon_dark -}}
