@@ -95,6 +95,17 @@
       </div>
     {% endunless %}
 
+    <div class="sidebar-actions sidebar-refresh-actions">
+      <button
+        type="button"
+        id="cache-refresh"
+        aria-label="Force Refresh"
+        title="Force Refresh"
+      >
+        <i class="fa-solid fa-arrows-rotate"></i>
+      </button>
+    </div>
+
     <div class="sidebar-actions sidebar-contact-actions d-flex align-items-center">
       {% for entry in site.data.contact %}
         {%- assign url = null -%}
