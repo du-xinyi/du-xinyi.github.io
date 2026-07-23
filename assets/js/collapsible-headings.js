@@ -30,7 +30,7 @@
       details.className = 'heading-fold';
       details.dataset.headingLevel = String(level);
       details.open = expandedLevels.has(level);
-      body.className = 'heading-fold__body';
+      body.className = 'heading-fold-body';
 
       container.insertBefore(details, heading);
       details.append(summary, body);
@@ -53,7 +53,7 @@
     .forEach((level) => {
       const containers = [
         content,
-        ...content.querySelectorAll('.heading-fold__body')
+        ...content.querySelectorAll('.heading-fold-body')
       ];
       containers.forEach((container) => wrapHeadings(container, level));
     });
