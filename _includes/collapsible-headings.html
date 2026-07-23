@@ -1,96 +1,10 @@
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const content = document.querySelector('article > .content');
-    if (!content) return;
-
-    const collapsibleLevels = new Set({{ page.collapsible_headings | jsonify }});
-    const expandedLevels = new Set({{ page.expanded_headings | default: empty | jsonify }});
-    const supportedLevels = new Set([2, 3, 4]);
-
-    const wrapHeadings = (container, level) => {
-      const tagName = `H${level}`;
-      const headings = Array.from(container.children).filter(
-        (element) => element.tagName === tagName
-      );
-
-      headings.forEach((heading) => {
-        const details = document.createElement('details');
-        const summary = document.createElement('summary');
-        const body = document.createElement('div');
-
-        details.className = 'heading-fold';
-        details.dataset.headingLevel = String(level);
-        details.open = expandedLevels.has(level);
-        body.className = 'heading-fold__body';
-
-        container.insertBefore(details, heading);
-        details.append(summary, body);
-        summary.appendChild(heading);
-
-        while (details.nextElementSibling) {
-          const sibling = details.nextElementSibling;
-          const headingMatch = sibling.tagName.match(/^H([1-6])$/);
-
-          if (headingMatch && Number(headingMatch[1]) <= level) break;
-          body.appendChild(sibling);
-        }
-      });
-    };
-
-    [...collapsibleLevels]
-      .map(Number)
-      .filter((level) => supportedLevels.has(level))
-      .sort((a, b) => a - b)
-      .forEach((level) => {
-        const containers = [
-          content,
-          ...content.querySelectorAll('.heading-fold__body')
-        ];
-        containers.forEach((container) => wrapHeadings(container, level));
-      });
-
-    const revealTarget = (target) => {
-      if (!target) return false;
-
-      let section = target.closest('details');
-      while (section) {
-        section.open = true;
-        section = section.parentElement.closest('details');
-      }
-
-      return true;
-    };
-
-    const revealHashTarget = () => {
-      if (!window.location.hash) return;
-
-      let id;
-      try {
-        id = decodeURIComponent(window.location.hash.slice(1));
-      } catch {
-        id = window.location.hash.slice(1);
-      }
-
-      const target = document.getElementById(id);
-      if (!revealTarget(target)) return;
-      requestAnimationFrame(() => target.scrollIntoView());
-    };
-
-    document.addEventListener('click', (event) => {
-      const link = event.target.closest('a[href^="#"]');
-      if (!link) return;
-
-      let id;
-      try {
-        id = decodeURIComponent(link.hash.slice(1));
-      } catch {
-        id = link.hash.slice(1);
-      }
-
-      revealTarget(document.getElementById(id));
-    });
-
-    window.addEventListener('hashchange', revealHashTarget);
-    revealHashTarget();
-  });
+<script id="collapsible-headings-config" type="application/json">
+  {
+    "levels": {{ page.collapsible_headings | jsonify }},
+    "expanded": {{ page.expanded_headings | default: empty | jsonify }}
+  }
 </script>
+<script
+  src="{{ '/assets/js/collapsible-headings.js' | relative_url }}"
+  defer
+></script>
