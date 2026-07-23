@@ -12,5 +12,4 @@
 @use 'custom/sidebar';
 @use 'custom/collapsible-headings';
 @use 'custom/tables';
-
-// Keep this entry point explicit so Jekyll rebuilds imported visual styles.
+@use 'custom/about';
