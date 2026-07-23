@@ -204,6 +204,7 @@ $sidebar-display: 'sidebar-display'; /* the attribute for sidebar display */
       margin-left: auto;
     }
 
+    // Bootstrap's dropup owns menu positioning; this wrapper only styles the trigger.
     .sidebar-theme-actions {
       flex: 0 0 auto;
     }
