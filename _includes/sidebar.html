@@ -91,20 +91,22 @@
               {{- site.data.locales[lang].theme.system -}}
             </button>
           </li>
+          <li><hr class="dropdown-divider my-1"></li>
+          <li>
+            <button
+              class="dropdown-item d-flex align-items-center"
+              type="button"
+              id="cache-refresh"
+              aria-label="Force Refresh"
+              title="Clear offline cache and reload"
+            >
+              <i class="fa-solid fa-arrows-rotate"></i>
+              Force Refresh
+            </button>
+          </li>
         </ul>
       </div>
     {% endunless %}
-
-    <div class="sidebar-actions sidebar-refresh-actions">
-      <button
-        type="button"
-        id="cache-refresh"
-        aria-label="Force Refresh"
-        title="Force Refresh"
-      >
-        <i class="fa-solid fa-arrows-rotate"></i>
-      </button>
-    </div>
 
     <div class="sidebar-actions sidebar-contact-actions d-flex align-items-center">
       {% for entry in site.data.contact %}
