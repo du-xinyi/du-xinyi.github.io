@@ -43,16 +43,18 @@ export function modeWatcher() {
     }
   });
 
-  dropdown.querySelectorAll('.dropdown-item').forEach((option) => {
+  dropdown
+    .querySelectorAll('.dropdown-item[data-theme-mode]')
+    .forEach((option) => {
     const mode = option.dataset.themeMode;
     if (mode === activeMode) {
       option.classList.add(ACTIVE_CLASS);
-      return;
-    }
-  });
+        return;
+      }
+    });
 
   dropdown.addEventListener('click', (event) => {
-    const current = event.target.closest('.dropdown-item');
+    const current = event.target.closest('.dropdown-item[data-theme-mode]');
 
     if (!current) {
       return;
