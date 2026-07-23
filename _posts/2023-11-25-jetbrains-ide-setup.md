@@ -1,19 +1,18 @@
 ---
-title: CLion Development Setup
-description: 整理 CLion 在 51 单片机、ROS 等开发场景中的环境配置与调试方法
-date: 2023-08-23 20:30:00 +0800
+title: JetBrains IDE Setup
+description: 整理 CLion 与 PyCharm 的嵌入式、ROS、OpenCV 和代理环境配置
+date: 2023-11-25 12:30:00 +0800
 categories: [ Development, Tooling ]
-tags: [ CLion, IDE, ROS ]
+tags: [ JetBrains, CLion, PyCharm, IDE, PlatformIO, ROS ]
 ---
 
-# CLion相关笔记
-## clion各种开发环境配置
-### 51开发
+## CLion
+### 51 单片机开发
 #### 安装插件
 
-![Alt text](posts/2023-08-23-clion-development-setup/plugin.png)  
+![Alt text](posts/2023-11-25-jetbrains-ide-setup/plugin.png)  
 通过<https://raw.githubusercontent.com/platformio/platformio-core-installer/master/get-platformio.py>
-下载`get-platformio.py`文件后使用python运行。随后在`设置->语言和框架`中设置platformiod的路径。  
+下载`get-platformio.py`文件后使用python运行。随后在`设置->语言和框架`中设置PlatformIO的路径。  
 windows和linux稍有不同  
 Windows在`C:/Users/UserName/.platformio/penv/Scripts/platformio`  
 Linux在`~/.platformio/penv/bin/platformio`
@@ -38,7 +37,7 @@ ln -s ~/.platformio/penv/bin/pio ~/.local/bin/pio
 ln -s ~/.platformio/penv/bin/piodebuggdb ~/.local/bin/piodebuggdb
 ```
 
-或着直接
+或者直接
 
 ```bash
 mkdir -p /usr/local/bin
@@ -53,11 +52,11 @@ ln -s ~/.platformio/penv/bin/piodebuggdb /usr/local/bin/piodebuggdb
 
 - 选择芯片
 
-![Alt text](posts/2023-08-23-clion-development-setup/choose.png)  
+![Alt text](posts/2023-11-25-jetbrains-ide-setup/choose.png)  
 以`STC89C52`为例  
 待环境构建完成后（第一次需下载文件有点慢）  
 在CMakeListsPrivate.txt文件中
-![Alt text](posts/2023-08-23-clion-development-setup/basic.png)  
+![Alt text](posts/2023-11-25-jetbrains-ide-setup/basic.png)  
 windows在include_directories后添加
 
 ```text
@@ -75,15 +74,15 @@ include_directories("$ENV{HOME}/.platformio/packages/toolchain-sdcc/share/sdcc/n
 {: file="CMakeListsPrivate.txt" }
 
 跳转到`8052.h`头文件中，将`#include <8051.h>`改为`#include "8051.h"`并添加`#include "lint.h"`  
-![Alt text](posts/2023-08-23-clion-development-setup/8052.png)  
+![Alt text](posts/2023-11-25-jetbrains-ide-setup/8052.png)  
 跳转到`8051.h`头文件中，在开头添加上`#include "lint.h"`  
-![Alt text](posts/2023-08-23-clion-development-setup/8051.png)  
+![Alt text](posts/2023-11-25-jetbrains-ide-setup/8051.png)  
 然后可正常编写程序。  
 **注意，位定义和中断与keil不同！**
 
 #### 烧录程序
 
-platformio原生的烧录很慢，改为使用stcgal烧录。  
+PlatformIO 原生的烧录很慢，改为使用stcgal烧录。  
 首先，安装stcgal
 
 ```bash
@@ -128,17 +127,17 @@ sudo ./setup.py install
 
 |stc89|stc89a|stc12a|stc12b|stc12|stc15a|stc15|stc8|stc8d|stc8g|usb15|
 
-### ROS1开发
+### ROS 1 开发
 #### 启动CLion
 
-首先在命令行激活ros环境
+首先在命令行激活ROS 环境
 
 ```bash
 catkin_make
 source ./devel/setup.zsh
 ```
 
-在同一终端下启动clion
+在同一终端下启动 CLion
 
 ```bash
 clion .
@@ -167,35 +166,35 @@ clion .
 {: file="构建目录" }
 
 生成器修改为`Unix Makefiles`  
-![Alt text](posts/2023-08-23-clion-development-setup/ros.png)
+![Alt text](posts/2023-11-25-jetbrains-ide-setup/ros.png)
 
-### ROS2开发
+### ROS 2 开发
 #### 启动CLion
 
 ```bash
 colcon build --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -G Ninja
 ```
 
-{: file='编译ros2工作空间'}
+{: file='编译ROS 2 工作空间'}
 此时在build目录下会生成文件`compile_commands.json`，然后
 
 ```bash
 source install/setup.zsh
 clion .
 ```
-{: file='启动clion'}
+{: file='启动 CLion'}
 
 在`文件->打开`选择工作空间下`build`文件夹下`compile_commands.json`。作为项目打开
-![Alt text](posts/2023-08-23-clion-development-setup/compile_commands.png)
+![Alt text](posts/2023-11-25-jetbrains-ide-setup/compile_commands.png)
 
 然后在`工具->编译数据库->更改项目根`选择工作空间作为根目录
-![Alt text](posts/2023-08-23-clion-development-setup/workspace.png)
+![Alt text](posts/2023-11-25-jetbrains-ide-setup/workspace.png)
 
 #### 编译工程
 
-在`文件->设置->工具->外部工具`点击`+`号，新增一个工具。具体填写内容就是之前编译ros2工作空间的命令。程序填写`colcon`
+在`文件->设置->工具->外部工具`点击`+`号，新增一个工具。具体填写内容就是之前编译ROS 2 工作空间的命令。程序填写`colcon`
 ，实参填写`build --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -G Ninja`，工作目录选择ros2的工作空间。
-![Alt text](posts/2023-08-23-clion-development-setup/external_tools.png)
+![Alt text](posts/2023-11-25-jetbrains-ide-setup/external_tools.png)
 
 保存后在`工具->外部工具`选择`colcon build`，此时可以编译整个工作空间。
 
@@ -216,12 +215,41 @@ clion .
 2、创建自定义构建目标  
 在`文件->设置->构建、执行、部署->自定义构建目标`点击`+`号，新增一个目标。在`构建`
 中添加外部工具，选择功能包下的`cmake_commands.bat`，并将工作目录选择为功能包的构建目录
-![Alt text](posts/2023-08-23-clion-development-setup/custom_build_target.png)
+![Alt text](posts/2023-11-25-jetbrains-ide-setup/custom_build_target.png)
 
 3、配置run/debug功能  
 在`添加配置->编辑配置`点击`+`号，选择自定义构建应用程序，在`目标`选择上一步生成的构建目标，在`可执行文件`
 选择功能包编译出的可执行文件，删除`执行前`中的构建。
-![Alt text](posts/2023-08-23-clion-development-setup/custom_build_application.png)
+![Alt text](posts/2023-11-25-jetbrains-ide-setup/custom_build_application.png)
 
 4、断点调试  
 在功能包的CMakeLists.txt中添加`SET(CMAKE_BUILD_TYPE "Debug")`
+
+## PyCharm
+
+### ROS 开发
+
+PyCharm 在设置项目解释器后默认是没有添加ROS 环境，在`设置->文件->项目->Python解释器->python解释器`中，选择全部显示
+
+![Alt text](posts/2023-11-25-jetbrains-ide-setup/python.png)
+
+选择最右侧的`查看解释器路径`
+
+![Alt text](posts/2023-11-25-jetbrains-ide-setup/site.png)
+
+由此可以看出，在PyCharm中没有包含ROS 库，将其添加进解释器路径即可进行ROS 开发
+
+后续使用自定义消息时，同样需要将工作空间内`/devel/lib/python3/dist-packages`添加进解释器路径
+
+#### OpenCV 冲突
+
+ROS 安装的cv_bridge库会与pip 安装的OpenCV 相关环境存在冲突，进而会导致与opencv相关的代码出现各种问题。  
+在编辑配置中设置环境变量，添加`LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/ros/noetic/lib`
+
+![alt text](posts/2023-11-25-jetbrains-ide-setup/opencv.png)
+
+### 代理设置
+
+在编辑配置中设置环境变量，添加`http_proxy=http://127.0.0.1:7897;https_proxy=http://127.0.0.1:7897`
+
+![alt text](posts/2023-11-25-jetbrains-ide-setup/proxy.png)
