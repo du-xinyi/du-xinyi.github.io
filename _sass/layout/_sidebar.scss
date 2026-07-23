@@ -188,12 +188,16 @@ $sidebar-display: 'sidebar-display'; /* the attribute for sidebar display */
 
     $btn-size: 2rem;
 
-    .sidebar-actions {
-      overflow: hidden;
+    .sidebar-actions,
+    .sidebar-theme-actions {
       border: 1px solid var(--sidebar-border-color);
       border-radius: calc($btn-size / 2);
       background-color: var(--sidebar-btn-bg);
       box-shadow: 0 0.125rem 0.4rem rgb(0 0 0 / 6%);
+    }
+
+    .sidebar-actions {
+      overflow: hidden;
     }
 
     .sidebar-contact-actions {
@@ -201,18 +205,7 @@ $sidebar-display: 'sidebar-display'; /* the attribute for sidebar display */
     }
 
     .sidebar-theme-actions {
-      position: relative;
-      overflow: visible;
-
-      .dropdown-menu {
-        inset: auto auto calc(100% + 0.5rem) 0 !important;
-        margin: 0 !important;
-        transform: none !important;
-
-        &:not(.show) {
-          display: none;
-        }
-      }
+      flex: 0 0 auto;
     }
 
     %button {
