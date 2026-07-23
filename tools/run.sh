@@ -63,5 +63,8 @@ fi
 echo -e "\n> npm run build:js\n"
 npm run build:js || exit 1
 
+echo -e "\n> bundle exec jekyll clean\n"
+bundle exec jekyll clean || exit 1
+
 echo -e "\n> $command\n"
 eval "$command"
