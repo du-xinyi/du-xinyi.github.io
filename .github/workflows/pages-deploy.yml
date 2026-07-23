@@ -48,6 +48,9 @@ jobs:
       - name: Install frontend dependencies
         run: npm ci --ignore-scripts --no-audit --no-fund
 
+      - name: Build frontend assets
+        run: npm run build:js
+
       - name: Lint frontend
         run: npm test
 
