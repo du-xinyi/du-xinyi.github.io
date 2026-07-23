@@ -1,5 +1,20 @@
 /* Keep the bilingual site name readable in the narrow sidebar. */
 #sidebar {
+  .profile-wrapper {
+    width: 100%;
+    text-align: center;
+  }
+
+  #avatar {
+    margin-inline: auto;
+  }
+
+  .site-title,
+  .site-subtitle {
+    width: 100%;
+    text-align: center;
+  }
+
   .site-title-primary,
   .site-title-english {
     display: block;
