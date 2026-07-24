@@ -1,5 +1,5 @@
-$glass-blur: 20px;
-$glass-saturation: 180%;
+$glass-blur: 24px;
+$glass-saturation: 190%;
 
 @mixin glass-filter(
   $blur: $glass-blur,
@@ -125,45 +125,45 @@ body::before {
     background:
       radial-gradient(
         ellipse 60rem 44rem at 78% 8%,
-        rgb(10 132 255 / 26%) 0,
+        rgb(10 132 255 / 34%) 0,
         transparent 72%
       ),
       radial-gradient(
         ellipse 54rem 40rem at 16% 82%,
-        rgb(175 82 222 / 30%) 0,
+        rgb(175 82 222 / 38%) 0,
         transparent 72%
       ),
       radial-gradient(
         ellipse 50rem 38rem at 60% 55%,
-        rgb(255 55 95 / 14%) 0,
+        rgb(255 55 95 / 18%) 0,
         transparent 72%
       ),
       radial-gradient(
         ellipse 42rem 34rem at 88% 92%,
-        rgb(255 159 10 / 20%) 0,
+        rgb(255 159 10 / 26%) 0,
         transparent 70%
       ),
       radial-gradient(
         ellipse 46rem 36rem at 6% 18%,
-        rgb(100 210 255 / 16%) 0,
+        rgb(100 210 255 / 22%) 0,
         transparent 72%
       ),
       var(--main-bg);
   }
 
   #sidebar {
-    background: rgb(250 250 252 / 58%);
+    background: rgb(250 250 252 / 48%);
     border-right-color: rgb(0 0 0 / 6%);
   }
 
   #topbar-wrapper {
-    background: rgb(248 248 250 / 56%);
+    background: rgb(248 248 250 / 46%);
     border-bottom-color: rgb(0 0 0 / 6%);
   }
 
   #post-list .post-preview {
     border-color: rgb(0 0 0 / 7%);
-    background: rgb(255 255 255 / 50%);
+    background: rgb(255 255 255 / 42%);
     box-shadow:
       inset 0 1px rgb(255 255 255 / 72%),
       0 1px 3px rgb(0 0 0 / 4%);
@@ -179,7 +179,7 @@ body::before {
 
   #sidebar .sidebar-actions {
     border-color: rgb(0 0 0 / 8%);
-    background: rgb(255 255 255 / 52%);
+    background: rgb(255 255 255 / 44%);
     box-shadow: 0 1px 2px rgb(0 0 0 / 4%);
   }
 }
