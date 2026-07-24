@@ -114,6 +114,12 @@ body::before {
   box-shadow: 0 1px 2px rgb(0 0 0 / 4%);
 }
 
+.toc-border-cover,
+#toc-wrapper::before,
+#toc-wrapper::after {
+  background: transparent;
+}
+
 @mixin light-glass {
   body::before {
     background:
