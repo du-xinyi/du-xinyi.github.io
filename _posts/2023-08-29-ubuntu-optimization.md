@@ -209,7 +209,11 @@ Windows 默认将硬件时钟（RTC）解释为本地时间，而 Ubuntu 通常�
 以管理员身份打开命令提示符，执行以下命令（64 位 Windows 同样使用 `REG_DWORD`）
 
 ```cmd
-reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\TimeZoneInformation" /v RealTimeIsUniversal /t REG_DWORD /d 1 /f
+reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\TimeZoneInformation" ^
+  /v RealTimeIsUniversal ^
+  /t REG_DWORD ^
+  /d 1 ^
+  /f
 ```
 
 重启 Windows，并在“设置 → 时间和语言 → 日期和时间”中确认时区正确，启用自动设置时间并同步。
