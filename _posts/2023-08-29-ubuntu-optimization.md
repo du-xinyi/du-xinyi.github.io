@@ -95,12 +95,12 @@ swapon --show
 ```
 
 | 物理内存 | 推荐 swap |
-| :--- | ---: |
-|  ------  |  -------  |
-|   16GB   |   4–8GB   |
-|   32GB   |  8–16GB   |
-|   64GB   |   16GB    |
-|  128GB+  |  16–32GB  |
+| :------- | --------: |
+| ------   |   ------- |
+| 16GB     |     4–8GB |
+| 32GB     |    8–16GB |
+| 64GB     |      16GB |
+| 128GB+   |   16–32GB |
 
 ### 使用 swapfile 扩容
 
@@ -140,7 +140,7 @@ echo 1 | sudo tee /sys/module/zswap/parameters/enabled
 
 永久生效
 ```bash
-sudo sed -i 's/^GRUB_CMDLINE_LINUX_DEFAULT="/GRUB_CMDLINE_LINUX_DEFAULT="zswap.enabled=1 zswap.compressor=lz4 zswap.max_pool_percent=20 /' /etc/default/grub && \
+sudo sed -i 's/^GRUB_CMDLINE_LINUX_DEFAULT="/GRUB_CMDLINE_LINUX_DEFAULT="zswap.enabled=1 zswap.compressor=lz4 zswap.max_pool_percent=20 /' /etc/default/grub
 ```
 
 更新设置
@@ -202,25 +202,44 @@ sudo sysctl --system
 ## 时间相关
 ### 双系统时间错误
 
-安装`ntpdate`
+Windows 默认将硬件时钟（RTC）解释为本地时间，而 Ubuntu 通常按 UTC 解释。同一个硬件时钟使用不同约定，会导致切换系统后时间偏移，例如在中国标准时间（UTC+8）下相差 8 小时。建议将两个系统的硬件时钟统一为 UTC，桌面仍按各自设置的时区显示当地时间
 
-```bash
-sudo apt-get install ntpdate
+#### Windows 使用 UTC 硬件时钟
+
+以管理员身份打开命令提示符，执行以下命令（64 位 Windows 同样使用 `REG_DWORD`）
+
+```cmd
+reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\TimeZoneInformation" /v RealTimeIsUniversal /t REG_DWORD /d 1 /f
 ```
 
-更新本地时间
+重启 Windows，并在“设置 → 时间和语言 → 日期和时间”中确认时区正确，启用自动设置时间并同步。
+
+#### Ubuntu 使用 UTC 硬件时钟
+
+先检查时区与同步状态
 
 ```bash
-sudo ntpdate time.windows.com
+timedatectl
 ```
 
-更新硬件
+如果时区不正确，按实际所在地修改，以下以中国标准时间为例
 
 ```bash
-sudo timedatectl set-local-rtc 1
+sudo timedatectl set-timezone Asia/Shanghai
 ```
 
-[一键配置脚本](https://github.com/du-xinyi/du-xinyi.github.io/releases/download/origin/time.sh)
+使用系统已有的时间同步服务（如 `systemd-timesyncd` 或 `chrony`）自动校时，无需额外安装 `ntpdate`。可通过以下命令启用可用的同步服务
+
+```bash
+sudo timedatectl set-ntp true
+```
+
+确认系统时间正确且已同步后，将硬件时钟设为 UTC；该命令也会用当前系统时间更新硬件时钟
+
+```bash
+sudo timedatectl set-local-rtc 0
+timedatectl
+```
 
 ### 修改启动等待时间为0
 
@@ -261,135 +280,76 @@ sudo vim /etc/systemd/system.conf
 **千万不要修改`DefaultTimeoutStartSec`，若修改时间太短，时间将不足以支持系统启动。如果不慎修改，在grub引导中选择recovery模式的root终端，用vim将其改回来**
 
 ## 显卡相关
-### 查询功率限制
+### 查询功率信息
+
+查看 GPU 0 的功率信息，包括设备支持时报告的当前、默认及最小/最大功率上限。多显卡机器可先使用 `nvidia-smi -L` 查看设备编号，再替换 `-i 0` 中的编号；不支持的字段可能显示为 `N/A`。
 
 ```bash
-nvidia-smi -q | grep 'Power Limit'
+nvidia-smi -i 0 -q -d POWER
 ```
 
-![Alt text](posts/2023-08-29-ubuntu-optimization/nvidia-smi.png)  
+![NVIDIA 显卡功率限制查询示例](posts/2023-08-29-ubuntu-optimization/nvidia-smi.png)
 
-### 设置持久模式
+### 持久模式（按需启用）
 
-持久模式是一种让GPU驱动程序在系统启动时就加载并一直保持运行的模式，可以避免在每次运行GPU应用程序时重新初始化GPU的开销
+持久模式用于在没有应用程序使用 GPU 时保留其初始化状态，减少后续计算任务的初始化开销，主要适用于无图形界面的计算场景。如果桌面图形服务已持续使用该 GPU，通常无需额外开启。
+
+NVIDIA 推荐使用 `nvidia-persistenced` 守护进程管理持久状态。先检查驱动包是否已经提供服务及其运行状态
 
 ```bash
-sudo nvidia-smi -pm 1
+systemctl cat nvidia-persistenced.service
+systemctl status nvidia-persistenced.service
 ```
 
-#### 开机自启
+如果服务存在但未运行，并且确实需要持久模式，可启动已有服务
 
 ```bash
-sudo vim /etc/systemd/system/nvidia-persistenced.service
-```
-
-添加如下内容
-
-```bash
-[Unit]
-Description=NVIDIA Persistence Mode
-
-[Service]
-Type=oneshot
-ExecStart=/usr/bin/nvidia-smi -pm 1
-RemainAfterExit=true
-
-[Install]
-WantedBy=multi-user.target
-```
-{: file='nvidia-persistenced.service' }
-
-重新加载 systemd 配置
-  
-```bash 
-sudo systemctl daemon-reload
-```
-
-开机自启
-
-```bash 
-sudo systemctl enable nvidia-persistenced.service
 sudo systemctl start nvidia-persistenced.service
 ```
 
-### 设置功耗
+在设备支持时，为 GPU 0 启用持久模式并查看结果
 
 ```bash
-sudo nvidia-smi -pl 140
+sudo nvidia-smi -i 0 -pm 1
+nvidia-smi -i 0 --query-gpu=persistence_mode --format=csv
 ```
 
-#### 开机自启
+`nvidia-smi -pm 1` 本身不会保存跨重启配置。开机行为应以驱动包提供的服务及启动参数为准；部分服务由依赖关系自动启动，不能直接用 `systemctl enable` 启用。如果服务不存在，应检查所安装驱动包的说明，不要创建同名的简化服务覆盖官方配置。
+
+### nvidia-powerd（受支持笔记本的 Dynamic Boost）
+
+`nvidia-powerd` 为 Linux 提供 Dynamic Boost 支持，根据负载在 CPU 和 GPU 之间动态分配功率预算
+
+硬件需要同时满足以下条件：
+
+- 笔记本平台
+- Ampere 或更新架构的 NVIDIA GPU
+- 受支持的 Intel 或 AMD 平台
+- 系统 BIOS 支持 Dynamic Boost
+
+具体平台及软件要求应以所安装驱动版本的文档为准。可通过以下命令查询 BIOS 是否报告支持；其中 `*` 匹配各 GPU 的 PCI 地址目录
 
 ```bash
-sudo vim /etc/systemd/system/nvidia-power.service
+cat /proc/driver/nvidia/gpus/*/power
 ```
+
+查看输出中的 `Dynamic Boost` 支持状态。确认平台支持后，检查驱动包提供的服务
 
 ```bash
-[Unit]
-Description=NVIDIA Power Restrict
-
-[Service]
-Type=oneshot
-ExecStart=/usr/bin/nvidia-smi -pl 140
-RemainAfterExit=true
-
-[Install]
-WantedBy=multi-user.target
-```
-{: file='nvidia-power.service' }
-
-重新加载 systemd 配置
-  
-```bash 
-sudo systemctl daemon-reload
+systemctl cat nvidia-powerd.service
 ```
 
-开机自启
-
-```bash 
-sudo systemctl enable nvidia-power.service
-sudo systemctl start nvidia-power.service
-```
-
-使用.run安装的显卡驱动可能不支持此方法修改功耗
-
-### nvidia-powerd
-
-在30系及以后的显卡中，使用了一种新类型的服务nvidia-powerd对显卡功耗进行控制操作
+如果服务已安装，且驱动要求的 D-Bus 等配置已就绪，可启用并立即启动
 
 ```bash
-sudo nvidia-powerd
+sudo systemctl enable --now nvidia-powerd.service
+systemctl status nvidia-powerd.service
 ```
 
-#### 开机自启
+若服务启动失败，可查看日志排查平台支持及配置问题
 
 ```bash
-sudo vim /etc/systemd/system/nvidia-powerd.service
+journalctl -u nvidia-powerd.service -b
 ```
 
-添加如下内容
-
-```bash
-[Unit]
-Description=NVIDIA Power Daemon
-After=multi-user.target
-
-[Service]
-Type=simple
-ExecStart=/usr/bin/nvidia-powerd
-
-[Install]
-WantedBy=multi-user.target
-```
-
-重新加载systemd配置
-
-```bash
-sudo systemctl daemon-reload
-```
-
-启用服务
-
-```bash
-sudo systemctl enable nvidia-powerd
-```
+不支持的平台无需启用该服务
