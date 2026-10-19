@@ -29,10 +29,21 @@ function shouldRefreshFromNetwork(request) {
   const url = new URL(request.url);
 
   return (
+    url.origin === self.location.origin ||
     request.mode === 'navigate' ||
     url.searchParams.has('v') ||
     url.searchParams.has('refresh')
   );
+}
+
+function cacheKey(request) {
+  if (request.mode !== 'navigate') {
+    return request;
+  }
+
+  const url = new URL(request.url);
+  url.searchParams.delete('refresh');
+  return url.href;
 }
 
 async function cacheResponse(request, response) {
@@ -46,17 +57,22 @@ async function cacheResponse(request, response) {
     return;
   }
 
-  const cache = await caches.open(swconf.cacheName);
-  await cache.put(request, response.clone());
+  try {
+    const cache = await caches.open(swconf.cacheName);
+    await cache.put(cacheKey(request), response.clone());
+  } catch (error) {
+    // A full cache must not discard a successful network response.
+    console.warn('Unable to cache response:', error);
+  }
 }
 
 async function networkFirst(request) {
   try {
-    const response = await fetch(request);
+    const response = await fetch(request, { cache: 'no-cache' });
     await cacheResponse(request, response);
     return response;
   } catch {
-    return caches.match(request);
+    return caches.match(cacheKey(request));
   }
 }
 
@@ -79,26 +95,31 @@ self.addEventListener('install', (event) => {
 
   event.waitUntil(
     caches.open(swconf.cacheName).then((cache) => {
-      return cache.addAll(swconf.resources);
+      return cache.addAll(
+        swconf.resources.map((url) => new Request(url, { cache: 'reload' }))
+      );
     })
   );
 });
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((keyList) => {
-      return Promise.all(
-        keyList.map((key) => {
-          if (purge) {
-            return caches.delete(key);
-          } else {
-            if (key !== swconf.cacheName) {
+    caches
+      .keys()
+      .then((keyList) => {
+        return Promise.all(
+          keyList.map((key) => {
+            if (purge) {
               return caches.delete(key);
+            } else {
+              if (key !== swconf.cacheName) {
+                return caches.delete(key);
+              }
             }
-          }
-        })
-      );
-    })
+          })
+        );
+      })
+      .then(() => self.clients.claim())
   );
 });
 
@@ -109,7 +130,12 @@ self.addEventListener('message', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  if (event.request.headers.has('range')) {
+  if (
+    purge ||
+    event.request.method !== 'GET' ||
+    event.request.headers.has('range') ||
+    !verifyUrl(event.request.url)
+  ) {
     return;
   }
 

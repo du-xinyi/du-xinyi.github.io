@@ -16,37 +16,33 @@ async function updateServiceWorker() {
     return false;
   }
 
-  const registrations = await navigator.serviceWorker.getRegistrations();
+  const registration = await navigator.serviceWorker.getRegistration();
+  if (!registration) {
+    return false;
+  }
 
-  await Promise.all(
-    registrations.map(async (registration) => {
-      await registration.update();
+  await registration.update();
 
-      const installingWorker = registration.installing;
-      if (!installingWorker) {
-        return;
-      }
+  const installingWorker = registration.installing;
+  if (installingWorker) {
+    await new Promise((resolve) => {
+      const onStateChange = () => {
+        if (
+          installingWorker.state === 'installed' ||
+          installingWorker.state === 'activated' ||
+          installingWorker.state === 'redundant'
+        ) {
+          installingWorker.removeEventListener('statechange', onStateChange);
+          resolve();
+        }
+      };
 
-      await new Promise((resolve) => {
-        const timeout = window.setTimeout(resolve, 3000);
+      installingWorker.addEventListener('statechange', onStateChange);
+      onStateChange();
+    });
+  }
 
-        installingWorker.addEventListener('statechange', () => {
-          if (
-            installingWorker.state === 'installed' ||
-            installingWorker.state === 'activated' ||
-            installingWorker.state === 'redundant'
-          ) {
-            window.clearTimeout(timeout);
-            resolve();
-          }
-        });
-      });
-    })
-  );
-
-  const waitingWorker = registrations
-    .map((registration) => registration.waiting)
-    .find(Boolean);
+  const waitingWorker = registration.waiting;
 
   if (!waitingWorker) {
     return false;
@@ -73,6 +69,10 @@ export function initCacheRefresh() {
 
   button.addEventListener('click', async (event) => {
     event.preventDefault();
+    if (button.getAttribute('aria-disabled') === 'true') {
+      return;
+    }
+
     button.setAttribute('aria-disabled', 'true');
     button.classList.add('refreshing');
 
@@ -80,7 +80,7 @@ export function initCacheRefresh() {
       const activatingUpdate = await updateServiceWorker();
 
       if (activatingUpdate) {
-        window.setTimeout(reloadWithCacheBuster, 1500);
+        // app.js reloads once the updated worker actually takes control.
         return;
       }
     } catch {

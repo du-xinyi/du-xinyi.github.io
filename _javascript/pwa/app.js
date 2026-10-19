@@ -6,43 +6,47 @@ if ('serviceWorker' in navigator) {
   const register = src.searchParams.get('register');
   const baseUrl = src.searchParams.get('baseurl');
 
-  if (register) {
+  if (register === 'true') {
     const swUrl = `${baseUrl}/sw.min.js`;
     const $notification = document.getElementById('notification');
     const $btnUpdate = $notification.querySelector('[aria-label="Update"]');
     const popupWindow = Toast.getOrCreateInstance($notification);
 
-    navigator.serviceWorker.register(swUrl).then((registration) => {
-      // Restore the update window that was last manually closed by the user
-      if (registration.waiting) {
-        popupWindow.show();
-      }
+    navigator.serviceWorker
+      .register(swUrl, { updateViaCache: 'none' })
+      .then((registration) => {
+        // Restore the update window that was last manually closed by the user
+        if (registration.waiting) {
+          popupWindow.show();
+        }
 
-      registration.addEventListener('updatefound', () => {
-        registration.installing.addEventListener('statechange', () => {
-          if (registration.waiting) {
-            if (navigator.serviceWorker.controller) {
-              popupWindow.show();
+        registration.addEventListener('updatefound', () => {
+          registration.installing.addEventListener('statechange', () => {
+            if (registration.waiting) {
+              if (navigator.serviceWorker.controller) {
+                popupWindow.show();
+              }
             }
+          });
+        });
+
+        $btnUpdate.addEventListener('click', () => {
+          if (registration.waiting) {
+            registration.waiting.postMessage('SKIP_WAITING');
           }
+          popupWindow.hide();
         });
       });
-
-      $btnUpdate.addEventListener('click', () => {
-        if (registration.waiting) {
-          registration.waiting.postMessage('SKIP_WAITING');
-        }
-        popupWindow.hide();
-      });
-    });
 
     let refreshing = false;
 
     // Detect controller change and refresh all the opened tabs
     navigator.serviceWorker.addEventListener('controllerchange', () => {
       if (!refreshing) {
-        window.location.reload();
         refreshing = true;
+        const url = new URL(window.location.href);
+        url.searchParams.set('refresh', Date.now().toString());
+        window.location.replace(url);
       }
     });
   } else {

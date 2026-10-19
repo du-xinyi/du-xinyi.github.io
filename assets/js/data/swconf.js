@@ -6,19 +6,19 @@ permalink: '/:path/swconf.js'
 
 const swconf = {
   {% if site.pwa.cache.enabled %}
-    cacheName: 'chirpy-{{ "now" | date: "%s" }}',
+    cacheName: 'chirpy-{{ site.time | date: "%s" }}',
 
     {%- comment -%} Resources added to the cache during PWA installation. {%- endcomment -%}
     resources: [
-      '{{ "/assets/css/site.css" | relative_url }}',
+      '{{ "/assets/css/site.css" | relative_url }}?v={{ site.time | date: "%s" }}',
       '{{ "/" | relative_url }}',
       {% for tab in site.tabs %}
         '{{- tab.url | relative_url -}}',
       {% endfor %}
 
-      {% assign cache_list = site.static_files | where: 'swcache', true %}
+      {% assign cache_list = site.pages | where: 'swcache', true %}
       {% for file in cache_list %}
-        '{{ file.path | relative_url }}'{%- unless forloop.last -%},{%- endunless -%}
+        '{{ file.url | relative_url }}?v={{ site.time | date: "%s" }}'{%- unless forloop.last -%},{%- endunless -%}
       {% endfor %}
     ],
 
