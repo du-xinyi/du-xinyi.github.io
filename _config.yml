@@ -183,6 +183,8 @@ collections:
   tabs:
     output: true
     sort_by: order
+  recipes: # assembled into the cookbook post, see _plugins/cookbook.rb
+    output: false
 
 defaults:
   - scope:

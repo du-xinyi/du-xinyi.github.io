@@ -1,0 +1,58 @@
+# 菜谱分类，顺序即页面中的显示顺序。
+# id 对应 _recipes/ 下的目录名；分类内的菜谱按文件名（拼音）排序。
+
+- name: 凉菜
+  id: cold-dishes
+
+- name: 素菜
+  id: vegetable-dishes
+
+- name: 荤菜
+  id: meat-dishes
+
+- name: 炖煲
+  id: stews
+
+- name: 汤羹
+  id: soups
+
+- name: 主食
+  id: staples
+
+- name: 小吃
+  id: snacks
+
+- name: 甜品
+  id: desserts
+
+- name: 饮品
+  id: drinks
+  groups:
+    - name: 果茶
+      id: fruit-tea
+    - name: 果蔬汁
+      id: juices
+    - name: 咖啡
+      id: coffee
+    - name: 可可
+      id: cocoa
+    - name: 奶茶
+      id: milk-tea
+    - name: 汽水
+      id: soda
+    - name: 汤饮
+      id: herbal-drinks
+
+- name: 基础处理
+  id: basics
+  groups:
+    - name: 酱料
+      id: condiments
+    - name: 酱汁
+      id: sauces
+    - name: 干料
+      id: dry-seasonings
+    - name: 糖浆
+      id: syrups
+    - name: 预处理
+      id: prep
