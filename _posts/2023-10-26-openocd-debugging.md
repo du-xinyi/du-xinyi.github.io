@@ -113,5 +113,5 @@ sudo udevadm trigger
 
 此时`openocd`可以免`sudo`连接单片机
 
-[一键安装及配置脚本](https://github.com/du-xinyi/du-xinyi.github.io/releases/download/origin/openocd.sh)
+[一键安装及配置脚本](https://raw.githubusercontent.com/du-xinyi/du-xinyi.github.io/master/assets/scripts/openocd.sh)
 ，将脚本置于`openocd`源码目录下即可使用

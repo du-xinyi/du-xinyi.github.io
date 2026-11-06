@@ -56,7 +56,7 @@ LANGUAGE=zh_CN /usr/bin/google-chrome-stable "$@"
 随后将该脚本复制到`/usr/bin/`路径下并添加执行权限（`sudo chmod +x /usr/bin/chrome_cn.sh`），再将`/usr/share/applications/google-chrome.desktop`
 复制到`~/.local/share/applications/`，把副本里的所有`/usr/bin/google-chrome-stable`换成`/usr/bin/chrome_cn.sh`，此时启动Chrome界面将是中文。直接修改`/usr/share/applications`下的原文件会在Chrome升级时被覆盖。
 
-[一键配置脚本](https://github.com/du-xinyi/du-xinyi.github.io/releases/download/origin/google-chinesization.sh)
+[一键配置脚本](https://raw.githubusercontent.com/du-xinyi/du-xinyi.github.io/master/assets/scripts/google-chinesization.sh)
 
 ## pip补全
 

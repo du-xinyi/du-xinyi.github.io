@@ -54,6 +54,6 @@ tags: [ Linux, Filesystem, Mount ]
   - squashfs → 压缩只读文件系统（常见于 LiveCD）
   - ramfs → 原始内存文件系统（比 tmpfs 更基础）
 
-[一键检查脚本](https://github.com/du-xinyi/du-xinyi.github.io/releases/download/origin/check_mounts.sh)
+[一键检查脚本](https://raw.githubusercontent.com/du-xinyi/du-xinyi.github.io/master/assets/scripts/check_mounts.sh)
 
 **注意：由于 内核态/用户态切换 和 拷贝开销，用户态挂载（FUSE）性能通常比内核态文件系统差，不推荐在高并发、大吞吐量的场景下直接使用**
