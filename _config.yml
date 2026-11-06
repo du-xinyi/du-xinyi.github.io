@@ -98,10 +98,10 @@ theme_mode: # [light | dark]
 # will be added to all media resources (site avatar, posts' images, audio and video files) paths starting with '/'
 #
 # e.g. 'https://cdn.com'
-cdn: "https://raw.githubusercontent.com/du-xinyi/du-xinyi.github.io/master/assets/img/"
+cdn:
 
 # the avatar on sidebar, support local or CORS resources
-avatar: "avatar/avatar.png"
+avatar: "/assets/img/avatar/avatar.png"
 
 # The URL of the site-wide social preview image used in SEO `og:image` meta tag.
 # It can be overridden by a customized `page.image` in front matter.
@@ -194,6 +194,7 @@ defaults:
       layout: post
       comments: true # Enable comments in posts.
       toc: true # Display TOC column in posts.
+      media_subpath: /assets/img # Post media paths are relative to this directory.
       # DO NOT modify the following parameter unless you are confident enough
       # to update the code of all other post links in this project.
       permalink: /posts/:title/
