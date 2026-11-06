@@ -1,3 +1,5 @@
+@use '../abstracts/breakpoints' as bp;
+
 $glass-blur: 24px;
 $glass-saturation: 190%;
 
@@ -121,34 +123,42 @@ body::before {
 }
 
 @mixin light-glass {
+  /* two hues only (blue + soft purple) so the light theme stays calm */
   body::before {
     background:
       radial-gradient(
         ellipse 60rem 44rem at 78% 8%,
-        rgb(10 132 255 / 34%) 0,
+        rgb(10 132 255 / 24%) 0,
         transparent 72%
       ),
       radial-gradient(
         ellipse 54rem 40rem at 16% 82%,
-        rgb(175 82 222 / 38%) 0,
-        transparent 72%
-      ),
-      radial-gradient(
-        ellipse 50rem 38rem at 60% 55%,
-        rgb(255 55 95 / 18%) 0,
-        transparent 72%
-      ),
-      radial-gradient(
-        ellipse 42rem 34rem at 88% 92%,
-        rgb(255 159 10 / 26%) 0,
-        transparent 70%
-      ),
-      radial-gradient(
-        ellipse 46rem 36rem at 6% 18%,
-        rgb(100 210 255 / 22%) 0,
+        rgb(175 82 222 / 20%) 0,
         transparent 72%
       ),
       var(--main-bg);
+  }
+
+  /* the desktop home page keeps a little more colour */
+  body:has(#post-list)::before {
+    @include bp.lg {
+      background:
+        radial-gradient(
+          ellipse 60rem 44rem at 78% 8%,
+          rgb(10 132 255 / 28%) 0,
+          transparent 72%
+        ),
+        radial-gradient(
+          ellipse 54rem 40rem at 16% 82%,
+          rgb(175 82 222 / 24%) 0,
+          transparent 72%
+        ),
+        var(--main-bg);
+    }
+  }
+
+  #sidebar .site-title {
+    color: var(--heading-color);
   }
 
   #sidebar {
@@ -163,7 +173,7 @@ body::before {
 
   #post-list .post-preview {
     border-color: rgb(0 0 0 / 7%);
-    background: rgb(255 255 255 / 42%);
+    background: rgb(255 255 255 / 55%);
     box-shadow:
       inset 0 1px rgb(255 255 255 / 72%),
       0 1px 3px rgb(0 0 0 / 4%);
