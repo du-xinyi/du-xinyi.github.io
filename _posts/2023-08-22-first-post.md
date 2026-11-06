@@ -7,7 +7,7 @@ tags: [ Journal ]
 pin: true
 pin_order: 1
 image:
-  path: posts/2023-08-22-first-post/origin.jpg
+  path: https://raw.githubusercontent.com/du-xinyi/du-xinyi.github.io/master/assets/img/posts/2023-08-22-first-post/origin.jpg
   width: 1200
   height: 630
 ---
