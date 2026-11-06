@@ -22,11 +22,11 @@ sudo usermod -aG docker $USER
 ```
 {: file='添加用户组'}
 
-重启后即可免sudo运行docker
+重新登录（或执行`newgrp docker`）后即可免sudo运行docker。注意：docker组成员等同于拥有root权限，只应添加可信用户
 
 ## 代理配置
 
-docker的网络默认不会走代理，需要在进程服务文件夹配置代理设置
+docker的守护进程（dockerd）默认不会走代理，需要在进程服务文件夹配置代理设置。该配置只影响dockerd本身（如拉取/推送镜像），不会作用于容器内网络和`docker build`中的`RUN`步骤，后者需在`~/.docker/config.json`的`proxies`中配置或通过`-e`/`--build-arg`传入
 
 ```bash
 sudo mkdir /etc/systemd/system/docker.service.d
@@ -42,12 +42,13 @@ sudo vim /etc/systemd/system/docker.service.d/proxy.conf
 
 ```bash
 [Service] 
-Environment="HTTP_PROXY=127.0.0.1:7897" 
-Environment="HTTPS_PROXY=127.0.0.1:7897"
+Environment="HTTP_PROXY=http://127.0.0.1:7897" 
+Environment="HTTPS_PROXY=http://127.0.0.1:7897"
+Environment="NO_PROXY=localhost,127.0.0.1"
 ```
 {: file='proxy.conf'}
 
-最后重启docker，并重启daemon进程
+最后重新加载systemd配置，并重启docker
 
 ```bash
 sudo systemctl daemon-reload
@@ -64,11 +65,13 @@ docker info
 ## docker ros可视化
 
 需要配置Docker以便支持X11显示系统，用于图形界面显示。以`osrf`中的`ros:humble-desktop`为例。
-在容器外的终端执行如下命令，允许任意主机连接到本机的X server
+在容器外的终端执行如下命令，允许本机的本地连接访问X server
 
 ```shell
-xhost +
+xhost +local:
 ```
+
+不要使用`xhost +`，它会关闭X server的访问控制，网络上任何主机都可连接并截屏、记录键盘输入。使用完毕后执行`xhost -local:`恢复
 
 随后启动容器
 

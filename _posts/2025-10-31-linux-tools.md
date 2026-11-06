@@ -19,6 +19,8 @@ sudo apt-get install -y ssh
 ```
 {: file='安装ssh'}
 
+`ssh`元包会同时安装`openssh-client`和`openssh-server`，安装后`sshd`会监听22端口；如果只需要客户端，安装`openssh-client`即可
+
 ```bash
 ssh-keygen -t rsa -b 4096 -C "emial@examle.com"
 ```
@@ -26,7 +28,7 @@ ssh-keygen -t rsa -b 4096 -C "emial@examle.com"
 
 `""`内为邮箱地址，运行成功后会在`~/.ssh`中生成`id_rsa`和`id_rsa.pub`文件
 
-- -t: 指定算法，包括`dsa` `ecdsa` `ecdsa-sk`,`ed25519` `ed25519-sk` `rsa`（推荐用 ed25519）
+- -t: 指定算法，包括`ecdsa` `ecdsa-sk`,`ed25519` `ed25519-sk` `rsa`（推荐用 ed25519）
 - -b: 指定密钥长度。对 `ed25519` 不需要 -b  
 
 密钥默认保存在 ~/.ssh/id_rsa（私钥）和 ~/.ssh/id_rsa.pub（公钥）
@@ -36,7 +38,7 @@ ssh-add ~/.ssh/id_rsa
 ```
 {: file='添加到ssh代理'}
 
-添加到`ssh代理`后，`ssh`相关操作及可实现免密
+添加到`ssh代理`后，私钥口令只需输入一次（需`ssh-agent`已在运行）；免密登录远程主机还需将公钥复制到远程主机，见下方`ssh-copy-id`
 
 ```bash
 ssh-add -l
@@ -129,7 +131,7 @@ screen -S session_name
 - `ctrl`+`a`+`c` 创建一个新的`screen`窗口
 - `ctrl`+`a`+`n` 切换到下一个`screen`窗口
 - `ctrl`+`a`+`p` 切换到上一个`screen`窗口
-- `ctrl`+`a` 列出所有的`screen`窗口
+- `ctrl`+`a`+`"` 列出所有的`screen`窗口
 - `ctrl`+`a`+`d` 分离当前的`screen`会话
 
 ### 重连会话
@@ -156,7 +158,7 @@ screen -x session_name
 
 ## shc
 
-shc 是一个用于加密 shell 脚本的工具，它可以将脚本转换为二进制可执行文件，以保护脚本内容不被轻易查看
+shc 是一个用于加密 shell 脚本的工具，它可以将脚本转换为二进制可执行文件，以保护脚本内容不被轻易查看。注意这只是混淆，脚本内容仍可被还原，不要依赖它保护密码等机密
 
 ```bash
 sudo apt-get install shc
@@ -175,8 +177,7 @@ sudo apt-get install shc
   - -e 设置脚本的过期日期，格式为 `dd/mm/yyyy`
   - -m 设置脚本过期时显示的消息
   - -o 指定输出的二进制文件名
-  - -z 压缩生成的二进制文件，减小体积
-  - -d 生成调试版本，包含更多错误信息
+  - -D 开启调试，输出执行调用信息
   - -S 打开 `setuid`（使生成程序可被 `root` 以 `setuid` 方式调用）。默认关闭 **谨慎使用**
   - -U 生成不可跟踪的二进制，尝试阻止 `strace` / `ptrace` / `truss` 等工具跟踪进程
 - [variables]

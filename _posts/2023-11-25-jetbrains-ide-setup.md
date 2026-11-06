@@ -49,6 +49,7 @@ export PATH=$PATH:$HOME/.local/bin
 然后
 
 ```bash
+mkdir -p ~/.local/bin
 ln -s ~/.platformio/penv/bin/platformio ~/.local/bin/platformio
 ln -s ~/.platformio/penv/bin/pio ~/.local/bin/pio
 ln -s ~/.platformio/penv/bin/piodebuggdb ~/.local/bin/piodebuggdb
@@ -57,10 +58,10 @@ ln -s ~/.platformio/penv/bin/piodebuggdb ~/.local/bin/piodebuggdb
 或者直接
 
 ```bash
-mkdir -p /usr/local/bin
-ln -s ~/.platformio/penv/bin/platformio /usr/local/bin/platformio
-ln -s ~/.platformio/penv/bin/pio /usr/local/bin/pio
-ln -s ~/.platformio/penv/bin/piodebuggdb /usr/local/bin/piodebuggdb
+sudo mkdir -p /usr/local/bin
+sudo ln -s ~/.platformio/penv/bin/platformio /usr/local/bin/platformio
+sudo ln -s ~/.platformio/penv/bin/pio /usr/local/bin/pio
+sudo ln -s ~/.platformio/penv/bin/piodebuggdb /usr/local/bin/piodebuggdb
 ```
 
 官网链接：<https://docs.platformio.org/en/latest/core/installation/shell-commands.html#piocore-install-shell-commands>
@@ -100,10 +101,11 @@ include_directories("$ENV{HOME}/.platformio/packages/toolchain-sdcc/share/sdcc/n
 #### 烧录程序
 
 PlatformIO 原生的烧录很慢，改为使用stcgal烧录。  
-首先，安装stcgal
+首先，安装stcgal。新版系统的 Python 不允许直接用 pip 安装到系统环境，这里安装到 PlatformIO 自带的 Python 环境中，并链接到`~/.local/bin`
 
 ```bash
-pip install stcgal
+~/.platformio/penv/bin/pip install stcgal
+ln -s ~/.platformio/penv/bin/stcgal ~/.local/bin/stcgal
 ```
 
 然后在platformio.ini添加
@@ -120,70 +122,11 @@ upload_command = stcgal $UPLOAD_FLAGS $SOURCE
 
 即可使用stcgal烧录程序。  
 
-**写在最后**  
-1.6版本的stcgal因为stc89c52芯片的固件原因有部分芯片会烧录失败，在 <https://github.com/nrife/stcgal.git> 下载源码后
-
-- Windows
-
-```bash
-python ./setup.py install
-```
-
-- Linux
-
-```bash
-sudo ./setup.py install
-```
-
-安装stcgal，同时将stc89改为stc89a  
-1.8版本的stcgal已添加对不同固件stc8952的支持，可以直接pip安装。
-
 #### 附录
 
-1.8支持的芯片类型如下
+stcgal支持的芯片类型如下
 
 |stc89|stc89a|stc12a|stc12b|stc12|stc15a|stc15|stc8|stc8d|stc8g|usb15|
-
-### ROS 1 开发
-#### 启动CLion
-
-首先在命令行激活ROS 环境
-
-```bash
-catkin_make
-source ./devel/setup.zsh
-```
-
-在同一终端下启动 CLion
-
-```bash
-clion .
-```
-
-#### CLion中打开ROS项目
-
-点击`文件->打开`并在ROS工作区的src目录中选择CMakeLists.txt，然后选择作为项目打开。
-
-#### 设置build路径
-
-默认情况下，CLion将生成输出放在自动创建的`cmake-build-debug`或`cmake-build-release`
-目录中。因此需要将CLion构建路径设置为catkin工作区目录。  
-在`文件->设置->构建、执行、部署->CMake`中将`CMake options`修改如下，`PATH`后面是ROS的devel目录
-
-```makefile
--DCATKIN_DEVEL_PREFIX:PATH=<WORKSPACE_DIRECTORY>/devel
-```
-{: file="CMake options" }
-
-构建目录修改如下，路径是ROS的build目录
-
-```
-<WORKSPACE_DIRECTORY>/build
-```
-{: file="构建目录" }
-
-生成器修改为`Unix Makefiles`  
-![Alt text](posts/2023-11-25-jetbrains-ide-setup/ros.png)
 
 ### ROS 2 开发
 #### 启动CLion
@@ -246,7 +189,7 @@ clion .
 
 ### ROS 开发
 
-PyCharm 在设置项目解释器后默认是没有添加ROS 环境，在`设置->文件->项目->Python解释器->python解释器`中，选择全部显示
+PyCharm 在设置项目解释器后默认是没有添加ROS 环境，在`文件->设置->项目->Python解释器`中，选择全部显示
 
 ![Alt text](posts/2023-11-25-jetbrains-ide-setup/python.png)
 
@@ -256,14 +199,14 @@ PyCharm 在设置项目解释器后默认是没有添加ROS 环境，在`设置-
 
 由此可以看出，在PyCharm中没有包含ROS 库，将其添加进解释器路径即可进行ROS 开发
 
-后续使用自定义消息时，同样需要将工作空间内`/devel/lib/python3/dist-packages`添加进解释器路径
+后续使用自定义消息时，同样需要将工作空间内`install/<功能包名>/lib/python3.x/site-packages`添加进解释器路径
 
 #### OpenCV 冲突
 
 ROS 安装的 `cv_bridge` 可能与 pip 安装的 OpenCV 环境发生冲突，导致相关代码运行异常。在通用设置所述的运行配置环境变量中添加：
 
 ```text
-LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/ros/noetic/lib
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/ros/humble/lib
 ```
 
 ![OpenCV 环境变量配置](posts/2023-11-25-jetbrains-ide-setup/opencv.png)

@@ -17,7 +17,7 @@ Chrome 的语言。
 打开终端，在终端中输入
 
 ```bash
-LANGUAGE=zh_cn google-chrome
+LANGUAGE=zh_CN google-chrome
 ```
 
 此时启动Chrome则是以中文显示。若要修改Chrome的默认语言，需要额外添加脚本。
@@ -25,36 +25,36 @@ LANGUAGE=zh_cn google-chrome
 在Chrome的图标文件`/usr/share/applications/google-chrome.desktop`中
 
 ```yaml
-[ Desktop Entry ]
-  Version=1.0
-  Name=Google Chrome
-  # Only KDE 4 seems to use GenericName, so we reuse the KDE strings.
-  # From Ubuntu's language-pack-kde-XX-base packages, version 9.04-20090413.
-  GenericName=Web Browser
-  ......
-  Exec=/usr/bin/google-chrome-stable %U
-  StartupNotify=true
-  Terminal=false
-  Icon=google-chrome
-  Type=Application
-  Categories=Network;WebBrowser;
-  ......
+[Desktop Entry]
+Version=1.0
+Name=Google Chrome
+# Only KDE 4 seems to use GenericName, so we reuse the KDE strings.
+# From Ubuntu's language-pack-kde-XX-base packages, version 9.04-20090413.
+GenericName=Web Browser
+......
+Exec=/usr/bin/google-chrome-stable %U
+StartupNotify=true
+Terminal=false
+Icon=google-chrome
+Type=Application
+Categories=Network;WebBrowser;
+......
 ```
 {: file="/usr/share/applications/google-chrome.desktop" }
 
-Chrome通过`Exec=/usr/bin/google-chrome-stable`运行，但直接添加命令行参数`LANGUAGE=zh_cn`
+Chrome通过`Exec=/usr/bin/google-chrome-stable`运行，但直接添加命令行参数`LANGUAGE=zh_CN`
 的话不仅会无法使用，而且还会导致GNOME桌面找不到Chrome。解决方法如下
 
 新建一个`chrome_cn.sh`脚本，在脚本中添加如下内容
 
 ```bash
 #!/bin/bash
-LANGUAGE=zh_cn /usr/bin/google-chrome-stable $@
+LANGUAGE=zh_CN /usr/bin/google-chrome-stable "$@"
 ```
 {: file="chrome_cn.sh" }
 
-随后将该脚本复制到`/usr/bin/`路径下，最后将`/usr/share/applications/google-chrome.desktop`
-里的所有`/usr/bin/google-chrome-stable`换成`/usr/bin/chrome_cn.sh`，此时启动Chrome界面将是中文。
+随后将该脚本复制到`/usr/bin/`路径下并添加执行权限（`sudo chmod +x /usr/bin/chrome_cn.sh`），再将`/usr/share/applications/google-chrome.desktop`
+复制到`~/.local/share/applications/`，把副本里的所有`/usr/bin/google-chrome-stable`换成`/usr/bin/chrome_cn.sh`，此时启动Chrome界面将是中文。直接修改`/usr/share/applications`下的原文件会在Chrome升级时被覆盖。
 
 [一键配置脚本](https://github.com/du-xinyi/du-xinyi.github.io/releases/download/origin/google-chinesization.sh)
 
@@ -122,6 +122,8 @@ sudo mkswap /swap.img
 sudo swapon /swap.img
 ```
 
+以上适用于 ext4。若根分区为 btrfs，`fallocate` 创建的文件无法直接作为 swap，需改用`sudo btrfs filesystem mkswapfile --size 16G /swap.img`
+
 如果文件名不为`swap.img`，需要修改`/etc/fstab`，确保如下行正确
 
 ```bash
@@ -183,11 +185,11 @@ sudo sysctl --system
   | :----------: | :--------------: |
   | ------------ |      -----       |
   |      0       | 默认（内核估算） |
-  |      1       |   允许过度分配   |
+  | 1 | 总是允许分配，从不拒绝；内存真正耗尽时由 OOM killer 杀进程，而不是 malloc 返回失败 |
   |      2       |     严格限制     |
 
 - vm.overcommit_ratio  
-`overcommit_memory=2` 时才严格生效，表示可分配内存比例（%）
+仅在 `overcommit_memory=2` 时生效，表示可分配内存比例（%）；在上面的`overcommit_memory=1`下该项不起作用
 
 - vm.vfs_cache_pressure  
 控制 inode/dentry 缓存回收速度
@@ -248,16 +250,6 @@ timedatectl
 ### 修改启动等待时间为0
 
 ```bash
-sudo vim /etc/grub.d/30_os-prober
-```
-
-修改
-
-```bash
-set timeout=0
-```
-
-```bash
 sudo vim /etc/default/grub
 ```
 
@@ -265,7 +257,10 @@ sudo vim /etc/default/grub
 
 ```bash
 GRUB_TIMEOUT=0
+GRUB_RECORDFAIL_TIMEOUT=0
 ```
+
+`GRUB_RECORDFAIL_TIMEOUT`用于上次启动失败后的等待时间（默认 30 秒）。等待时间为 0 时将直接启动默认系统，双系统需在开机时按住`Esc`或`Shift`才能选择其他系统
 
 最后更新`grub.cfg`文件，使改动生效
 
@@ -281,7 +276,9 @@ sudo vim /etc/systemd/system.conf
 
 将`#DefaultTimeoutStopSec=90s`取消注释，并将`DefaultTimeoutStopSec=90s`改为`DefaultTimeoutStopSec=3s`
 
-**千万不要修改`DefaultTimeoutStartSec`，若修改时间太短，时间将不足以支持系统启动。如果不慎修改，在grub引导中选择recovery模式的root终端，用vim将其改回来**
+注意：超过该时间仍未停止的服务会被直接 SIGKILL，数据库、Docker 容器等可能来不及正常退出而丢失数据。也可将该配置写在`/etc/systemd/system.conf.d/timeout.conf`（`[Manager]`段下）中，避免直接修改`system.conf`
+
+**千万不要修改`DefaultTimeoutStartSec`，若修改时间太短，时间将不足以支持系统启动。如果不慎修改，在grub引导中选择recovery模式的root终端，先执行`mount -o remount,rw /`将根分区重新挂载为可写，再用vim将其改回来**
 
 ## 显卡相关
 ### 查询功率信息

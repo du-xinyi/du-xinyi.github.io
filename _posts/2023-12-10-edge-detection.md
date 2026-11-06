@@ -43,8 +43,8 @@ void Canny( InputArray image, OutputArray edges,
 
 参数详解：
 
-- 第一个参数，InputArray类型的`src`，输入图像。需为单通道8位图像。
-- 第二个参数，OutputArray类型的`dst`，目标图像，需要和源图片有一样的尺寸和类型。
+- 第一个参数，InputArray类型的`src`，输入图像。需为8位图像（单通道或多通道）。
+- 第二个参数，OutputArray类型的`dst`，输出的边缘图，为与源图片尺寸相同的8位单通道图像。
 - 第三个参数，double类型的`threshold1`，第一个滞后性阈值。
 - 第四个参数，double类型的`threshold2`，第二个滞后性阈值。
 - 第五个参数，int类型的`apertureSize`，表示应用Sobel算子的孔径大小，其有默认值3。
@@ -90,14 +90,23 @@ void Sobel( InputArray src, OutputArray dst, int ddepth,
 ## laplace算子
 
 Laplacian算子是n维欧几里德空间中的一个二阶微分算子，定义为梯度grad（）的散度div（）。因此如果f是二阶可微的实函数，则f的拉普拉斯算子定义为：
-(1) f的拉普拉斯算子也是笛卡儿坐标系xi中的所有非混合二阶偏导数求和：
-(2) 作为一个二阶微分算子，拉普拉斯算子把C函数映射到C函数，对于k ≥ 2。表达式(1)（或(2)）定义了一个算子Δ :C(R) → C(R)
-，或更一般地，对于任何开集Ω，定义了一个算子Δ : C(Ω) → C(Ω)。
+
+$$
+\Delta f = \nabla \cdot \nabla f \qquad (1)
+$$
+
+f的拉普拉斯算子也是笛卡儿坐标系$x_i$中的所有非混合二阶偏导数求和：
+
+$$
+\Delta f = \sum_{i=1}^{n}\frac{\partial^2 f}{\partial x_i^2} \qquad (2)
+$$
+
+作为一个二阶微分算子，拉普拉斯算子把$C^k$函数映射到$C^{k-2}$函数，对于$k \ge 2$。表达式(1)（或(2)）定义了一个算子$\Delta: C^k(\mathbb{R}^n) \to C^{k-2}(\mathbb{R}^n)$，或更一般地，对于任何开集$\Omega$，定义了一个算子$\Delta: C^k(\Omega) \to C^{k-2}(\Omega)$。
 
 Laplacian算子的定义：
 
 $$
-Laplacian(f)=\frac{\vartheta^2f}{\vartheta x^2}+\frac{\vartheta^2f}{\vartheta y^2}
+Laplacian(f)=\frac{\partial^2f}{\partial x^2}+\frac{\partial^2f}{\partial y^2}
 $$
 
 ```c++
@@ -109,7 +118,7 @@ void Laplacian( InputArray src, OutputArray dst, int ddepth,
 
 参数详解：
 
-- 第一个参数，InputArray类型的`src`，输入图像。需为单通道8位图像。
+- 第一个参数，InputArray类型的`src`，输入图像。
 - 第二个参数，OutputArray类型的`dst`，目标图像，需要和源图片有一样的尺寸和类型。
 - 第三个参数，int类型的`ddepth`，输出图像的深度。
 - 第四个参数，int类型的`ksize`，用于计算二阶导数的滤波器的孔径尺寸，大小必须为正奇数，且有默认值1

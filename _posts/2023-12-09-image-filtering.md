@@ -24,7 +24,7 @@ $$
 g(i,j) = \sum_{k,l}f(i+k,j+l)h(k,l)
 $$
 
-其中的`h(k,l)`为“核”，是滤波器的加权系数，即滤波器的滤波系数。可以简单写作
+其中的`h(k,l)`为“核”，是滤波器的加权系数，即滤波器的滤波系数（严格来说上式是相关运算，OpenCV 的`filter2D`也是如此；卷积需先将核翻转，对称核两者结果相同）。可以简单写作
 
 $$
 g = f\otimes h
@@ -62,7 +62,7 @@ algorithms）中用到的图像倒数的协方差矩阵（covariance matrices of
 ```c++
 void boxFilter(InputArray src,OutputArray dst, int ddepth, 
                Size ksize, Point anchor=Point(-1,-1), 
-               boolnormalize=true, 
+               bool normalize=true, 
                int borderType=BORDER_DEFAULT );
 ```
 {: file='方框滤波'}
@@ -84,7 +84,7 @@ void boxFilter(InputArray src,OutputArray dst, int ddepth,
 均值滤波本身存在着固有的缺陷，即它不能很好地保护图像细节，在图像去噪的同时也破坏了图像的细节部分，从而使图像变得模糊，不能很好地去除噪声点。
 
 ```c++
-void blur(InputArray src, OutputArraydst, 
+void blur(InputArray src, OutputArray dst, 
           Size ksize, Point anchor=Point(-1,-1), 
           int borderType=BORDER_DEFAULT );
 ```
@@ -113,7 +113,7 @@ $$
 二维高斯函数为：
 
 $$
-G_{0}(x,y) = Ae\frac{-{(x-u_{x})}^2}{2{\sigma_{x}}^2}+\frac{-{(y-u_{y})}^2}{2{\sigma_{y}}^2}
+G_{0}(x,y) = A\exp\left(-\frac{(x-u_{x})^2}{2\sigma_{x}^2}-\frac{(y-u_{y})^2}{2\sigma_{y}^2}\right),\quad A=\frac{1}{2\pi\sigma_{x}\sigma_{y}}
 $$
 
 ```c++
@@ -155,7 +155,7 @@ void medianBlur( InputArray src, OutputArray dst, int ksize );
   ，输入图像。该函数对通道是独立处理的，填入1、3或者4通道的图像，当ksize为3或者5的时候，图像深度需为`CV_8U`，`CV_16U`
   ，或`CV_32F`，而对于较大孔径尺寸的图片，只能是`CV_8U`。
 - 第二个参数，OutputArray类型的`dst`，目标图像，需要和源图片有一样的尺寸和类型。
-- 第三个参数，Size类型的`ksize`，孔径的线性尺寸。必须是大于1的奇数。
+- 第三个参数，int类型的`ksize`，孔径的线性尺寸。必须是大于1的奇数。
 
 #### 中值滤波与均值滤波器比较
 
@@ -166,7 +166,7 @@ void medianBlur( InputArray src, OutputArray dst, int ksize );
 
 双边滤波（Bilateral filter）是一种非线性的滤波方法，是结合图像的空间邻近度和像素值相似度的一种折衷处理，同时考虑空域信息和灰度相似性，达到保边去噪的目的。具有简单、非迭代、局部的特点。
 双边滤波器的好处是可以做边缘保存（edge
-preserving），一般过去用的维纳滤波或者高斯滤波去降噪，都会较明显地模糊边缘，对于高频细节的保护效果并不明显。双边滤波器顾名思义比高斯滤波多了一个高斯方差sigma－d，它是基于空间分布的高斯滤波函数，所以在边缘附近，离的较远的像素不会太多影响到边缘上的像素值，这样就保证了边缘附近像素值的保存。但是由于保存了过多的高频信息，对于彩色图像里的高频噪声，双边滤波器不能够干净的滤掉，只能够对于低频信息进行较好的滤波。
+preserving），一般过去用的维纳滤波或者高斯滤波去降噪，都会较明显地模糊边缘，对于高频细节的保护效果并不明显。双边滤波器顾名思义比高斯滤波多了一个高斯方差sigma－r，它是基于像素值相似度的高斯函数，所以在边缘附近，与当前像素灰度差别较大的像素不会太多影响到边缘上的像素值，这样就保证了边缘附近像素值的保存。但是由于保存了过多的高频信息，对于彩色图像里的高频噪声，双边滤波器不能够干净的滤掉，只能够对于低频信息进行较好的滤波。
 
 在双边滤波器中，输出像素的值依赖于邻域像素值的加权值组合：
 
@@ -202,7 +202,7 @@ void bilateralFilter( InputArray src, OutputArray dst, int d,
 
 参数详解：
 
-- 第一个参数，InputArray类型的`src`，输入图像。该函数对通道是独立处理的，需要为8位或者浮点型单通道、三通道的图像。
+- 第一个参数，InputArray类型的`src`，输入图像。需要为8位或者浮点型单通道、三通道的图像，三通道时按颜色向量的距离计算值域权重（各通道并非独立处理）。
 - 第二个参数，OutputArray类型的`dst`，目标图像，需要和源图片有一样的尺寸和类型。
 - 第三个参数，int类型的`d`，表示在过滤过程中每个像素邻域的直径。如果这个设为非正数，那么会从第五个参数`sigmaSpace`来计算。
 - 第四个参数，double类型的`sigmaColor`，颜色空间滤波器的sigma值。这个参数的值越大，就表明该像素邻域内有更宽广的颜色会被混合到一起，产生较大的半相等颜色区域。
@@ -241,7 +241,7 @@ void dilate( InputArray src, OutputArray dst, InputArray kernel,
   - 椭圆形: MORPH_ELLIPSE
 - 第四个参数，Point类型的`anchor`，锚的位置，其有默认值（-1，-1），表示锚位于中心。
 - 第五个参数，int类型的`iterations`，迭代使用dilate()函数的次数，默认值为1。
-- 第六个参数，int类型的`borderType`，用于推断图像外部像素的某种边界模式。有默认值BORDER_DEFAULT。
+- 第六个参数，int类型的`borderType`，用于推断图像外部像素的某种边界模式。有默认值BORDER_CONSTANT。
 - 第七个参数，const Scalar&类型的`borderValue`，当边界为常数时的边界值，有默认值morphologyDefaultBorderValue()。
 
 ### 腐蚀(erode)
@@ -266,7 +266,7 @@ void erode( InputArray src, OutputArray dst, InputArray kernel,
 - 第三个参数，InputArray类型的`kernel`，腐蚀操作的核。若为NULL时，表示的是使用参考点位于中心3x3的核。
 - 第四个参数，Point类型的`anchor`，锚的位置，其有默认值（-1，-1），表示锚位于中心。
 - 第五个参数，int类型的`iterations`，迭代使用erode()函数的次数，默认值为1。
-- 第六个参数，int类型的`borderType`，用于推断图像外部像素的某种边界模式。有默认值BORDER_DEFAULT。
+- 第六个参数，int类型的`borderType`，用于推断图像外部像素的某种边界模式。有默认值BORDER_CONSTANT。
 - 第七个参数，const Scalar&类型的`borderValue`，当边界为常数时的边界值，有默认值morphologyDefaultBorderValue()。
 
 ### 开运算(Opening Operation)
@@ -316,7 +316,7 @@ void morphologyEx( InputArray src, OutputArray dst,
                    int op, InputArray kernel,
                    Point anchor = Point(-1,-1), int iterations = 1,
                    int borderType = BORDER_CONSTANT,
-                   Wconst Scalar& borderValue = morphologyDefaultBorderValue() );
+                   const Scalar& borderValue = morphologyDefaultBorderValue() );
 ```
 {: file='morphologyEx'}
 

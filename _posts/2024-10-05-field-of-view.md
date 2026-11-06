@@ -40,17 +40,17 @@ $$
 水平方向视场角：
 
 $$
-\theta_h = 2 \times \arcsin(\frac{W}{4f})
+\theta_h = 4 \times \arcsin(\frac{W}{4f})
 $$
 
 垂直方向视场角：
 
 $$
-\theta_v = 2 \times \arcsin(\frac{H}{4f})
+\theta_v = 4 \times \arcsin(\frac{H}{4f})
 $$
 
 对角线视场角:
 
 $$
-\theta_d = 2 \times \arcsin(\frac{D}{4f})
+\theta_d = 4 \times \arcsin(\frac{D}{4f})
 $$

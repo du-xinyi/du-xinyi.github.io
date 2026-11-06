@@ -30,7 +30,7 @@ C++11提供了语言层面上的多线程，包含在头文件`<thread>`
 
 |                                       函数                                       |   类别    |                作用                |
 | :--- | :--- | ---: |
-|                              `thread() noexcept`                               | 默认构造函数  |              创建一个线程              |
+|                              `thread() noexcept`                               | 默认构造函数  |              创建一个不关联任何线程的空对象              |
 | `template <class Fn, class… Args>`<br>`explicit thread(Fn&& fn, Args&&… args)` | 初始化构造函数 | 创建一个线程<br>以`args`为参数<br>执行`fn`函数 |
 |                        `thread(const thread&) = delete`                        | 复制构造函数  |     禁用`std::thread`类的拷贝构造函数      |
 |                         `thread(thread&& x) noexcept`                          | 移动构造函数  |    构造一个与`x`相同的对象<br>会破坏`x`对象     |
@@ -42,7 +42,7 @@ C++11提供了语言层面上的多线程，包含在头文件`<thread>`
 | :--- | ---: |
 |             `void join()`              |                    等待线程结束并清理资源（会阻塞）                    |
 |           `bool joinable()`            |                   返回线程是否可以执行`join`函数                   |
-|            `void detach()`             |    启动的线程自主在后台运行<br>必须在线程创建时立即调用，且调用此函数会使其不能被`join`     |
+|            `void detach()`             |    启动的线程自主在后台运行<br>仅当`joinable()`为`true`时可调用，且调用此函数会使其不能被`join`     |
 |       `std::thread::id get_id()`       |                         获取线程id                         |
 | `thread& operator=(std::thread &&rhs)` | 见移动构造函数<br>（如果对象是`joinable`，会调用`std::terminate()`结束程序） |
 
@@ -76,10 +76,11 @@ int main()
 
 {:file="基本使用"}
 
-输出结果：
+输出结果（两个线程间无同步，顺序不定，甚至可能交错）：
 
 ```
-Hello, World!
+Hello,
+World!
 ```
 
 或者
@@ -110,7 +111,7 @@ int main()
     std::thread th[10];
     for (int i = 0; i < 10; i++)
     {
-        th[i] = thread(countnumber, i, 100000000);
+        th[i] = std::thread(countnumber, i, 100000000);
     }
 
     for (int i = 0; i < 10; i++)
@@ -201,7 +202,7 @@ int main()
     int nums[100];
     for (int i = 0; i < 100; i++)
     {
-        th[i] = std::thread(changevalue<int>, ref(nums[i]), i + 1);
+        th[i] = std::thread(changevalue<int>, std::ref(nums[i]), i + 1);
     }
 
     for (int i = 0; i < 100; i++)
@@ -231,9 +232,9 @@ int main()
 **注意事项：**
 
 - 线程是在`thread`对象被定义的时候开始执行的，而不是在调用`join`函数时才执行的，调用`join`函数只是阻塞等待线程结束并回收资源
-- 分离的线程（执行过`detach`的线程）会在调用它的线程结束或自己结束时释放资源
+- 分离的线程（执行过`detach`的线程）会在自己结束时释放资源；但`main`返回、进程退出时，仍在运行的分离线程会被直接终止
 - 线程会在函数运行完毕后自动释放，不推荐利用其他方法强制结束线程，可能会因资源未释放而导致内存泄漏
-- **没有执行`join`或`detach`的线程在程序结束时会引发异常**
+- **没有执行`join`或`detach`的`std::thread`对象在析构时（仍为`joinable`）会调用`std::terminate()`终止程序**
 
 ## std::this_thread
 
@@ -253,10 +254,11 @@ int main()
 #include <iostream>
 #include <thread>
 #include <atomic>
+#include <cstdint>
 
 std::atomic_bool ready;
 
-void sleep(uintmax_t ms)
+void sleep_ms(uintmax_t ms)
 {
     std::this_thread::sleep_for(std::chrono::milliseconds(ms));
 }
@@ -278,7 +280,7 @@ int main()
     {
         th[i] = std::thread(::count);
     }
-    sleep(5000);
+    sleep_ms(5000);
     
     ready = true;
     std::cout << "Start!" << std::endl;
@@ -365,15 +367,15 @@ int main()
 | :--- | ---: |
 |         `std::mutex`         |  基本`Mutex`类  |
 |    `std::recursive_mutex`    |  递归`Mutex`类  |
-|      `std::time_mutex`       |  定时`Mutex`类  |
+|      `std::timed_mutex`       |  定时`Mutex`类  |
 | `std::recursive_timed_mutex` | 定时递归`Mutex`类 |
 
 `std::mutex`常用成员函数（mutex代指对象）
 
 |        函数         |                                                作用                                                |
 | :--- | ---: |
-|   `void lock()`   |            将`mutex`上锁<br>如果`mutex`已经被其它线程上锁，那么会阻塞，直到解锁；<br>如果`mutex`已经被同一个线程锁住，会产生死锁             |
-|  `void unlock()`  | 解锁`mutex`，释放其所有权<br>如果有线程因为调用`lock()`而被阻塞，随机将`mutex`的控制权交给其中一个线程。<br>如果当前线程未锁定 `mutex`，会引发未定义的异常 |
+|   `void lock()`   |            将`mutex`上锁<br>如果`mutex`已经被其它线程上锁，那么会阻塞，直到解锁；<br>如果`mutex`已经被同一个线程锁住，为未定义行为（通常表现为死锁），需要重复加锁应使用`std::recursive_mutex`             |
+|  `void unlock()`  | 解锁`mutex`，释放其所有权<br>如果有线程因为调用`lock()`而被阻塞，随机将`mutex`的控制权交给其中一个线程。<br>如果当前线程未锁定 `mutex`，为未定义行为 |
 | `bool try_lock()` |               尝试将`mutex`上锁<br>如果`mutex`未被上锁，则将其上锁并返回`true`，如果`mutex`已被锁则返回`false`                |
 
 #### std::lock_guard
@@ -452,7 +454,7 @@ int main()
 
 |                 函数                 |   类型    |                      作用                      |
 | :--- | :--- | ---: |
-|   `atomic() noexcept = default`    | 默认构造函数  | 构造`std::atomic`对象<br>（可通过`atomic_init`进行初始化） |
+|   `constexpr atomic() noexcept(std::is_nothrow_default_constructible_v<T>)`    | 默认构造函数  | 构造`std::atomic`对象<br>（C++20起进行值初始化，如`std::atomic<int>`初值为0） |
 | `constexpr atomic(T val) noexcept` | 初始化构造函数 |     构造一个`std::atomic`对象<br>用`val`的值来初始化      |
 |  `atomic(const atomic&) = delete`  | 复制构造函数  |           删除`std::atomic`类型的拷贝构造函数           |
 
@@ -465,17 +467,17 @@ int main()
 
 |                                                                  重载版本                                                                  |                                    作用                                     |
 | :--- | ---: |
-|         `template <class Fn, class… Args>`<br>`future<typename result_of<Fn(Args…)>::type>`<br>`async (Fn&& fn, Args&&… args)`         |   异步或同步（根据操作系统而定）<br>以`args`为参数执行`fn`<br>传递引用参数需要`std::ref`或`std::cref`   |
-| `template <class Fn, class… Args>`<br>`future<typename result_of<Fn(Args…)>::type>`<br>`async (launch policy, Fn&& fn, Args&&… args);` | 异步或同步（根据policy参数而定）<br>以`args`为参数执行`fn`<br>传递引用参数需要`std::ref`或`std::cref` |
+|         `template <class Fn, class… Args>`<br>`std::future<std::invoke_result_t<`<br>`std::decay_t<Fn>, std::decay_t<Args>…>>`<br>`async (Fn&& fn, Args&&… args)`         |   异步或同步（根据操作系统而定）<br>以`args`为参数执行`fn`<br>传递引用参数需要`std::ref`或`std::cref`   |
+| `template <class Fn, class… Args>`<br>`std::future<std::invoke_result_t<`<br>`std::decay_t<Fn>, std::decay_t<Args>…>>`<br>`async (launch policy, Fn&& fn, Args&&… args);` | 异步或同步（根据policy参数而定）<br>以`args`为参数执行`fn`<br>传递引用参数需要`std::ref`或`std::cref` |
 
 `std::launch`强枚举类（enum class）  
-`std::launch`有2个枚举值和1个特殊值
+`std::launch`有2个枚举值，不指定`policy`时相当于二者按位或（实际值由实现定义，下表为libstdc++的值）
 
 |                 标识符                  |   实际值    |                 作用                 |
 | :--- | :--- | ---: |
 |          枚举值`launch::async`          | `0x1(1)` |                异步启动                |
 |        枚举值`launch::deferred`         | `0x2(2)` | 调用`future::get``future::wait`时同步启动 |
-| 特殊值`launch::async``launch::defereed` | `0x3(3)` |           同步或异步，根据操作系统而定           |
+| `launch::async`与`launch::deferred`按位或（默认策略） | `0x3(3)` |           同步或异步，由实现决定           |
 
 例七：
 
@@ -486,10 +488,11 @@ int main()
 
 int main()
 {
-    std::async(
+    auto fut = std::async(
         std::launch::async, [](const char *message)
         { std::cout << message << std::flush; },
         "Hello, ");
+    fut.wait(); // 等待异步任务完成
     std::cout << "World!" << std::endl;
 
     return 0;
@@ -545,7 +548,7 @@ int main()
 
 |                                                          函数                                                           |                                                                                 作用                                                                                  |
 | :--- | ---: |
-|                    一般：`T get()`<br>当类型为引用：`R& future<R&>::get()`<br>当类型为void：`void future::get()`                     |                                                       阻塞等待线程结束并获取返回值<br>若类型为void，则与future::wait()相同<br>只能调用一次                                                       |
+|                    一般：`T get()`<br>当类型为引用：`R& future<R&>::get()`<br>当类型为void：`void future::get()`                     |                                                       阻塞等待线程结束并获取返回值<br>若任务抛出异常则重新抛出<br>调用后`future`变为无效，只能调用一次                                                       |
 |                                                  `void wait() const`                                                  |                                                                              阻塞等待线程结束                                                                               |
 | `template <class Rep, class Period>`<br>`future_status wait_for(const chrono::duration<Rep,Period>& rel_time) const;` | 阻塞等待`rel_time`<br>若在这段时间内线程结束则返回`future_status::ready`<br>若没结束则返回`future_status::timeout`<br>若`async`是以`launch::deferred`启动的<br>则不会阻塞并立即返回`future_status::deferred` |
 
@@ -594,7 +597,7 @@ int main()
 ```c++
 #include <iostream>
 
-constexpr long double PI = 3.14159265358979323846264338327950288419716939937510582097494459230781640628;
+constexpr long double PI = 3.14159265358979323846264338327950288419716939937510582097494459230781640628L;
 
 // 求圆的直径、周长及面积
 void get_circle_info(double r, double &d, double &c, double &s)
@@ -618,8 +621,8 @@ int main()
 
 {:file="引用传递返回值"}
 
-`std::promise`实际上是`std::future`的一个包装。  
-因为`std::future`的值不能被改变，但可以通过`std::promise`来创建一个拥有特定值的`std::future`
+`std::promise`与`std::future`是同一共享状态的两端：`std::promise`是写入端，`std::future`是读取端。  
+`std::future`本身不能设置值，但可以通过`std::promise`设置值，再用`get_future()`得到对应的`std::future`
 
 `std::promise`常用成员函数
 
@@ -663,7 +666,7 @@ void sum_thread(std::promise<long long> &val, Args &&...args)
 int main()
 {
     std::promise<long long> sum_value;
-    std::thread get_sum(sum_thread<int, int, int>, ref(sum_value), 1, 10, 100);
+    std::thread get_sum(sum_thread<int, int, int>, std::ref(sum_value), 1, 10, 100);
     std::cout << sum_value.get_future().get() << std::endl;
     get_sum.join();
 
@@ -693,6 +696,6 @@ int main()
 |         函数         |                            作用                            |
 | :--- | ---: |
 |    `wait(lock)`    | 使当前线程等待，直到其他线程通知或唤醒<br>需要一个已经上锁的`std::unique_lock`对象作为参数 |
-| `wait(lock, pred)` |    额外提供一个条件函数<br>只有当`pred`返回`true`时，才会真正等待，否则会继续等待或返回    |
+| `wait(lock, pred)` |    额外提供一个条件函数<br>当`pred`返回`false`时等待，被唤醒后重新检查<br>`pred`返回`true`时才返回（可防止虚假唤醒）    |
 |   `notify_one()`   |                通知等待在条件变量上的一个线程，使其从等待状态唤醒                 |
 |   `notify_all()`   |                通知等待在条件变量上的所有线程，使它们从等待状态唤醒                |

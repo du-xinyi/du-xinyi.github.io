@@ -38,7 +38,7 @@ void abssort(float* x, unsigned n)
 1. 捕获列表。在C++规范中也称为Lambda导入器，捕获列表总是出现在Lambda函数的开始处。实际上，[]
    是Lambda引出符。编译器根据该引出符判断接下来的代码是否是Lambda函数，捕获列表能够捕捉上下文中的变量以供Lambda函数使用。
 2. 参数列表。与普通函数的参数列表一致。如果不需要参数传递，则可以连同括号“()”一起省略。
-3. 可变规格`*`。mutable修饰符， 默认情况下Lambda函数总是一个const函数，mutable可以取消其常量性。在使用该修饰符时，参数列表不可省略（即使参数为空）。
+3. 可变规格`*`。mutable修饰符， 默认情况下Lambda函数总是一个const函数，mutable可以取消其常量性。C++23起，使用该修饰符时参数为空的参数列表也可以省略（如`[x] mutable { ++x; }`）。
 4. 异常说明。用于Lamdba表达式内部函数抛出异常。
 5. 返回类型。 追踪返回类型形式声明函数的返回类型。我们可以在不需要返回值的时候也可以连同符号”->
    ”一起省略。此外，在返回类型明确的情况下，也可以省略该部分，让编译器对返回类型进行推导。
@@ -76,7 +76,7 @@ function();
 ```
 {: file='值传递方式捕获变量var'}
 
-- [=] 值传递方式捕获所有父作用域的变量（包括this）
+- [=] 值传递方式捕获父作用域中用到的变量（C++20起不再推荐隐式捕获this，需要时写成`[=, this]`）
 
 ```c++
 int index = 1;
@@ -183,9 +183,7 @@ function();
 [&total, factor]
 [factor, &total]
 [&, factor]
-[factor, &]
 [=, &total]
-[&total, =]
 ```
 
 ### Lambda参数列表
@@ -203,7 +201,7 @@ function(100, 200);
 
 ### 可变规格mutable
 
-mutable修饰符，默认情况下Lambda函数总是一个const函数，mutable可以取消其常量性。在使用该修饰符时，参数列表不可省略（即使参数为空）。
+mutable修饰符，默认情况下Lambda函数总是一个const函数，mutable可以取消其常量性。C++23起，使用该修饰符时参数为空的参数列表也可以省略。
 
 ```c++
 #include <iostream>
@@ -221,12 +219,12 @@ int main()
 
 ### 异常说明
 
-​可以使用throw()异常规范来指示lambda表达式不会引发任何异常。与普通函数一样，如果lambda表达式声明C4297异常规范且lambda体引发异常。
+​可以使用noexcept来指示lambda表达式不会引发任何异常。与普通函数一样，如果lambda表达式声明了noexcept而lambda体引发异常，程序会调用`std::terminate`终止（MSVC会给出C4297警告）。
 
 ```c++
 int main()
 { 
- 	[]() throw() { throw 5; }(); 
+ 	[]() noexcept { throw 5; }(); // 调用std::terminate
 }
 ```
 {: file='异常说明'}
@@ -234,7 +232,7 @@ int main()
 ### 返回类型
 
 ​Lambda表达式的返回类型会自动推导。除非指定了返回类型，否则不必使用关键字。返回型类似于通常的方法或函数的返回型部分。但是，返回类型必须在参数列表之后，并且必须在返回类型->
-之前包含类型关键字。如果lambda主体仅包含一个return语句或该表达式未返回值，则可以省略Lambda表达式的return-type部分。如果lambda主体包含一个return语句，则编译器将从return表达式的类型中推断出return类型。否则，编译器将返回类型推导为void。
+之前包含类型关键字。省略Lambda表达式的return-type部分时，编译器根据return语句推导返回类型：若有多个return语句，它们推导出的类型必须一致；若没有return语句（或只有`return;`），则推导为void。
 
 ```c++
 auto x1 = [](int i){ return i; };

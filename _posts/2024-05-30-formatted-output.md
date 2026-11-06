@@ -26,7 +26,7 @@ tags: [ C++, Python, Terminal ]
 | \033[38;2;${red};${green};${blue}m | 自定义RGB文本 |
 
 ```C++
-printf("\033[31mred text\033[0m\n")
+printf("\033[31mred text\033[0m\n");
 ```
 
 - 背景色
@@ -44,7 +44,7 @@ printf("\033[31mred text\033[0m\n")
 | \033[48;2;${red};${green};${blue}m | 自定义RGB背景 |
 
 ```C++
-printf("\033[41mred backdrop\033[0m\n")
+printf("\033[41mred backdrop\033[0m\n");
 ```
 
 - 其它
@@ -62,9 +62,9 @@ printf("\033[41mred backdrop\033[0m\n")
 |      转义字符       |      功能       |
 | :--- | ---: |
 |   \033[${n}A    |    光标上移n行     |
-|    \03[${n}B    |    光标下移n行     |
-|   \033[${n}C    |    光标右移n行     |
-|   \033[${n}D    |    光标左移n行     |
+|   \033[${n}B    |    光标下移n行     |
+|   \033[${n}C    |    光标右移n列     |
+|   \033[${n}D    |    光标左移n列     |
 |     \033[H      |   光标移动到左上角    |
 | \033[${y};${x}H |    设置光标位置     |
 |     \033[2J     |     清除屏幕      |

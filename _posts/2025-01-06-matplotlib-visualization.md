@@ -79,11 +79,11 @@ plot(x,y,color='#900302',marker='+',linestyle='-')
 ### 网格线
 
 ```python
-plt.grid(b=None, which='major', axis='both', **kwargs)
+plt.grid(visible=None, which='major', axis='both', **kwargs)
 ```
 
 参数说明
-- b 默认为`None`，可以设置布尔值，`true`为显示网格线，`false`为不显示
+- visible 默认为`None`，可以设置布尔值，`True`为显示网格线，`False`为不显示（旧版本中该参数名为`b`，已弃用）
 - which 应用更改的网格线，默认为`'major'`
   - `'major'` 只应用于主刻度网格线
   - `'minor'` 只应用于次刻度网格线
@@ -104,14 +104,14 @@ data=None, **kwargs)
 
 参数说明
 - x，y 输入数据，长度相同的数组，绘制散点图的数据点
-- s 点的大小，默认为20，也可以是个数组，数组每个参数为对应点的大小
-- c 点的颜色，默认为蓝色`'b'`，也可以是RGB或RGBA二维行数组
+- s 点的大小，默认为`rcParams['lines.markersize'] ** 2`，即36，也可以是个数组，数组每个参数为对应点的大小
+- c 点的颜色，默认使用颜色循环中的下一个颜色（首个为`'C0'`，即`#1f77b4`），也可以是RGB或RGBA二维行数组
 - marker 点的样式，默认为小圆圈`'o'`
 - cmap 颜色映射，默认为`None`，用于将数据值映射到特定的颜色范围，`c`为浮点数数组的时生效。如果没有指定`cmap`，默认为`viridis`。显示需要使用`plt.colorbar()` 
 - norm 归一化，默认为`None`，用于将数据值归一化到[0, 1]的范围，`c`为浮点数数组的时生效
-- vmin，vmax 亮度设置，在`norm`参数存在时会忽略
+- vmin，vmax 颜色映射的数据范围，`c`为浮点数数组时生效；不能与`Normalize`实例形式的`norm`同时传入，否则会报错
 - alpha 透明度设置，0-1 之间，默认为`None`，即不透明
-- linewidths 标记点的长度
+- linewidths 标记点边框的线宽
 - edgecolors 颜色或颜色序列，默认为`'face'`，可选值有`'face'`,`'none'`,`None`
 - plotnonfinite 布尔值，设置是否使用非限定的`c`(`inf`,`-inf`或`nan`)绘制点
 - **kwargs 其他参数
@@ -188,8 +188,8 @@ plt.bar(x, height, width=0.8, bottom=None, *, align='center', data=None, **kwarg
 ```python
 plt.pie(x, explode=None, labels=None, colors=None, autopct=None, pctdistance=0.6, 
 shadow=False, labeldistance=1.1, startangle=0, radius=1, counterclock=True, 
-wedgeprops=None, textprops=None, center=0, 0, frame=False, rotatelabels=False, 
-*, normalize=None, data=None)
+wedgeprops=None, textprops=None, center=(0, 0), frame=False, rotatelabels=False, 
+*, normalize=True, data=None)
 ```
 
 参数说明
@@ -222,7 +222,7 @@ wedgeprops=None, textprops=None, center=0, 0, frame=False, rotatelabels=False,
 - center 浮点型列表，指定饼图的中心位置，默认`(0,0)`
 - frame 布尔类型，指定是否绘制饼图的边框，默认`False`不绘制带有表的轴框架
 - rotatelabels 布尔类型，指定是否旋转文本标签，默认为`False`不旋转
-- normalize 布尔类型，指定是否对输入的数据进行归一化处理，为`True`会将所有值的和归一化为`1.0`，然后按比例绘制饼图
+- normalize 布尔类型，默认为`True`，指定是否对输入的数据进行归一化处理，为`True`会将所有值的和归一化为`1.0`，然后按比例绘制饼图
 - data 指定数据。如果设置`data`参数，则可以直接使用数据框中的列作为`x`、`labels`等参数的值，无需再次传递
 
 除此之外，`pie()`函数还可以返回三个参数
@@ -259,12 +259,12 @@ log=False, color=None, label=None, stacked=False, **kwargs)
 - label 直方图的标签
 - stacked 是否堆叠不同的直方图，默认为`False`
 - **kwargs：可选参数
-  - edgecolor 柱体边框颜色，默认为`'black'`
-  - linewidth 柱体边框线宽（单位：点），默认为`1.5`
-  - linestyle 柱体边框的线型，默认为`'--'`
-  - alpha 透明度（0.0 到 1.0），值越小越透明，默认为`0.7`
+  - edgecolor 柱体边框颜色，默认不绘制边框
+  - linewidth 柱体边框线宽（单位：点），默认由`rcParams['patch.linewidth']`决定（`1.0`）
+  - linestyle 柱体边框的线型，默认为`'-'`实线
+  - alpha 透明度（0.0 到 1.0），值越小越透明，默认为`None`，即不透明
   - hatch 填充图案
-  - color 柱体颜色，可以是单个值或颜色列表，默认为`blue`
+  - color 柱体颜色，可以是单个值或颜色列表，默认使用颜色循环中的下一个颜色（首个为`'C0'`）
 
 ## 设置参数
 ### 颜色字符(color)
@@ -283,11 +283,11 @@ log=False, color=None, label=None, stacked=False, **kwargs)
 
 ### 线型参数(linestyle)
 
-- `‐`或`'solid'` 实线
-- `‐‐`或`'dashed'` 虚线
-- `‐.`或`'dashdot'` 点划线
-- `:'`或`'dotted'` 点线
-- `None` 不划线
+- `'-'`或`'solid'` 实线
+- `'--'`或`'dashed'` 虚线
+- `'-.'`或`'dashdot'` 点划线
+- `':'`或`'dotted'` 点线
+- `'None'`、`' '`或`''` 不划线
 
 ### 标记字符(marker)
 

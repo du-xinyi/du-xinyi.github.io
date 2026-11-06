@@ -71,35 +71,34 @@ z轴旋转角度$\alpha$，再绕y轴旋转角度$\beta$，最后绕x轴旋转�
 $$
 R = \begin{bmatrix}
 1 & 0 & 0 & 0 \\
-0 & \cos\theta & -\sin\theta & 0 \\
-0 & \sin\theta & \cos\theta & 0 \\
+0 & \cos\gamma & -\sin\gamma & 0 \\
+0 & \sin\gamma & \cos\gamma & 0 \\
 0 & 0 & 0 & 1 \\
 \end{bmatrix}
 \begin{bmatrix}
-\cos\theta & 0 & \sin\theta & 0 \\
+\cos\beta & 0 & \sin\beta & 0 \\
 0 & 1 & 0 & 0 \\
--\sin\theta & 0 & \cos\theta & 0 \\
+-\sin\beta & 0 & \cos\beta & 0 \\
 0 & 0 & 0 & 1 \\
 \end{bmatrix}
 \begin{bmatrix}
-\cos\theta & -\sin\theta & 0 & 0 \\
-\sin\theta & \cos\theta & 0 & 0 \\
+\cos\alpha & -\sin\alpha & 0 & 0 \\
+\sin\alpha & \cos\alpha & 0 & 0 \\
 0 & 0 & 1 & 0 \\
 0 & 0 & 0 & 1 \\
 \end{bmatrix}
 $$
 
-**矩阵乘法的顺序是从右到左，即最先旋转的矩阵在最右边**
+**矩阵乘法的顺序是从右到左，即最先旋转的矩阵在最右边**（此处各次旋转均绕固定坐标轴；若绕物体自身的动轴旋转，乘法顺序相反）
 
-即坐标系$\textbf{B}$的初始位姿与坐标系$\textbf{A}$重合，首先$\textbf{B}$相对于$\textbf{A}$的z轴顺时针旋转30度，再沿$\textbf{A}$的x轴正方向移动12个单位，并沿$\textbf{A}$的y轴正方向移动6个单位，点$\textbf{p}$在$\textbf{B}$的描述为$^{B}\textbf{p}=[3, 7, 0]^T$，则在$\textbf{A}$的描述$^{A}\textbf{p}$为
+即坐标系$\textbf{B}$的初始位姿与坐标系$\textbf{A}$重合，首先$\textbf{B}$相对于$\textbf{A}$的z轴逆时针旋转30度，再沿$\textbf{A}$的x轴正方向移动12个单位，并沿$\textbf{A}$的y轴正方向移动6个单位，点$\textbf{p}$在$\textbf{B}$的描述为$^{B}\textbf{p}=[3, 7, 0]^T$，则在$\textbf{A}$的描述$^{A}\textbf{p}$为
 
 $$
 ^{A}_{B}R = R_{(z, 30^{\circ})} = 
 \begin{bmatrix}
-\cos(30^{\circ}) & -\sin(30^{\circ}) & 0 & 0 \\
-\sin(30^{\circ}) & \cos(30^{\circ}) & 0 & 0 \\
-0 & 0 & 1 & 0 \\
-0 & 0 & 0 & 1 \\
+\cos(30^{\circ}) & -\sin(30^{\circ}) & 0 \\
+\sin(30^{\circ}) & \cos(30^{\circ}) & 0 \\
+0 & 0 & 1 \\
 \end{bmatrix}
 $$
 

@@ -41,7 +41,7 @@ std::array<double, 10> values; // 具有10个double类型元素的array容器
 
 std::array<double, 10> values {}; // 将所有的元素初始化为0.0
 
-std::array<double, 10> values {0.5,1.0,1.5,,2.0}; // 初始化前4个元素，其余为0.0
+std::array<double, 10> values {0.5,1.0,1.5,2.0}; // 初始化前4个元素，其余为0.0
 ```
 {: file='初始化'}
 
@@ -108,12 +108,12 @@ std::vector<int>value2(std::begin(value1),std::begin(value1)+3); // 保存1,2,3
 |    `crbegin()`     |  和`rbegin()`功能相同，其基础上增加了`const`属性   |
 |     `crend()`      |   和`rend()`功能相同，其基础上增加了`const`属性    |
 |      `size()`      |              返回实际元素个数               |
-|    `max_size()`    |      返回元素个数的最大值，一般是$2^{32}-1$       |
+|    `max_size()`    |      返回元素个数的理论最大值，与实现和元素类型有关       |
 |     `resize()`     |              改变实际元素的个数              |
 |    `capacity()`    |               返回当前容量                |
 |     `empty()`      |              判断容器是否有元素              |
 |    `reserve()`     |               增加容器的容量               |
-| `shrink _to_fit()` |        将内存减少到等于当前元素实际所使用的大小         |
+| `shrink_to_fit()` |        请求将内存减少到等于当前元素实际所使用的大小（非强制）         |
 |   `operator[ ]`    | 重载`[]`运算符，通过下标即可访问、修改`vector`容器中的元素 |
 |       `at()`       |           使用经过边界检查的索引访问元素           |
 |     `front()`      |             返回第一个元素的引用              |
@@ -142,7 +142,7 @@ std::deque<int> d; // 没有任何元素的空deque容器
 
 std::deque<int> d(10); // 具有10个元素，初始值都为0的deque容器
 
-std::deque<int> d(10, 5) // 初始值都为5的deque容器
+std::deque<int> d(10, 5); // 初始值都为5的deque容器
 
 std::deque<int> d1(5);
 std::deque<int> d2(d1); // 必须保证新旧容器存储的元素类型一致
@@ -168,19 +168,17 @@ std::deque<int>d(arr.begin()+2, arr.end()); // 拷贝arr容器中的13,14,15
 |    `crbegin()`     | 和`rbegin()`功能相同，其基础上增加了`const`属性 |
 |     `crend()`      |  和`rend()`功能相同，其基础上增加了`const`属性  |
 |      `size()`      |             返回实际元素个数             |
-|    `max_size()`    |     返回元素个数的最大值，一般是$2^{32}-1$     |
+|    `max_size()`    |     返回元素个数的理论最大值，与实现和元素类型有关     |
 |     `resize()`     |            改变实际元素的个数             |
-|    `capacity()`    |              返回当前容量              |
 |     `empty()`      |            判断容器是否有元素             |
-|    `reserve()`     |             增加容器的容量              |
-| `shrink _to_fit()` |       将内存减少到等于当前元素实际所使用的大小       |
+| `shrink_to_fit()` |       请求将内存减少到等于当前元素实际所使用的大小（非强制）       |
 |   `operator[ ]`    |   重载`[]`运算符，通过下标即可访问、修改容器中的元素    |
 |       `at()`       |         使用经过边界检查的索引访问元素          |
 |     `front()`      |            返回第一个元素的引用            |
 |      `back()`      |           返回最后一个元素的引用            |
-|      `data()`      |         返回指向容器中第一个元素的指针          |
 |     `assign()`     |            用新元素替换原有内容            |
 |   `push_back()`    |           在容器的尾部添加一个元素           |
+|   `push_front()`   |           在容器头部添加一个元素            |
 |    `pop_back()`    |            移出容器尾部的元素             |
 |   `pop_front()`    |            移除容器头部的元素             |
 |     `insert()`     |         在指定的位置插入一个或多个元素          |
@@ -221,17 +219,17 @@ std::list<int>values(arr.begin()+2, arr.end()); // 拷贝arr容器中的13,14,15
 
 |       成员函数        |                功能                |
 | :--- | ---: |
-|     `begin()`     |       返回指向容器中第一个元素的随机访问迭代器       |
-|      `end()`      |    返回指向容器最后一个元素之后一个位置的随机访问迭代器    |
-|    `rbegin()`     |        返回指向最后一个元素的随机访问迭代器        |
-|     `rend()`      |     返回指向第一个元素之前一个位置的随机访问迭代器      |
+|     `begin()`     |       返回指向容器中第一个元素的双向迭代器       |
+|      `end()`      |    返回指向容器最后一个元素之后一个位置的双向迭代器    |
+|    `rbegin()`     |        返回指向最后一个元素的反向双向迭代器        |
+|     `rend()`      |     返回指向第一个元素之前一个位置的反向双向迭代器      |
 |    `cbegin()`     | 和`begin()`功能相同，其基础上增加了`const`属性  |
 |     `cend()`      |  和`end()`功能相同，其基础上增加了`const`属性   |
 |    `crbegin()`    | 和`rbegin()`功能相同，其基础上增加了`const`属性 |
 |     `crend()`     |  和`rend()`功能相同，其基础上增加了`const`属性  |
 |     `size()`      |             返回实际元素个数             |
 |    `resize()`     |             调整容器的大小              |
-|   `max_size()`    |     返回元素个数的最大值，一般是$2^{32}-1$     |
+|   `max_size()`    |     返回元素个数的理论最大值，与实现和元素类型有关     |
 |     `front()`     |            返回第一个元素的引用            |
 |     `back()`      |           返回最后一个元素的引用            |
 |    `assign()`     |            用新元素替换原有内容            |
@@ -285,29 +283,23 @@ std::forward_list<int>values(arr.begin()+2, arr.end()); // 拷贝arr容器中的
 
 |       成员函数        |                功能                |
 | :--- | ---: |
-|     `begin()`     |       返回指向容器中第一个元素的随机访问迭代器       |
-|      `end()`      |    返回指向容器最后一个元素之后一个位置的随机访问迭代器    |
-|    `rbegin()`     |        返回指向最后一个元素的随机访问迭代器        |
-|     `rend()`      |     返回指向第一个元素之前一个位置的随机访问迭代器      |
+| `before_begin()`  |       返回指向第一个元素之前一个位置的前向迭代器       |
+|     `begin()`     |       返回指向容器中第一个元素的前向迭代器       |
+|      `end()`      |    返回指向容器最后一个元素之后一个位置的前向迭代器    |
 |    `cbegin()`     | 和`begin()`功能相同，其基础上增加了`const`属性  |
 |     `cend()`      |  和`end()`功能相同，其基础上增加了`const`属性   |
-|    `crbegin()`    | 和`rbegin()`功能相同，其基础上增加了`const`属性 |
-|     `crend()`     |  和`rend()`功能相同，其基础上增加了`const`属性  |
-|     `size()`      |             返回实际元素个数             |
 |    `resize()`     |             调整容器的大小              |
-|   `max_size()`    |     返回元素个数的最大值，一般是$2^{32}-1$     |
+|   `max_size()`    |     返回元素个数的理论最大值，与实现和元素类型有关     |
 |     `front()`     |            返回第一个元素的引用            |
-|     `back()`      |           返回最后一个元素的引用            |
 |    `assign()`     |            用新元素替换原有内容            |
 |  `push_front()`   |           在容器头部插入一个元素            |
 |   `pop_front()`   |            移除容器头部的元素             |
-|    `insert()`     |         在指定的位置插入一个或多个元素          |
-|     `erase()`     |           移出一个元素或一段元素            |
+|  `insert_after()` |         在指定位置之后插入一个或多个元素          |
+|  `erase_after()`  |           移出指定位置之后的一个元素或一段元素            |
 |     `clear()`     |         移出所有的元素，容器大小变为0          |
 |     `swap()`      |           交换两个容器的所有元素            |
-|    `emplace()`    |           在指定的位置插入一个元素           |
+| `emplace_after()` |           在指定位置之后生成一个元素           |
 | `emplace_front()` |           在容器头部生成一个元素            |
-| `emplace_back()`  |           在容器尾部生成一个元素            |
 | `splice_after()`  |      将一个容器中的元素插入到另一个容器的指定位置      |
 |   `remove(val)`   |         删除容器中所有等于val的元素          |
 |   `remove_if()`   |           删除容器中满足条件的元素           |
@@ -375,7 +367,7 @@ std::map<std::string, int> newMap(++myMap.begin(),
 |     `erase()`      |                                   删除容器指定位置、指定键值或者指定区域内的键值对                                    |
 |      `swap()`      |                                  交换2个容器中存储的键值对，2个键值对的类型必须相同                                   |
 |     `clear()`      |                                          清空容器中所有的键值对                                          |
-|    `emplace()`     |                                      在当前容器中的指定位置处构造新键值对                                       |
+|    `emplace()`     |                                      在当前容器中就地构造并插入新键值对                                       |
 |  `emplace_hint()`  |                   和`emplace()`构造新键值对的方式一样<br>但必须提供一个指示键值对生成位置的迭代器，并作为第一个参数                    |
 |    `count(key)`    |                             在当前容器中，查找键为`key`的键值对的个数并返回<br>返回值最大为1                             |
 
@@ -399,7 +391,7 @@ std::multimap<std::string, std::string> mymultimap{
                                                   };
 std::multimap<std::string, std::string> newmultimap(mymultimap); // 容器的类型必须完全一致
 
-std::multimap<std::string, std::string> mymultimap{ {"C++",10},{"Container",20} };
+std::multimap<std::string, std::string> mymultimap{ {"C++","10"},{"Container","20"} };
 std::multimap<std::string, std::string> newmultimap(
                                                         ++mymultimap.begin(), 
                                                         mymultimap.end()
@@ -430,9 +422,9 @@ std::multimap<std::string, std::string> newmultimap(
 |     `erase()`      |                                   删除容器指定位置、指定键值或者指定区域内的键值对                                    |
 |      `swap()`      |                                  交换2个容器中存储的键值对，2个键值对的类型必须相同                                   |
 |     `clear()`      |                                          清空容器中所有的键值对                                          |
-|    `emplace()`     |                                      在当前容器中的指定位置处构造新键值对                                       |
+|    `emplace()`     |                                      在当前容器中就地构造并插入新键值对                                       |
 |  `emplace_hint()`  |                   和`emplace()`构造新键值对的方式一样<br>但必须提供一个指示键值对生成位置的迭代器，并作为第一个参数                    |
-|    `count(key)`    |                             在当前容器中，查找键为`key`的键值对的个数并返回<br>返回值最大为1                             |
+|    `count(key)`    |                             在当前容器中，查找键为`key`的键值对的个数并返回<br>键可以重复，返回值可以大于1                             |
 
 ### std::set
 
@@ -474,7 +466,7 @@ std::set<std::string> copyset(++myset.begin(), myset.end()); // 包含"Container
 |     `erase()`      |                                   删除容器指定位置、指定键值或者指定区域内的键值对                                    |
 |      `swap()`      |                                  交换2个容器中存储的键值对，2个键值对的类型必须相同                                   |
 |     `clear()`      |                                          清空容器中所有的键值对                                          |
-|    `emplace()`     |                                      在当前容器中的指定位置处构造新键值对                                       |
+|    `emplace()`     |                                      在当前容器中就地构造并插入新键值对                                       |
 |  `emplace_hint()`  |                   和`emplace()`构造新键值对的方式一样<br>但必须提供一个指示键值对生成位置的迭代器，并作为第一个参数                    |
 |    `count(val)`    |                             在当前容器中，查找键为`val`的键值对的个数并返回<br>返回值最大为1                             |
 
@@ -519,16 +511,16 @@ std::multiset<std::string> copymultiset(++mymultiset.begin(),
 |     `erase()`      |                                   删除容器指定位置、指定键值或者指定区域内的键值对                                    |
 |      `swap()`      |                                  交换2个容器中存储的键值对，2个键值对的类型必须相同                                   |
 |     `clear()`      |                                          清空容器中所有的键值对                                          |
-|    `emplace()`     |                                      在当前容器中的指定位置处构造新键值对                                       |
+|    `emplace()`     |                                      在当前容器中就地构造并插入新键值对                                       |
 |  `emplace_hint()`  |                   和`emplace()`构造新键值对的方式一样<br>但必须提供一个指示键值对生成位置的迭代器，并作为第一个参数                    |
-|    `count(val)`    |                             在当前容器中，查找键为`val`的键值对的个数并返回<br>返回值最大为1                             |
+|    `count(val)`    |                             在当前容器中，查找键为`val`的键值对的个数并返回<br>值可以重复，返回值可以大于1                             |
 
 ## 无序容器
 
 无序容器包含以下几类容器：
 
 - `std::unordered_map`: 定义在`<unordered_map>`头文件中，使用该容器存储的数据，其各个元素的键必须是唯一的，且该容器中存储的键值对是无序的
-- `std::unordered_multimap`: 定义在`<unordered_map>`头文件中，和`unordered_map`容器唯一的不同在于，`unordered_map`
+- `std::unordered_multimap`: 定义在`<unordered_map>`头文件中，和`unordered_map`容器唯一的不同在于，`unordered_multimap`
   容器中存储元素的键可以重复
 - `std::unordered_set`: 定义在`<unordered_set>`头文件中，不再以键值对的形式存储数据，而是直接存储数据元素本身
 - `std::unordered_multiset`: 定义在`<unordered_set>`头文件中，和`unordered_set`容器唯一的不同在于，`unordered_multiset`
@@ -555,7 +547,7 @@ std::unordered_map<std::string, std::string> umap2(umap); // 容器的类型必�
 std::unordered_map<std::string, std::string> umap2(
                                                     ++umap.begin(), 
                                                     umap.end()
-                                                  ); // 包含{"Container",20}键值对
+                                                  ); // 包含除首个迭代元素外的其余键值对（遍历顺序未指定）
 ```
 {: file='初始化'}
 
@@ -563,12 +555,12 @@ std::unordered_map<std::string, std::string> umap2(
 
 |         成员函数         |                                              功能                                               |
 | :--- | ---: |
-|      `begin()`       |                 返回指向容器中排好序的第一个键值对的双向迭代器<br>如果容器用`const`限定，返回的是`const`类型的双向迭代器                 |
-|       `end()`        |              返回指向容器中排好序的最后一个元素的后一个位置的双向迭代器<br>如果容器用`const`限定，返回的是`const`类型的双向迭代器              |
+|      `begin()`       |                 返回指向容器中第一个元素的前向迭代器（遍历顺序未指定）<br>如果容器用`const`限定，返回的是`const`类型的前向迭代器                 |
+|       `end()`        |              返回指向容器中最后一个元素的后一个位置的前向迭代器<br>如果容器用`const`限定，返回的是`const`类型的前向迭代器              |
 |      `cbegin()`      |                        和`begin()`功能相同<br>增加了`const`属性，不能用于修改容器内存储的键值对                         |
 |       `cend()`       |                         和`end()`功能相同<br>增加了`const`属性，不能用于修改容器内存储的键值对                          |
-|     `find(key)`      |   返回指向当前容器中等于`key`的键值对的双向迭代器<br>如果没找到，返回和`end()`一样的迭代器<br>如果容器用`const`限定，返回`const`类型的双向迭代器    |
-|  `equal_range(key)`  | 返回一个`pair`对象<br>`pair.first`和`lower_bound()`方法的返回值等价<br>`pair.second`和`upper_bound()`方法的返回值等价 |
+|     `find(key)`      |   返回指向当前容器中等于`key`的键值对的前向迭代器<br>如果没找到，返回和`end()`一样的迭代器<br>如果容器用`const`限定，返回`const`类型的前向迭代器    |
+|  `equal_range(key)`  | 返回一个`pair`对象<br>表示所有键等于`key`的元素构成的范围 |
 |      `empty()`       |                                           检查容器是否为空                                            |
 |       `size()`       |                                        返回当前容器中存有键值对的个数                                        |
 |     `max_size()`     |                              返回容器所能容纳键值对的最大个数<br>不同的操作系统，其返回值不同                               |
@@ -578,7 +570,7 @@ std::unordered_map<std::string, std::string> umap2(
 |      `erase()`       |                                   删除容器指定位置、指定键值或者指定区域内的键值对                                    |
 |       `swap()`       |                                  交换2个容器中存储的键值对，2个键值对的类型必须相同                                   |
 |      `clear()`       |                                          清空容器中所有的键值对                                          |
-|     `emplace()`      |                                      在当前容器中的指定位置处构造新键值对                                       |
+|     `emplace()`      |                                      在当前容器中就地构造并插入新键值对                                       |
 |   `emplace_hint()`   |                   和`emplace()`构造新键值对的方式一样<br>但必须提供一个指示键值对生成位置的迭代器，并作为第一个参数                    |
 |     `count(key)`     |                             在当前容器中，查找键为`key`的键值对的个数并返回<br>返回值最大为1                             |
 |   `bucket_count()`   |                                  返回当前容器底层存储键值对时，使用桶（线性链表）的数量                                  |
@@ -586,8 +578,8 @@ std::unordered_map<std::string, std::string> umap2(
 |   `bucket_size(n)`   |                                       返回第`n`个桶中存储键值对的数量                                       |
 |    `bucket(key)`     |                                     返回以`key`为键的键值对所在桶的编号                                      |
 |   `load_factor()`    |                   返回容器中当前的负载因子<br>即存储键值对的数量（size()）和使用桶数（bucket_count()）的比值                   |
-| `max_load_factor()`  |                                        返回或者设置当前容器的负载因子                                        |
-|     `rehash(n)`      |                                      将当前容器底层使用桶的数量设置为`n`                                      |
+| `max_load_factor()`  |                                        返回或者设置当前容器的最大负载因子                                        |
+|     `rehash(n)`      |                                      将当前容器底层使用桶的数量设置为至少`n`（且不少于size()/max_load_factor()）                                      |
 |     `reserve()`      |              将存储桶的数量（bucket_count()）设置为至少容纳`count`个元<br>（不超过最大负载因子）所需的数量，并重新整理容器              |
 |  `hash_function()`   |                                        返回当前容器使用的哈希函数对象                                        |
 
@@ -612,7 +604,7 @@ std::unordered_multimap<std::string, std::string>
 
 std::unordered_multimap<std::string, std::string> 
                         myummap2(++myummap.begin(), 
-                        myummap.end()); // 包含{"Container",20}键值对
+                        myummap.end()); // 包含除首个迭代元素外的其余键值对（遍历顺序未指定）
 ```
 {: file='初始化'}
 
@@ -620,12 +612,12 @@ std::unordered_multimap<std::string, std::string>
 
 |         成员函数         |                                              功能                                               |
 | :--- | ---: |
-|      `begin()`       |                 返回指向容器中排好序的第一个键值对的双向迭代器<br>如果容器用`const`限定，返回的是`const`类型的双向迭代器                 |
-|       `end()`        |              返回指向容器中排好序的最后一个元素的后一个位置的双向迭代器<br>如果容器用`const`限定，返回的是`const`类型的双向迭代器              |
+|      `begin()`       |                 返回指向容器中第一个元素的前向迭代器（遍历顺序未指定）<br>如果容器用`const`限定，返回的是`const`类型的前向迭代器                 |
+|       `end()`        |              返回指向容器中最后一个元素的后一个位置的前向迭代器<br>如果容器用`const`限定，返回的是`const`类型的前向迭代器              |
 |      `cbegin()`      |                        和`begin()`功能相同<br>增加了`const`属性，不能用于修改容器内存储的键值对                         |
 |       `cend()`       |                         和`end()`功能相同<br>增加了`const`属性，不能用于修改容器内存储的键值对                          |
-|     `find(key)`      |   返回指向当前容器中等于`key`的键值对的双向迭代器<br>如果没找到，返回和`end()`一样的迭代器<br>如果容器用`const`限定，返回`const`类型的双向迭代器    |
-|  `equal_range(key)`  | 返回一个`pair`对象<br>`pair.first`和`lower_bound()`方法的返回值等价<br>`pair.second`和`upper_bound()`方法的返回值等价 |
+|     `find(key)`      |   返回指向当前容器中等于`key`的键值对的前向迭代器<br>如果没找到，返回和`end()`一样的迭代器<br>如果容器用`const`限定，返回`const`类型的前向迭代器    |
+|  `equal_range(key)`  | 返回一个`pair`对象<br>表示所有键等于`key`的元素构成的范围 |
 |      `empty()`       |                                           检查容器是否为空                                            |
 |       `size()`       |                                        返回当前容器中存有键值对的个数                                        |
 |     `max_size()`     |                              返回容器所能容纳键值对的最大个数<br>不同的操作系统，其返回值不同                               |
@@ -633,16 +625,16 @@ std::unordered_multimap<std::string, std::string>
 |      `erase()`       |                                   删除容器指定位置、指定键值或者指定区域内的键值对                                    |
 |       `swap()`       |                                  交换2个容器中存储的键值对，2个键值对的类型必须相同                                   |
 |      `clear()`       |                                          清空容器中所有的键值对                                          |
-|     `emplace()`      |                                      在当前容器中的指定位置处构造新键值对                                       |
+|     `emplace()`      |                                      在当前容器中就地构造并插入新键值对                                       |
 |   `emplace_hint()`   |                   和`emplace()`构造新键值对的方式一样<br>但必须提供一个指示键值对生成位置的迭代器，并作为第一个参数                    |
-|     `count(key)`     |                             在当前容器中，查找键为`key`的键值对的个数并返回<br>返回值最大为1                             |
+|     `count(key)`     |                             在当前容器中，查找键为`key`的键值对的个数并返回<br>键可以重复，返回值可以大于1                             |
 |   `bucket_count()`   |                                  返回当前容器底层存储键值对时，使用桶（线性链表）的数量                                  |
 | `max_bucket_count()` |                                     返回当前系统中，容器底层最多可以用多少桶                                      |
 |   `bucket_size(n)`   |                                       返回第`n`个桶中存储键值对的数量                                       |
 |    `bucket(key)`     |                                     返回以`key`为键的键值对所在桶的编号                                      |
 |   `load_factor()`    |                   返回容器中当前的负载因子<br>即存储键值对的数量（size()）和使用桶数（bucket_count()）的比值                   |
-| `max_load_factor()`  |                                        返回或者设置当前容器的负载因子                                        |
-|     `rehash(n)`      |                                      将当前容器底层使用桶的数量设置为`n`                                      |
+| `max_load_factor()`  |                                        返回或者设置当前容器的最大负载因子                                        |
+|     `rehash(n)`      |                                      将当前容器底层使用桶的数量设置为至少`n`（且不少于size()/max_load_factor()）                                      |
 |     `reserve()`      |              将存储桶的数量（bucket_count()）设置为至少容纳`count`个元<br>（不超过最大负载因子）所需的数量，并重新整理容器              |
 |  `hash_function()`   |                                        返回当前容器使用的哈希函数对象                                        |
 
@@ -659,7 +651,7 @@ std::unordered_set<std::string> uset{ "C++", "Container"}; // 初始状态包含
 
 std::unordered_set<std::string> uset2(uset); // 容器的类型必须完全一致
 
-std::unordered_set<std::string> uset2(++uset.begin(), uset.end()); // 包含"Container"
+std::unordered_set<std::string> uset2(++uset.begin(), uset.end()); // 包含除首个迭代元素外的其余元素（遍历顺序未指定）
 ```
 {: file='初始化'}
 
@@ -667,12 +659,12 @@ std::unordered_set<std::string> uset2(++uset.begin(), uset.end()); // 包含"Con
 
 |         成员函数         |                                              功能                                               |
 | :--- | ---: |
-|      `begin()`       |                 返回指向容器中排好序的第一个键值对的双向迭代器<br>如果容器用`const`限定，返回的是`const`类型的双向迭代器                 |
-|       `end()`        |              返回指向容器中排好序的最后一个元素的后一个位置的双向迭代器<br>如果容器用`const`限定，返回的是`const`类型的双向迭代器              |
+|      `begin()`       |                 返回指向容器中第一个元素的前向迭代器（遍历顺序未指定）<br>如果容器用`const`限定，返回的是`const`类型的前向迭代器                 |
+|       `end()`        |              返回指向容器中最后一个元素的后一个位置的前向迭代器<br>如果容器用`const`限定，返回的是`const`类型的前向迭代器              |
 |      `cbegin()`      |                        和`begin()`功能相同<br>增加了`const`属性，不能用于修改容器内存储的键值对                         |
 |       `cend()`       |                         和`end()`功能相同<br>增加了`const`属性，不能用于修改容器内存储的键值对                          |
-|     `find(key)`      |   返回指向当前容器中等于`key`的键值对的双向迭代器<br>如果没找到，返回和`end()`一样的迭代器<br>如果容器用`const`限定，返回`const`类型的双向迭代器    |
-|  `equal_range(key)`  | 返回一个`pair`对象<br>`pair.first`和`lower_bound()`方法的返回值等价<br>`pair.second`和`upper_bound()`方法的返回值等价 |
+|     `find(key)`      |   返回指向当前容器中等于`key`的键值对的前向迭代器<br>如果没找到，返回和`end()`一样的迭代器<br>如果容器用`const`限定，返回`const`类型的前向迭代器    |
+|  `equal_range(key)`  | 返回一个`pair`对象<br>表示所有键等于`key`的元素构成的范围 |
 |      `empty()`       |                                           检查容器是否为空                                            |
 |       `size()`       |                                        返回当前容器中存有键值对的个数                                        |
 |     `max_size()`     |                              返回容器所能容纳键值对的最大个数<br>不同的操作系统，其返回值不同                               |
@@ -680,7 +672,7 @@ std::unordered_set<std::string> uset2(++uset.begin(), uset.end()); // 包含"Con
 |      `erase()`       |                                   删除容器指定位置、指定键值或者指定区域内的键值对                                    |
 |       `swap()`       |                                  交换2个容器中存储的键值对，2个键值对的类型必须相同                                   |
 |      `clear()`       |                                          清空容器中所有的键值对                                          |
-|     `emplace()`      |                                      在当前容器中的指定位置处构造新键值对                                       |
+|     `emplace()`      |                                      在当前容器中就地构造并插入新键值对                                       |
 |   `emplace_hint()`   |                   和`emplace()`构造新键值对的方式一样<br>但必须提供一个指示键值对生成位置的迭代器，并作为第一个参数                    |
 |     `count(key)`     |                             在当前容器中，查找键为`key`的键值对的个数并返回<br>返回值最大为1                             |
 |   `bucket_count()`   |                                  返回当前容器底层存储键值对时，使用桶（线性链表）的数量                                  |
@@ -688,8 +680,8 @@ std::unordered_set<std::string> uset2(++uset.begin(), uset.end()); // 包含"Con
 |   `bucket_size(n)`   |                                       返回第`n`个桶中存储键值对的数量                                       |
 |    `bucket(key)`     |                                     返回以`key`为键的键值对所在桶的编号                                      |
 |   `load_factor()`    |                   返回容器中当前的负载因子<br>即存储键值对的数量（size()）和使用桶数（bucket_count()）的比值                   |
-| `max_load_factor()`  |                                        返回或者设置当前容器的负载因子                                        |
-|     `rehash(n)`      |                                      将当前容器底层使用桶的数量设置为`n`                                      |
+| `max_load_factor()`  |                                        返回或者设置当前容器的最大负载因子                                        |
+|     `rehash(n)`      |                                      将当前容器底层使用桶的数量设置为至少`n`（且不少于size()/max_load_factor()）                                      |
 |     `reserve()`      |              将存储桶的数量（bucket_count()）设置为至少容纳`count`个元<br>（不超过最大负载因子）所需的数量，并重新整理容器              |
 |  `hash_function()`   |                                        返回当前容器使用的哈希函数对象                                        |
 
@@ -707,7 +699,7 @@ std::unordered_multiset<std::string> uset{ "C++", "Container"}; // 初始状态�
 std::unordered_multiset<std::string> uset2(uset); // 容器的类型必须完全一致
 
 std::unordered_multiset<std::string> uset2(++uset.begin(), 
-                                           uset.end()); // 包含"Container"
+                                           uset.end()); // 包含除首个迭代元素外的其余元素（遍历顺序未指定）
 ```
 {: file='初始化'}
 
@@ -715,12 +707,12 @@ std::unordered_multiset<std::string> uset2(++uset.begin(),
 
 |         成员函数         |                                              功能                                               |
 | :--- | ---: |
-|      `begin()`       |                 返回指向容器中排好序的第一个键值对的双向迭代器<br>如果容器用`const`限定，返回的是`const`类型的双向迭代器                 |
-|       `end()`        |              返回指向容器中排好序的最后一个元素的后一个位置的双向迭代器<br>如果容器用`const`限定，返回的是`const`类型的双向迭代器              |
+|      `begin()`       |                 返回指向容器中第一个元素的前向迭代器（遍历顺序未指定）<br>如果容器用`const`限定，返回的是`const`类型的前向迭代器                 |
+|       `end()`        |              返回指向容器中最后一个元素的后一个位置的前向迭代器<br>如果容器用`const`限定，返回的是`const`类型的前向迭代器              |
 |      `cbegin()`      |                        和`begin()`功能相同<br>增加了`const`属性，不能用于修改容器内存储的键值对                         |
 |       `cend()`       |                         和`end()`功能相同<br>增加了`const`属性，不能用于修改容器内存储的键值对                          |
-|     `find(key)`      |   返回指向当前容器中等于`key`的键值对的双向迭代器<br>如果没找到，返回和`end()`一样的迭代器<br>如果容器用`const`限定，返回`const`类型的双向迭代器    |
-|  `equal_range(key)`  | 返回一个`pair`对象<br>`pair.first`和`lower_bound()`方法的返回值等价<br>`pair.second`和`upper_bound()`方法的返回值等价 |
+|     `find(key)`      |   返回指向当前容器中等于`key`的键值对的前向迭代器<br>如果没找到，返回和`end()`一样的迭代器<br>如果容器用`const`限定，返回`const`类型的前向迭代器    |
+|  `equal_range(key)`  | 返回一个`pair`对象<br>表示所有键等于`key`的元素构成的范围 |
 |      `empty()`       |                                           检查容器是否为空                                            |
 |       `size()`       |                                        返回当前容器中存有键值对的个数                                        |
 |     `max_size()`     |                              返回容器所能容纳键值对的最大个数<br>不同的操作系统，其返回值不同                               |
@@ -728,15 +720,15 @@ std::unordered_multiset<std::string> uset2(++uset.begin(),
 |      `erase()`       |                                   删除容器指定位置、指定键值或者指定区域内的键值对                                    |
 |       `swap()`       |                                  交换2个容器中存储的键值对，2个键值对的类型必须相同                                   |
 |      `clear()`       |                                          清空容器中所有的键值对                                          |
-|     `emplace()`      |                                      在当前容器中的指定位置处构造新键值对                                       |
+|     `emplace()`      |                                      在当前容器中就地构造并插入新键值对                                       |
 |   `emplace_hint()`   |                   和`emplace()`构造新键值对的方式一样<br>但必须提供一个指示键值对生成位置的迭代器，并作为第一个参数                    |
-|     `count(key)`     |                             在当前容器中，查找键为`key`的键值对的个数并返回<br>返回值最大为1                             |
+|     `count(key)`     |                             在当前容器中，查找键为`key`的键值对的个数并返回<br>值可以重复，返回值可以大于1                             |
 |   `bucket_count()`   |                                  返回当前容器底层存储键值对时，使用桶（线性链表）的数量                                  |
 | `max_bucket_count()` |                                     返回当前系统中，容器底层最多可以用多少桶                                      |
 |   `bucket_size(n)`   |                                       返回第`n`个桶中存储键值对的数量                                       |
 |    `bucket(key)`     |                                     返回以`key`为键的键值对所在桶的编号                                      |
 |   `load_factor()`    |                   返回容器中当前的负载因子<br>即存储键值对的数量（size()）和使用桶数（bucket_count()）的比值                   |
-| `max_load_factor()`  |                                        返回或者设置当前容器的负载因子                                        |
-|     `rehash(n)`      |                                      将当前容器底层使用桶的数量设置为`n`                                      |
+| `max_load_factor()`  |                                        返回或者设置当前容器的最大负载因子                                        |
+|     `rehash(n)`      |                                      将当前容器底层使用桶的数量设置为至少`n`（且不少于size()/max_load_factor()）                                      |
 |     `reserve()`      |              将存储桶的数量（bucket_count()）设置为至少容纳`count`个元<br>（不超过最大负载因子）所需的数量，并重新整理容器              |
 |  `hash_function()`   |                                        返回当前容器使用的哈希函数对象                                        |

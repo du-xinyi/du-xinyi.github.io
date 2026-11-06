@@ -13,13 +13,13 @@ tags: [ Linux, Filesystem, Mount ]
   - ext2/ext3/ext4 → Linux 最常用的文件系统
   - xfs → 高性能文件系统
   - btrfs → 现代化文件系统，支持快照、校验
-  - reiserfs → 较旧文件系统
-  - vfat / msdos / ntfs → Windows 兼容文件系统
+  - reiserfs → 较旧文件系统，内核 6.13 起已移除
+  - vfat / msdos / exfat / ntfs3 → Windows 兼容文件系统（旧的 ntfs 驱动已于内核 6.9 移除，ntfs 现为 ntfs3 的别名）
   - iso9660 → 光盘文件系统
   - zfs → 来自 Solaris，支持快照、压缩，需 ZFS on Linux
 - 网络文件系统（内核态）
   - nfs / nfs4 → Network File System
-  - cifs / smbfs → Windows 共享（Samba）
+  - cifs / smb3 → Windows 共享（SMB/Samba）
   - afs → Andrew File System
 - 用户态挂载（FUSE）
   - fuse.sshfs → SSH 远程文件系统
@@ -33,8 +33,7 @@ tags: [ Linux, Filesystem, Mount ]
   - tmpfs → 内存文件系统
   - devtmpfs → 设备节点文件系统
   - cgroup / cgroup2 → 控制组文件系统
-  - overlay → 容器联合挂载（常见于 Docker/Podman）
-  - securityfs → 内核安全接口（AppArmor、SELinux）
+  - securityfs → 内核安全接口（AppArmor、IMA、TPM 等）
   - efivarfs → EFI/UEFI 固件变量
   - debugfs → 内核调试接口
   - tracefs → 内核跟踪接口（ftrace）
@@ -47,11 +46,11 @@ tags: [ Linux, Filesystem, Mount ]
   - selinuxfs → SELinux 配置接口
   - rpc_pipefs → RPC 通信管道文件系统
   - nsfs → namespace 文件系统
-  - kernfs → sysfs 的底层实现
   - pstore → 内核崩溃日志存储
-  - resctrl → CPU/内存资源控制
+  - resctrl → 缓存分配与内存带宽控制（Intel RDT / AMD QoS）
 - 特殊用途文件系统
-  - aufs / overlayfs → 容器镜像层文件系统
+  - overlay（OverlayFS）→ 联合文件系统，容器镜像层常用（Docker/Podman）
+  - aufs → 旧的联合文件系统，未进入主线内核，Docker 已移除其存储驱动
   - squashfs → 压缩只读文件系统（常见于 LiveCD）
   - ramfs → 原始内存文件系统（比 tmpfs 更基础）
 
