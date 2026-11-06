@@ -8,6 +8,7 @@
 {%- endif -%}
 ';
 
+@use 'custom/theme';
 @use 'custom/glass';
 @use 'custom/sidebar';
 @use 'custom/collapsible-headings';

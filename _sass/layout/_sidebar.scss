@@ -3,6 +3,8 @@
 @use '../abstracts/breakpoints' as bp;
 @use '../abstracts/placeholders';
 
+$btn-border-width: 3px;
+$btn-mb: 0.5rem;
 $sidebar-display: 'sidebar-display'; /* the attribute for sidebar display */
 
 #sidebar {
@@ -179,62 +181,28 @@ $sidebar-display: 'sidebar-display'; /* the attribute for sidebar display */
     padding-left: 2rem;
     padding-right: 1rem;
     margin-bottom: 1.5rem;
-    gap: 1rem;
 
     @include bp.xxxl {
       padding-left: 2.75rem;
       margin-bottom: 1.75rem;
     }
 
-    $btn-size: 2rem;
-
-    .sidebar-actions,
-    .sidebar-theme-actions {
-      border: 1px solid var(--sidebar-border-color);
-      border-radius: calc($btn-size / 2);
-      background-color: var(--sidebar-btn-bg);
-      box-shadow: 0 0.125rem 0.4rem rgb(0 0 0 / 6%);
-    }
-
-    .sidebar-actions {
-      overflow: hidden;
-    }
-
-    .sidebar-contact-actions {
-      margin-left: auto;
-    }
-
-    .sidebar-theme-actions {
-      position: relative;
-      flex: 0 0 auto;
-
-      .dropdown-menu {
-        inset: auto auto calc(100% + 0.5rem) 0;
-        display: none;
-        margin: 0;
-        transform: none;
-
-        &.show {
-          display: flex;
-        }
-      }
-    }
+    $btn-size: 1.75rem;
 
     %button {
       width: $btn-size;
       height: $btn-size;
-      margin: 0;
-      border: 0;
-      border-radius: 0;
+      margin-bottom: $btn-mb; // multi line gap
+      border-radius: 50%;
       color: var(--sidebar-btn-color);
-      background-color: transparent;
+      background-color: var(--sidebar-btn-bg);
       text-align: center;
       display: flex;
       align-items: center;
       justify-content: center;
 
       &:not(:focus-visible) {
-        box-shadow: none;
+        box-shadow: var(--sidebar-border-color) 0 0 0 1px;
       }
 
       &:hover {
@@ -247,8 +215,12 @@ $sidebar-display: 'sidebar-display'; /* the attribute for sidebar display */
       @extend %sidebar-link-hover;
       @extend %clickable-transition;
 
-      &:not(:first-child) {
-        border-left: 1px solid var(--sidebar-border-color);
+      &:not(:last-child) {
+        margin-right: v.$sb-btn-gap;
+
+        @include bp.xxxl {
+          margin-right: v.$sb-btn-gap-lg;
+        }
       }
     }
 
@@ -313,6 +285,7 @@ $sidebar-display: 'sidebar-display'; /* the attribute for sidebar display */
           display: flex;
           flex-direction: column;
           gap: 0.25rem;
+          left: -0.25rem !important;
           -webkit-animation: menu-pop 0.2s ease-out;
           animation: menu-pop 0.2s ease-out;
         }
@@ -346,11 +319,21 @@ $sidebar-display: 'sidebar-display'; /* the attribute for sidebar display */
             color: var(--sidebar-btn-color);
             margin-right: 0.5rem;
           }
-
         }
       }
     }
 
+    .icon-border {
+      @extend %no-cursor;
+      @include mx.ml-mr(0.6rem);
+
+      background-color: var(--sidebar-btn-color);
+      content: '';
+      width: $btn-border-width;
+      height: $btn-border-width;
+      border-radius: 50%;
+      margin-bottom: $btn-mb;
+    }
   } /* .sidebar-bottom */
 } /* #sidebar */
 

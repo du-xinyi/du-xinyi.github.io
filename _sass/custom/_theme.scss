@@ -1,0 +1,528 @@
+/*
+ * Site-specific overrides of Chirpy theme styles.
+ *
+ * The theme files under _sass/{base,layout,pages,themes} are kept identical
+ * to upstream Chirpy v7.6.0 so theme upgrades merge cleanly; every visual
+ * change to those files lives here instead. Loaded right after the theme and
+ * before the other custom stylesheets (see assets/css/site.scss).
+ */
+
+@use '../abstracts/variables' as v;
+@use '../abstracts/breakpoints' as bp;
+@use '../abstracts/mixins' as mx;
+@use '../abstracts/placeholders';
+
+/* ---------- base/_syntax.scss: code block header ---------- */
+
+div[class^='language-'] {
+  .code-header {
+    @extend %no-cursor;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: v.$code-header-height;
+    margin-left: 0.75rem;
+    margin-right: 0.25rem;
+
+    /* the label block */
+    span {
+      color: var(--code-header-text-color);
+      line-height: v.$code-header-height;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+
+      /* label icon */
+      i {
+        font-size: 1rem;
+        width: v.$code-icon-width;
+        color: var(--code-header-icon-color);
+
+        &.small {
+          font-size: 70%;
+        }
+      }
+
+      /* label text */
+      &::after {
+        content: attr(data-label-text);
+        font-size: 0.85rem;
+        font-weight: 600;
+      }
+    }
+
+    /* clipboard */
+    button {
+      @extend %cursor-pointer;
+      @extend %rounded;
+
+      border: 1px solid transparent;
+      height: 2rem;
+      width: 2rem;
+      margin-right: 0.125rem;
+      padding: 0;
+      background-color: inherit;
+
+      i {
+        color: var(--code-header-icon-color);
+      }
+
+      &[timeout] {
+        &:hover {
+          border-color: var(--clipboard-checked-color);
+        }
+
+        i {
+          font-size: 90%;
+          color: var(--clipboard-checked-color);
+        }
+      }
+
+      &:focus {
+        outline: none;
+      }
+
+      &:not([timeout]):hover {
+        background-color: rgb(128 128 128 / 37%);
+
+        i {
+          color: white;
+        }
+      }
+    }
+
+    @include bp.sm {
+      @include mx.ml-mr(0);
+
+      $dot-margin: 1rem;
+
+      &::before {
+        content: '';
+        display: inline-block;
+        margin-left: $dot-margin;
+        width: v.$code-dot-size;
+        height: v.$code-dot-size;
+        border-radius: 50%;
+        background-color: var(--code-header-muted-color);
+        box-shadow:
+          (v.$code-dot-size + v.$code-dot-gap) 0 0
+            var(--code-header-muted-color),
+          (v.$code-dot-size + v.$code-dot-gap) * 2 0 0
+            var(--code-header-muted-color);
+      }
+
+      span {
+        margin-left: v.$code-icon-width * -1; // center the label text
+        max-width: calc(
+          100% - $dot-margin - (v.$code-dot-gap + v.$code-dot-size) * 3 -
+            v.$code-icon-width * 4
+        );
+      }
+    }
+  }
+}
+
+/* keep the file icon unshifted (upstream nudges it down 1px) */
+[file] .code-header span > i {
+  position: static;
+  top: auto;
+}
+
+/* ---------- layout/_footer.scss ---------- */
+
+footer {
+  background-color: transparent;
+  border-top: 0;
+
+  .site-copyright {
+    width: 100%;
+  }
+}
+
+/* ---------- layout/_topbar.scss ---------- */
+
+#topbar-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#cache-refresh {
+  color: var(--topbar-text-color);
+  text-decoration: none;
+  margin-left: auto;
+  margin-right: 0.5rem;
+
+  &:hover {
+    color: var(--text-muted-highlight-color);
+  }
+
+  &.refreshing {
+    pointer-events: none;
+    opacity: 0.65;
+
+    i {
+      animation: cache-refresh-spin 0.75s linear infinite;
+    }
+  }
+
+  @include bp.lt(bp.get(lg)) {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+@keyframes cache-refresh-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+/* ---------- layout/_sidebar.scss: bottom action bar ---------- */
+
+#sidebar .sidebar-bottom {
+  $btn-size: 2rem;
+
+  gap: 1rem;
+
+  .sidebar-actions,
+  .sidebar-theme-actions {
+    border: 1px solid var(--sidebar-border-color);
+    border-radius: calc($btn-size / 2);
+    background-color: var(--sidebar-btn-bg);
+    box-shadow: 0 0.125rem 0.4rem rgb(0 0 0 / 6%);
+  }
+
+  .sidebar-actions {
+    overflow: hidden;
+  }
+
+  .sidebar-contact-actions {
+    margin-left: auto;
+  }
+
+  .sidebar-theme-actions {
+    position: relative;
+    flex: 0 0 auto;
+
+    .dropdown-menu {
+      inset: auto auto calc(100% + 0.5rem) 0;
+      display: none;
+      margin: 0;
+      transform: none;
+
+      &.show {
+        display: flex;
+      }
+    }
+  }
+
+  > a,
+  #mode-toggle {
+    width: $btn-size;
+    height: $btn-size;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    background-color: transparent;
+
+    &:not(:focus-visible) {
+      box-shadow: none;
+    }
+
+    &:hover {
+      background-color: var(--sidebar-hover-bg);
+    }
+  }
+
+  > a:not(:last-child) {
+    margin-right: 0; /* reset upstream button gap */
+  }
+
+  > a:not(:first-child) {
+    border-left: 1px solid var(--sidebar-border-color);
+  }
+
+  i {
+    line-height: $btn-size;
+  }
+
+  .sidebar-theme-actions #mode-toggle + .dropdown-menu.show {
+    left: 0 !important; /* reset upstream left: -0.25rem !important */
+  }
+}
+
+/* ---------- pages/_archives.scss (+ themes/_dark.scss) ---------- */
+
+$archives-odd-bg: linear-gradient(
+  to left,
+  transparent,
+  color-mix(in srgb, var(--tb-odd-bg) 72%, transparent) 18%,
+  color-mix(in srgb, var(--tb-odd-bg) 86%, transparent) 50%,
+  color-mix(in srgb, var(--tb-odd-bg) 72%, transparent) 82%,
+  transparent
+);
+
+#archives ul li:nth-child(odd) {
+  border-radius: 0.45rem;
+  background-color: transparent;
+  background-image: $archives-odd-bg;
+}
+
+/* upstream dark theme paints its own gradient with a more specific selector */
+:root[#{v.$theme-attr}='dark'] #archives li:nth-child(odd) {
+  background-image: $archives-odd-bg;
+}
+
+:root:not([#{v.$theme-attr}]) {
+  @include mx.color-scheme(dark) {
+    #archives li:nth-child(odd) {
+      background-image: $archives-odd-bg;
+    }
+  }
+}
+
+/* ---------- pages/_categories.scss ---------- */
+
+.categories.card {
+  overflow: hidden;
+  margin-bottom: 1rem;
+  border: 1px solid color-mix(in srgb, var(--text-color) 9%, transparent);
+  border-radius: 1rem;
+  background: color-mix(in srgb, var(--card-bg) 68%, transparent);
+  box-shadow:
+    inset 0 1px rgb(255 255 255 / 10%),
+    0 0.4rem 1.3rem rgb(0 0 0 / 6%);
+  -webkit-backdrop-filter: saturate(170%) blur(18px);
+  backdrop-filter: saturate(170%) blur(18px);
+}
+
+.categories {
+  .card-header {
+    padding: 0.95rem 1rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--text-color) 8%, transparent);
+    border-radius: 0;
+    background: color-mix(in srgb, var(--text-color) 4%, transparent);
+
+    &.hide-border-bottom {
+      border-bottom-color: transparent;
+    }
+
+    > span {
+      display: inline-flex;
+      align-items: center;
+      min-width: 0;
+    }
+
+    i {
+      color: var(--link-color);
+      font-size: 0.95rem;
+    }
+
+    .text-muted {
+      color: var(--text-muted-color) !important;
+      font-size: 0.82rem;
+    }
+  }
+
+  .list-group {
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .list-group-item {
+    display: flex;
+    align-items: center;
+    padding: 0.8rem 1.1rem 0.8rem 2.2rem;
+    border: 0;
+    border-top: 1px solid color-mix(in srgb, var(--text-color) 7%, transparent);
+    background: transparent;
+    color: var(--text-color);
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
+
+    &:hover {
+      background: color-mix(in srgb, var(--link-color) 6%, transparent);
+    }
+
+    &:first-child,
+    &:last-child {
+      border-radius: 0;
+    }
+
+    i {
+      color: var(--text-muted-color);
+      font-size: 0.88rem;
+    }
+
+    .text-muted {
+      font-size: 0.82rem;
+    }
+  }
+}
+
+.content .categories {
+  .card-header a,
+  .list-group-item a {
+    border-bottom: 0;
+    color: var(--heading-color);
+    font-weight: 650;
+
+    &:hover {
+      border-bottom: 0;
+      color: var(--link-color);
+    }
+  }
+}
+
+.category-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  color: var(--text-muted-color) !important;
+  text-align: center;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+
+  i {
+    position: relative;
+    width: 1rem;
+    height: 0.7rem;
+    transition: transform 0.25s ease;
+  }
+
+  &.disabled {
+    opacity: 0.45;
+  }
+
+  &:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--link-color) 70%, transparent);
+    outline-offset: 2px;
+  }
+}
+
+@media (hover: hover) {
+  .category-trigger:not(.disabled):hover {
+    border-color: color-mix(in srgb, var(--text-color) 8%, transparent);
+    background: color-mix(in srgb, var(--link-color) 8%, transparent);
+
+    i {
+      color: var(--link-color);
+    }
+  }
+}
+
+.rotate {
+  transform: rotate(-90deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .categories .list-group-item,
+  .category-trigger,
+  .category-trigger i {
+    transition: none;
+  }
+}
+
+/* reset upstream `.categories` / hover styles that the design above drops */
+.categories:not(.card) {
+  margin-bottom: 0;
+  border-color: currentcolor;
+}
+
+@media (hover: hover) {
+  .category-trigger.disabled:hover {
+    background-color: transparent;
+  }
+}
+
+/* ---------- pages/_tags.scss ---------- */
+
+#tags {
+  gap: 0.8rem;
+  margin-top: 1.5rem;
+
+  > div {
+    display: flex;
+  }
+
+  .tag {
+    letter-spacing: inherit; /* reset upstream .tag */
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: 2.55rem;
+    margin: 0;
+    padding: 0.55rem 0.85rem;
+    border: 1px solid color-mix(in srgb, var(--text-color) 10%, transparent) !important;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--card-bg) 68%, transparent);
+    box-shadow:
+      inset 0 1px rgb(255 255 255 / 10%),
+      0 0.25rem 0.9rem rgb(0 0 0 / 5%);
+    color: var(--text-color);
+    font-weight: 650;
+    line-height: 1.25;
+    -webkit-backdrop-filter: saturate(170%) blur(16px);
+    backdrop-filter: saturate(170%) blur(16px);
+    transition:
+      transform 0.2s ease,
+      border-color 0.2s ease,
+      background-color 0.2s ease,
+      box-shadow 0.2s ease;
+
+    span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 1.45rem;
+      height: 1.45rem;
+      margin: 0;
+      padding: 0 0.35rem;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--link-color) 10%, transparent);
+      color: var(--link-color) !important;
+      font-family: inherit;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
+    &:hover {
+      border-color: color-mix(in srgb, var(--link-color) 28%, transparent) !important;
+      background: color-mix(in srgb, var(--link-color) 9%, var(--card-bg));
+      box-shadow:
+        inset 0 1px rgb(255 255 255 / 12%),
+        0 0.45rem 1.2rem rgb(0 0 0 / 8%);
+      color: var(--link-color);
+      transform: translateY(-2px);
+    }
+
+    &:focus-visible {
+      outline: 2px solid color-mix(in srgb, var(--link-color) 70%, transparent);
+      outline-offset: 3px;
+    }
+  }
+
+  @include bp.lt(bp.get(lg)) {
+    justify-content: center !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #tags .tag {
+    transition: none;
+
+    &:hover {
+      transform: none;
+    }
+  }
+}
