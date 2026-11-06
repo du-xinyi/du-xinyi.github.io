@@ -6,8 +6,6 @@ categories: [ Development, Python ]
 tags: [ Conda, Python ]
 ---
 
-# conda相关笔记
-
 `conda`是`anaconda`发行版中的包管理器，用于安装、更新、卸载软件包，以及创建和管理不同的`Python`环境。除`Anaconda`外，也可以使用默认`conda-forge`频道的`Miniforge`发行版（`Anaconda`的`defaults`频道对组织用户有商业授权限制）
 
 ## 环境管理

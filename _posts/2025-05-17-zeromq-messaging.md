@@ -6,8 +6,6 @@ categories: [ Development, Distributed Systems ]
 tags: [ ZeroMQ, C++, Python ]
 ---
 
-# ZeroMQ相关笔记
-
 `ZeroMQ`是一个高性能、异步消息库，提供 套接字风格的 API，但其本质比 TCP/UDP 更强大，接近消息中间件的功能，适用于构建分布式、并发和多线程系统
 
 > ZeroMQ = Socket + Queue + Threading + 异步通信能力，但无中心服务器、轻量级、极快

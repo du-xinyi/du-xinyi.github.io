@@ -6,8 +6,6 @@ categories: [ Systems, Linux ]
 tags: [ Linux, CLI, SSH ]
 ---
 
-# Linux 常用工具
-
 ## ssh
 
 `ssh`命令用于通过`SSH`协议连接到远程主机，实现远程登录和执行命令

@@ -6,7 +6,6 @@ categories: [ Systems, Linux ]
 tags: [ Linux, Filesystem, Mount ]
 ---
 
-# Linux下系统挂载相关笔记
 ## 常见文件系统类型
 
 - 内核态本地文件系统

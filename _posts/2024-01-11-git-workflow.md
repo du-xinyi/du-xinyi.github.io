@@ -7,8 +7,6 @@ tags: [ Git, Version Control, GitHub ]
 math: true
 ---
 
-# git相关笔记
-
 ## 分支更新代码
 
 以本博客为例，fork的源仓库为[jekyll-theme-chirpy](https://github.com/cotes2020/jekyll-theme-chirpy)

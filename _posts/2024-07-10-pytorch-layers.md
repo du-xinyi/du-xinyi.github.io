@@ -7,7 +7,6 @@ tags: [ PyTorch, Python, Deep Learning ]
 math: True
 ---
 
-# PyTorch相关笔记
 ## 输出大小计算
 ### 卷积层
 

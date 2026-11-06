@@ -6,8 +6,6 @@ categories: [ Development, Python ]
 tags: [ Matplotlib, Python, Visualization ]
 ---
 
-# matplotlib相关笔记
-
 `matplotlib`是Python中绘图工具，使用时需要导入其中的`pyplot`模块
 
 ```python

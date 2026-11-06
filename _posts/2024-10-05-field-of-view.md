@@ -7,8 +7,6 @@ tags: [ Camera, Optics ]
 math: True
 ---
 
-# 镜头视角相关笔记
-
 镜头的视场角(Field of View, FOV)可以通过镜头的焦距`f`和传感器的宽度`W`高度`H`对角线长度`D`来计算
 
 ## 标准镜头

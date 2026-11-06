@@ -6,8 +6,6 @@ categories: [ Development, C++ ]
 tags: [ C++, Python, Terminal ]
 ---
 
-# printf相关笔记
-
 ## 彩色输出
 
 - 前景色

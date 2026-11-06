@@ -6,8 +6,6 @@ categories: [ Embedded, Debugging ]
 tags: [ OpenOCD, Embedded, Debugging ]
 ---
 
-# OpenOCD相关笔记
-
 `OpenOCD`是一个用来调试嵌入式SOC的软件，需要搭配`debug adapter`（如JLink，ST-Link，DAP-Link）和GDB（或Telnet）一起使用
 
 ## Linux安装OpenOCD

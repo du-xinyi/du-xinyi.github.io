@@ -6,8 +6,6 @@ categories: [ Development, C++ ]
 tags: [ C++, Multithreading ]
 ---
 
-# C++多线程相关笔记
-
 在传统的C++(C++11之前)
 中并没有引入线程这个概念，在C++11出来之前，如果想要在C++中实现多线程，需要借助操作系统平台提供的API，比如Linux的`<pthread.h>`
 ，或者Windows下的`<windows.h>`  

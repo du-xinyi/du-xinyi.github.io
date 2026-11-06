@@ -7,8 +7,6 @@ tags: [ Linear Algebra, Coordinate Transform, Robotics ]
 math: True
 ---
 
-# 齐次变换矩阵相关笔记
-
 ## 平移
 
 将点$\left(x, y, z\right)$平移$t_x$，$t_y$，$t_z$单位

@@ -7,8 +7,6 @@ tags: [ Docker, Linux, Containers ]
 math: true
 ---
 
-# docker相关笔记
-
 ## 权限设置
 
 docker进程默认是以root用户运行的，免sudo运行需要将用户添加到docker组中

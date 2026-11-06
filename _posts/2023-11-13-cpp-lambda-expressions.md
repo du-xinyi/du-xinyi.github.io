@@ -6,8 +6,6 @@ categories: [ Development, C++ ]
 tags: [ C++, Lambda ]
 ---
 
-# Lambda表达式相关笔记
-
 ​Lambda表达式是现代C++在C++11和更高版本中的一个新的语法糖。lambda表达式是在调用或作为函数参数传递的位置处定义匿名函数对象的便捷方法。通常，lambda用于封装传递给算法或异步方法的几行代码
 
 ## Lambda表达式定义

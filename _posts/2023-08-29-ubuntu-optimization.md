@@ -6,7 +6,6 @@ categories: [ Systems, Linux ]
 tags: [ Ubuntu, Linux ]
 ---
 
-# ubuntu优化
 ## 谷歌浏览器汉化
 
 在ubuntu内更改Chrome的语言时，并没有像是windows的`以这种语言显示Google Chrome`
