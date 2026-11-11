@@ -1,6 +1,6 @@
 /* Unified glass rendering for Markdown tables. */
 .table-wrapper {
-  overflow: hidden;
+  overflow: auto hidden;
   margin: 0.75rem 0 1rem;
   border: 1px solid color-mix(in srgb, var(--text-color) 10%, transparent);
   border-radius: 0.8rem;
@@ -15,9 +15,32 @@
     width: 100%;
     min-width: 0;
     margin: 0;
-    table-layout: fixed;
+    table-layout: auto;
     border-collapse: separate;
     border-spacing: 0;
+
+    /* A faint divider between columns, matching the row dividers. */
+    th:not(:last-child),
+    td:not(:last-child) {
+      border-right: 1px solid color-mix(in srgb, var(--text-color) 7%, transparent);
+    }
+
+    /* No text column narrower than six characters plus the cell padding, so a
+       short label stays on one line. Centred mark columns stay compact. */
+    td:not([style*='center']) {
+      min-width: 8em;
+    }
+
+    /* Name/quantity tables (last column right-aligned, as in the recipes)
+       keep equal columns and no column divider. */
+    &:has(> thead th:last-child[style*='right']) {
+      table-layout: fixed;
+
+      th,
+      td {
+        border-right: 0;
+      }
+    }
 
     thead {
       border: 0;
@@ -48,6 +71,7 @@
         padding: 0.65rem 0.9rem;
         font-size: 0.95rem;
         white-space: normal;
+        overflow-wrap: break-word;
       }
     }
   }
@@ -62,6 +86,12 @@
       thead th,
       tbody tr td {
         padding: 0.6rem 0.8rem;
+      }
+
+      /* Narrower minimum on phones; tables that still do not fit scroll
+         sideways instead of squeezing a column to one character per line. */
+      td:not([style*='center']) {
+        min-width: 6em;
       }
     }
   }
