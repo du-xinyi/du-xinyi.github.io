@@ -85,6 +85,38 @@
     requestAnimationFrame(() => target.scrollIntoView());
   };
 
+  const currentHashId = () => {
+    try {
+      return decodeURIComponent(window.location.hash.slice(1));
+    } catch {
+      return window.location.hash.slice(1);
+    }
+  };
+
+  // Keep the URL in step with the section the reader opens or closes, without
+  // scrolling or adding history entries.
+  document.addEventListener('click', (event) => {
+    if (event.target.closest('a')) return;
+
+    const summary = event.target.closest('.heading-fold > summary');
+    const heading = summary?.querySelector('h2, h3, h4');
+    if (!heading?.id) return;
+
+    const details = summary.parentElement;
+    const { pathname, search } = window.location;
+
+    if (!details.open) {
+      // The click fires before the section toggles, so this one is opening.
+      history.replaceState(null, '', `#${encodeURIComponent(heading.id)}`);
+      return;
+    }
+
+    const current = document.getElementById(currentHashId());
+    if (current && details.contains(current)) {
+      history.replaceState(null, '', pathname + search);
+    }
+  });
+
   document.addEventListener('click', (event) => {
     const link = event.target.closest('a[href^="#"]');
     if (!link) return;
