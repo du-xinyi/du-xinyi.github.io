@@ -3,13 +3,13 @@
 # 安装依赖项
 sudo apt install -y build-essential git make libtool pkg-config
 sudo apt install -y autoconf automake texinfo libjim-dev
-sudo apt install -y libusb-1.0-0-dev libftdi-dev libhidapi-dev libgpiod-dev libjaylink-dev libcapstone-dev
+sudo apt install -y libusb-1.0-0-dev libftdi1-dev libhidapi-dev libgpiod-dev libjaylink-dev libcapstone-dev
 sudo apt install -y perl
 
 # 编译安装openocd
 ./bootstrap
 ./configure
-make
+make -j$(nproc)
 sudo make install
 
 # 添加udev规则

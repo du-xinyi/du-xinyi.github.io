@@ -12,7 +12,7 @@ classify_fs() {
     local fstype="$1"
     case "$fstype" in
         # 本地磁盘文件系统（内核态）
-        ext2|ext3|ext4|xfs|btrfs|reiserfs|vfat|msdos|ntfs|ntfs3|iso9660|exfat|zfs)
+        ext2|ext3|ext4|xfs|btrfs|vfat|msdos|ntfs|ntfs3|iso9660|exfat|zfs)
             echo "Local filesystem"
             ;;
         # 网络文件系统（内核态）
@@ -28,7 +28,7 @@ classify_fs() {
             echo "Virtual / pseudo filesystem"
             ;;
         # 特殊用途文件系统
-        squashfs|aufs|overlay|ramfs)
+        squashfs|overlay|ramfs)
             echo "Special-purpose filesystem"
             ;;
         *)
