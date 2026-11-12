@@ -775,19 +775,53 @@ mar_100 0.5000
 | `fcos_resnet50_fpn`                     | 单阶段，无锚框 | 回归到四条边的距离 |
 | `ssdlite320_mobilenet_v3_large`         | 单阶段，锚框   | 最轻量             |
 
+为了让结果可以重复，下面用代码画一张合成的街景作为测试图像，左边是红绿灯，右边是停车标志
+
 ```python
-import matplotlib.cbook as cbook
+import math
+
+from PIL import Image, ImageDraw
+
+
+def make_scene(width=512, height=600):
+    """画一张合成的街景：左边是红绿灯，右边是停车标志"""
+    image = Image.new('RGB', (width, height), (150, 190, 225))  # 天空
+    draw = ImageDraw.Draw(image)
+    draw.rectangle([0, 430, width, height], fill=(120, 125, 130))  # 路面
+
+    # 红绿灯：灯杆、灯箱和三盏灯，只有红灯亮
+    draw.rectangle([100, 330, 120, 490], fill=(60, 60, 60))
+    draw.rounded_rectangle([60, 60, 160, 330], radius=20, fill=(35, 35, 35))
+    for center_y, color in zip([105, 195, 285], [(230, 40, 40), (90, 80, 20), (20, 80, 30)]):
+        draw.ellipse([78, center_y - 32, 142, center_y + 32], fill=color)
+
+    # 停车标志：立柱、白边和红色的八边形
+    def octagon(radius):
+        return [(340 + radius * math.cos(math.radians(22.5 + 45 * k)), 230 + radius * math.sin(math.radians(22.5 + 45 * k))) for k in range(8)]
+
+    draw.rectangle([334, 230, 346, 520], fill=(170, 170, 170))
+    draw.polygon(octagon(140), fill=(255, 255, 255))
+    draw.polygon(octagon(129), fill=(200, 25, 30))
+    return image
+
+
+if __name__ == '__main__':
+    make_scene().save('scene.png')
+```
+{: file='scene.py'}
+
+```python
 import torch
-from PIL import Image
 from torchvision.models.detection import FasterRCNN_MobileNet_V3_Large_320_FPN_Weights, fasterrcnn_mobilenet_v3_large_320_fpn
 from torchvision.transforms.functional import pil_to_tensor
+
+from scene import make_scene
 
 weights = FasterRCNN_MobileNet_V3_Large_320_FPN_Weights.DEFAULT
 model = fasterrcnn_mobilenet_v3_large_320_fpn(weights=weights)
 model.eval()
 
-# matplotlib 自带的示例图像，宽 512、高 600
-image = Image.open(cbook.get_sample_data('grace_hopper.jpg', asfileobj=False)).convert('RGB')
+image = make_scene()  # 合成的街景，宽 512、高 600
 x = pil_to_tensor(image).float() / 255  # (3, H, W)，取值范围 [0, 1]
 print(x.shape)  # torch.Size([3, 600, 512])
 
@@ -801,17 +835,17 @@ for key, value in output.items():
 categories = weights.meta['categories']
 keep = output['scores'] > 0.5
 for box, label, score in zip(output['boxes'][keep], output['labels'][keep], output['scores'][keep]):
-    print(f'{categories[label]:8s}{score:.3f}  {[round(v) for v in box.tolist()]}')
+    print(f'{categories[label]:15s}{score:.3f}  {[round(v) for v in box.tolist()]}')
 ```
 {: file='使用预训练的 Faster R-CNN'}
 
 ```text
 torch.Size([3, 600, 512])
-boxes torch.Size([3, 4]) torch.float32
-labels torch.Size([3]) torch.int64
-scores torch.Size([3]) torch.float32
-person  1.000  [1, 25, 511, 595]
-tie     0.939  [226, 413, 283, 523]
+boxes torch.Size([2, 4]) torch.float32
+labels torch.Size([2]) torch.int64
+scores torch.Size([2]) torch.float32
+stop sign      0.997  [215, 96, 471, 359]
+traffic light  0.965  [54, 52, 165, 342]
 ```
 {: file='输出结果'}
 
@@ -821,16 +855,16 @@ tie     0.939  [226, 413, 283, 523]
 | `labels` | (K,)   | 类别编号，用`weights.meta['categories']`查名称 |
 | `scores` | (K,)   | 置信度分数，已经从高到低排列                   |
 
-模型默认返回分数高于 0.05 的所有结果，其中有很多低分的误检，使用前需要按分数再过滤一次。阈值根据应用决定：漏检代价高时调低，误检代价高时调高
+模型默认返回分数高于 0.05 的所有结果。这张合成图像很干净，只返回了 2 个框；真实图像上会有很多低分的误检，使用前需要按分数再过滤一次。阈值根据应用决定：漏检代价高时调低，误检代价高时调高
 
 ### 输入的要求
 
-| 输入                           | 结果                                           |
-| :----------------------------- | :--------------------------------------------- |
-| 取值在 0 到 1 之间的浮点张量   | 正确，检测到 person 和 tie                     |
-| 取值在 0 到 255 之间的浮点张量 | 不报错，同一张图像检测出两个分数 0.98 的 clock |
-| 自己先做了 ImageNet 的标准化   | 不报错，没有任何分数超过 0.5 的结果            |
-| `uint8`张量                    | 抛出`TypeError`                                |
+| 输入                           | 结果 |
+| :----------------------------- | :--- |
+| 取值在 0 到 1 之间的浮点张量   | 正确，检测到 stop sign 和 traffic light |
+| 取值在 0 到 255 之间的浮点张量 | 不报错，没有返回任何检测结果 |
+| 自己先做了 ImageNet 的标准化   | 不报错，stop sign 的分数降到 0.979，traffic light 降到 0.276，按 0.5 过滤后漏检 |
+| `uint8`张量                    | 抛出`TypeError` |
 
 **模型内部已经包含标准化和缩放，输入只需要除以 255。** 重复做标准化或者忘记除以 255 都不会报错，只是结果不对，这是使用这些模型时最常见的错误
 
@@ -913,19 +947,18 @@ if __name__ == '__main__':
 把同一张图像直接送入检测器，和先填充到 320x320 再检测并映射回原图，两种方式得到的框应当基本一致
 
 ```python
-import matplotlib.cbook as cbook
 import torch
-from PIL import Image
 from torchvision.models.detection import FasterRCNN_MobileNet_V3_Large_320_FPN_Weights, fasterrcnn_mobilenet_v3_large_320_fpn
 from torchvision.transforms.functional import pil_to_tensor
 
 from letterbox import letterbox, to_original
+from scene import make_scene
 
 weights = FasterRCNN_MobileNet_V3_Large_320_FPN_Weights.DEFAULT
 model = fasterrcnn_mobilenet_v3_large_320_fpn(weights=weights, box_score_thresh=0.5)
 model.eval()
 
-image = Image.open(cbook.get_sample_data('grace_hopper.jpg', asfileobj=False)).convert('RGB')
+image = make_scene()
 x = pil_to_tensor(image).float() / 255      # (3, 600, 512)
 resized, scale, pad = letterbox(x, 320)
 print(resized.shape, round(scale, 4), pad)  # torch.Size([3, 320, 320]) 0.5333 (23, 0)
@@ -942,16 +975,16 @@ print(direct.round())
 
 ```text
 torch.Size([3, 320, 320]) 0.5333 (23, 0)
-tensor([[ 17.,   7., 300., 318.],
-        [145., 226., 173., 273.]])
-tensor([[  0.,  13., 512., 597.],
-        [229., 423., 281., 512.]])
-tensor([[  1.,  25., 511., 595.],
-        [226., 413., 283., 523.]])
+tensor([[138.,  52., 272., 194.],
+        [ 52.,  34., 109., 184.]])
+tensor([[215.,  98., 466., 364.],
+        [ 55.,  63., 162., 344.]])
+tensor([[215.,  96., 471., 359.],
+        [ 54.,  52., 165., 342.]])
 ```
 {: file='输出结果'}
 
-三组结果依次为 320x320 输入上的框、映射回原图后的框、直接在原图上检测的框。后两组相差几个像素，是因为两次送入网络的图像本身不同
+三组结果依次为 320x320 输入上的框、映射回原图后的框、直接在原图上检测的框。后两组最多相差 11 个像素，是因为两次送入网络的图像本身不同
 
 ![原图经过等比例缩放和填充后送入检测器，再把检测框映射回原图](posts/2026-11-11-object-detection/letterbox.png)
 

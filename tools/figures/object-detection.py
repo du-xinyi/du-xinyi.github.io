@@ -150,7 +150,7 @@ fig.tight_layout(); save(fig, T, 'pr_curve.png')
 
 # ---- 6. letterbox
 orig = np.load(W + 'orig.npy'); lb = np.load(W + 'lb.npy')
-names = ['person', 'tie']; cs = [BLUE, ORANGE]
+names = ['stop sign', 'traffic light']; cs = [BLUE, ORANGE]
 fig, axs = plt.subplots(1, 3, figsize=(12.4, 5.0), gridspec_kw=dict(width_ratios=[512, 600, 512]))
 def show(ax, img, bxs, title, ls='-'):
     ax.imshow(img); h, w = img.shape[:2]; ax.set_xlim(0, w); ax.set_ylim(h, 0)
