@@ -1,0 +1,12 @@
+PyTorch CPU              batch=1     9.16 ms
+ONNX Runtime CPU         batch=1     5.97 ms
+ONNX Runtime CPU 动态量化    batch=1     5.06 ms
+ONNX Runtime CPU 静态量化    batch=1     6.83 ms
+PyTorch GPU              batch=1     0.66 ms
+ONNX Runtime GPU         batch=1     0.57 ms
+PyTorch CPU              batch=8    64.49 ms
+ONNX Runtime CPU         batch=8    46.76 ms
+ONNX Runtime CPU 动态量化    batch=8    39.30 ms
+ONNX Runtime CPU 静态量化    batch=8    48.60 ms
+PyTorch GPU              batch=8     0.91 ms
+ONNX Runtime GPU         batch=8     1.11 ms

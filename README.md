@@ -75,6 +75,9 @@ JEKYLL_ENV=production bundle exec jekyll serve --host 127.0.0.1 --port 4000
 | `npm test` | 运行 ESLint 与 Stylelint |
 | `bundle exec jekyll clean` | 清理 Jekyll 构建缓存 |
 | `bash tools/test.sh` | 构建生产站点并运行 html-proofer |
+| `python3 tools/format-posts.py` | 统一文章的表格对齐、中英文间距等格式，可以只传入要处理的文件 |
+| `python3 tools/check-post-code.py <文章>` | 重新运行一篇文章里的 Python 代码，核对输出与文中是否一致 |
+| `python3 tools/figures/<文章>.py` | 重新生成一篇文章的配图 |
 
 ## 目录结构
 
@@ -88,8 +91,9 @@ _sass/vendors/      PurgeCSS 生成的第三方样式，不手动编辑
 _javascript/        JavaScript 源码
 assets/js/dist/     Rollup 生成的 JavaScript
 assets/img/         头像、文章图片与站点图标
-_data/              导航、联系方式与本地化文案
-tools/              本地运行与站点测试脚本
+_data/              导航、联系方式、本地化文案与系列文章目录（series.yml）
+tools/              本地运行与站点测试脚本，文章的格式化与代码检查脚本
+tools/figures/      文章配图的生成脚本与所用数据
 .github/workflows/  GitHub Pages 自动部署流程
 ```
 
@@ -112,6 +116,17 @@ tags: [ Linux, CLI, SSH ]
 - `pin: true`：将文章置顶。
 - `math: true`：启用数学公式渲染。
 - `image:`：为首页卡片和社交分享配置封面图。
+- `series: <id>`：把文章归入一个系列，见下文。
+
+### 系列文章
+
+系列在 `_data/series.yml` 中定义，按分组列出各篇文章地址中的名字（`/posts/<名字>/`），顺序即阅读顺序。文章的 front matter 中写上 `series: <id>` 后，正文开头会显示可折叠的系列目录，结尾显示上一篇和下一篇。新增文章时两处都要写；列表中还没有写出来的文章不会显示。
+
+### 文章中的代码与配图
+
+- 文章的写法约定（表格全部左对齐、选项用表格、中英文之间加空格等）由 `tools/format-posts.py` 统一，写完后运行一次。
+- 文中的输出都来自实际运行。修改代码后用 `tools/check-post-code.py` 重新核对，`--python` 指定装有相应依赖的解释器，`--threads` 指定线程数。
+- 配图放在 `assets/img/posts/<文章文件名>/`，由 `tools/figures/` 中的脚本生成，说明见 [tools/figures/README.md](tools/figures/README.md)。
 
 ## 样式说明
 
