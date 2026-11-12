@@ -143,7 +143,7 @@ def save_code_state(run_dir):
 {: file='tracking.py（第 2 段）：代码版本与运行环境'}
 
 - `git diff HEAD`包含已暂存和未暂存的修改，但不包含未跟踪的新文件。新写的代码文件要先`git add`，否则差异里没有它
-- 训练结果、检查点和事件文件不要放进版本控制，在`.gitignore`中写上`runs*/`。否则每次训练都会让工作区变“脏”
+- 训练结果、检查点和事件文件不要放进版本控制，在`.gitignore`中写上`runs*/`，Python 的缓存目录`__pycache__/`也一样。否则每次训练都会让工作区变“脏”
 - 在 CPU 上运行时`cuda`和`gpu`两项记为`null`
 
 ## 日志
@@ -233,6 +233,7 @@ print(sorted(os.listdir(run_dir)))
 {: file='demo.py'}
 
 ```bash
+printf 'runs*/\n__pycache__/\n' > .gitignore   # 实验目录和 Python 的缓存不进版本控制
 git init && git add -A && git commit -m "training script with experiment tracking"
 python demo.py
 echo "# try a change" >> demo.py   # 改动一行，不提交

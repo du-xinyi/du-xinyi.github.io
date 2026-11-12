@@ -35,7 +35,7 @@ if len(posts) != 1:
     sys.exit(f'找不到唯一的文章：{args.slug}')
 text = open(os.path.join(root, '_posts', posts[0]), encoding='utf8').read()
 
-parts = re.findall(r'```(\w+)\n(.*?)```', text, re.S)
+parts = re.findall(r'^```(\w+)\n(.*?)^```$', text, re.S | re.M)  # 围栏必须在行首，代码中间出现的 ``` 不算
 python_blocks = [(i, code) for i, (lang, code) in enumerate(parts) if lang == 'python']
 prelude = f'import torch\ntorch.set_num_threads({int(args.threads)})\n'
 ok = bad = skipped = 0
