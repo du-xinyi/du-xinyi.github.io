@@ -8,7 +8,7 @@ series: deep-learning
 math: true
 ---
 
-Transformer 处理的是序列：一句话是词的序列，一张图像切成小块后是图像块的序列。它的核心是注意力机制，让序列中的每个位置都能直接获取其他所有位置的信息。卷积网络的内容见[PyTorch CNN](/posts/pytorch-cnn/)
+Transformer 处理的是序列：一句话是词的序列，一张图像切成小块后是图像块的序列。它的核心是注意力机制，让序列中的每个位置都能直接获取其他所有位置的信息。卷积网络的内容见[PyTorch CNN](/posts/pytorch-cnn/)，图像怎样切块送入 Transformer 见[Vision Transformer](/posts/vision-transformer/)
 
 ## 张量形状
 

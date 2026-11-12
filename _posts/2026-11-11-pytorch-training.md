@@ -108,6 +108,8 @@ print(nn.BCELoss(reduction="none")(logits.sigmoid(), target))     # tensor([100.
 
 ## 优化器
 
+各个优化器的更新公式和学习率调度的原理见[Optimizers and Learning Rate Schedules](/posts/optimizers-and-lr-schedules/)，这里只整理用法
+
 | 优化器      | 特点                                                    | 常见设置                                       |
 | :---------- | :------------------------------------------------------ | :--------------------------------------------- |
 | `SGD`       | 沿梯度的反方向更新，不带动量时收敛慢                    | 很少单独使用                                   |
