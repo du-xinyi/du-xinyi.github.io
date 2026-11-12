@@ -4,6 +4,7 @@ description: 汇总 Linux 文件系统类型、挂载与卸载命令、挂载选
 date: 2025-09-22 12:30:00 +0800
 categories: [ Systems, Linux ]
 tags: [ Linux, Filesystem, Mount ]
+series: linux
 ---
 
 ## 常见文件系统类型

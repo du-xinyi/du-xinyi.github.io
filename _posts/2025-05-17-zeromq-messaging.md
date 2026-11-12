@@ -4,6 +4,7 @@ description: 介绍 ZeroMQ 的安装与源码编译、通信模式、传输协�
 date: 2025-05-17 12:30:00 +0800
 categories: [ Development, Distributed Systems ]
 tags: [ ZeroMQ, C++, Python ]
+series: cpp
 ---
 
 `ZeroMQ`是一个高性能的异步消息库，提供套接字风格的 API，但收发的是完整的消息而不是字节流，并且内置了消息队列、自动重连和多种通信模式，适用于构建分布式、并发和多线程系统

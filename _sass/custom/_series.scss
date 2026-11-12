@@ -62,4 +62,38 @@
     flex-direction: column;
     gap: 0;
   }
+
+  .post-series .post-series-group-name {
+    flex: none;
+  }
+}
+
+/* Series page: one card per series, posts listed with their descriptions. */
+.series-index-card {
+  padding: 1rem 1.2rem;
+
+  > h2 {
+    display: flex;
+    gap: 0.6rem;
+    align-items: baseline;
+    margin: 0;
+    font-size: 1.25rem;
+  }
+
+  .series-index-count {
+    color: var(--text-muted-color);
+    font-size: 0.85rem;
+    font-weight: 400;
+  }
+
+  li {
+    margin: 0.35rem 0;
+  }
+
+  .series-index-desc {
+    display: block;
+    color: var(--text-muted-color);
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
 }

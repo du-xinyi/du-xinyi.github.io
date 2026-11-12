@@ -4,6 +4,7 @@ description: 汇总 printf 格式控制符、C++ 与 Python 的格式化输出�
 date: 2024-05-30 12:30:00 +0800
 categories: [ Development, C++ ]
 tags: [ C++, Python, Terminal ]
+series: cpp
 ---
 
 ## printf 格式控制符

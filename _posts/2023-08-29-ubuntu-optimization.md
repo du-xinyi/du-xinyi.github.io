@@ -4,6 +4,7 @@ description: 汇总 Ubuntu 的语言、内存、时间、显卡及常用系统�
 date: 2023-08-29 12:30:00 +0800
 categories: [ Systems, Linux ]
 tags: [ Ubuntu, Linux ]
+series: linux
 ---
 
 ## 谷歌浏览器汉化

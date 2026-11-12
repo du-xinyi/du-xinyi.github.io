@@ -4,6 +4,7 @@ description: 记录 Docker 的免 sudo 权限、守护进程与容器的代理�
 date: 2024-01-11 12:30:00 +0800
 categories: [ Systems, Linux ]
 tags: [ Docker, Linux, Containers ]
+series: linux
 ---
 
 ## 权限设置

@@ -4,6 +4,7 @@ description: 介绍图像边缘检测的评价标准，以及 Canny、Sobel、La
 date: 2023-12-10 20:30:00 +0800
 categories: [ Computer Vision, OpenCV ]
 tags: [ OpenCV, Edge Detection, Image Processing ]
+series: computer-vision
 math: true
 ---
 

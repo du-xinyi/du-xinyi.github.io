@@ -1,0 +1,46 @@
+{%- comment -%}
+  所有系列的目录，用在 Series 页面；系列的定义见 _data/series.yml
+{%- endcomment -%}
+<div class="series-index">
+  {%- for entry in site.data.series -%}
+    {%- assign series = entry[1] -%}
+    {%- assign total = 0 -%}
+    {%- capture body -%}
+      {%- assign number = 1 -%}
+      {%- for group in series.groups -%}
+        {%- assign posts = '' | split: '' -%}
+        {%- for slug in group.posts -%}
+          {%- assign url = '/posts/' | append: slug | append: '/' -%}
+          {%- assign found = site.posts | where: 'url', url | first -%}
+          {%- if found -%}
+            {%- assign posts = posts | push: found -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- if posts.size > 0 -%}
+          <div class="post-series-group">
+            <span class="post-series-group-name">{{ group.name }}</span>
+            <ol start="{{ number }}">
+              {%- for item in posts -%}
+                <li>
+                  <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
+                  {%- if item.description -%}
+                    <span class="series-index-desc">{{ item.description }}</span>
+                  {%- endif -%}
+                </li>
+              {%- endfor -%}
+            </ol>
+          </div>
+          {%- assign number = number | plus: posts.size -%}
+          {%- assign total = total | plus: posts.size -%}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endcapture -%}
+    {%- if total > 0 -%}
+      <section class="post-series series-index-card" id="{{ entry[0] }}">
+        <h2>{{ series.name }}<span class="series-index-count">{{ total }} 篇</span></h2>
+        <p class="post-series-intro">{{ series.intro }}</p>
+        {{ body }}
+      </section>
+    {%- endif -%}
+  {%- endfor -%}
+</div>

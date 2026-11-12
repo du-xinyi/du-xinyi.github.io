@@ -4,6 +4,7 @@ description: 介绍现代 C++ Lambda 表达式的语法、捕获方式、泛型 
 date: 2023-11-13 18:30:00 +0800
 categories: [ Development, C++ ]
 tags: [ C++, Lambda ]
+series: cpp
 ---
 
 Lambda 表达式是 C++11 引入的语法，用于在调用处或作为参数传递的位置直接定义一个匿名函数对象。通常，Lambda 用于封装传递给算法或异步方法的几行代码

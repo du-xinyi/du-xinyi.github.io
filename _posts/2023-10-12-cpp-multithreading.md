@@ -4,6 +4,7 @@ description: 系统整理 C++ 多线程、同步原语、原子操作、异步�
 date: 2023-10-12 21:30:00 +0800
 categories: [ Development, C++ ]
 tags: [ C++, Multithreading ]
+series: cpp
 ---
 
 在传统的 C++（C++11 之前）

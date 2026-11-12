@@ -35,6 +35,7 @@ order: 4
     <div class="about-card-icon"><i class="fas fa-robot"></i></div>
     <h3>视觉与机器人</h3>
     <p>图像处理、坐标变换、深度学习、机器人相关的内容，主要偏学习笔记。</p>
+    <p><a href="{{ '/series/' | relative_url }}">按系列查看文章 →</a></p>
   </section>
 
   <section class="about-card">

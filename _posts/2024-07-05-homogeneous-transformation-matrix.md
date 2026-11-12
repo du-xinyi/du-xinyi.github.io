@@ -4,6 +4,7 @@ description: 整理三维空间中的平移、旋转、镜像、缩放矩阵，�
 date: 2024-07-05 12:30:00 +0800
 categories: [ Mathematics, Linear Algebra ]
 tags: [ Linear Algebra, Coordinate Transform, Robotics ]
+series: computer-vision
 math: true
 ---
 

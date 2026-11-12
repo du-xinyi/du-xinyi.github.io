@@ -4,6 +4,7 @@ description: 介绍标准镜头与鱼眼镜头在不同投影模型下，由焦�
 date: 2024-10-05 12:30:00 +0800
 categories: [ Computer Vision, Camera ]
 tags: [ Camera, Optics ]
+series: computer-vision
 math: true
 ---
 

@@ -4,6 +4,7 @@ description: 整理 Linux 下 ssh、scp、rsync、screen、tmux、tar、grep、f
 date: 2025-10-31 12:30:00 +0800
 categories: [ Systems, Linux ]
 tags: [ Linux, CLI, SSH ]
+series: linux
 ---
 
 ## ssh
