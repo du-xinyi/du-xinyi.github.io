@@ -1,0 +1,6 @@
+/* Wide display formulas scroll inside their own box instead of widening the page. */
+.content mjx-container[display='true'] {
+  max-width: 100%;
+  overflow: auto hidden;
+  padding-block: 0.25rem;
+}

@@ -120,7 +120,9 @@ script_includes:
   {% endif %}
 
   <div class="content">
+    {% if page.series %}{% include post-series.html part='toc' %}{% endif %}
     {{ content }}
+    {% if page.series %}{% include post-series.html part='nav' %}{% endif %}
   </div>
 
   <div class="post-tail-wrapper text-muted">

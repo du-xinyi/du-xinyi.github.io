@@ -1,0 +1,26 @@
+# 系列文章，文章的 front matter 中写 series: <id> 即可在正文开头显示目录
+# posts 中写文章地址中的名字（/posts/<名字>/），顺序即阅读顺序；还没有写的文章不会显示
+
+deep-learning:
+  name: 深度学习
+  intro: 用 PyTorch 从搭建模型、训练、调试到部署的一组笔记。按下面的顺序阅读，后面的文章会直接引用前面讲过的内容
+  groups:
+    - name: 模型结构
+      posts: [pytorch-cnn, pytorch-transformer]
+    - name: 训练
+      posts:
+        - pytorch-data-loading
+        - pytorch-training
+        - pytorch-checkpoints-and-reproducibility
+        - normalization-and-regularization
+        - pytorch-debugging
+        - pytorch-common-mistakes
+        - pytorch-memory-and-speed
+        - evaluation-metrics
+        - tensorboard
+        - experiment-tracking
+        - pytorch-distributed-training
+    - name: 任务
+      posts: [pytorch-fine-tuning, object-detection, image-segmentation, generative-models]
+    - name: 部署
+      posts: [pytorch-deployment]

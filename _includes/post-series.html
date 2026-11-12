@@ -1,0 +1,75 @@
+{%- comment -%}
+  系列文章的导航，系列的定义见 _data/series.yml
+  part='toc'：正文开头的目录；part='nav'：正文末尾的上一篇、下一篇
+{%- endcomment -%}
+{%- assign series = site.data.series[page.series] -%}
+{%- if series -%}
+  {%- assign order = '' | split: '' -%}
+  {%- for group in series.groups -%}
+    {%- for slug in group.posts -%}
+      {%- assign url = '/posts/' | append: slug | append: '/' -%}
+      {%- assign found = site.posts | where: 'url', url | first -%}
+      {%- if found -%}
+        {%- assign order = order | push: found -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endfor -%}
+  {%- assign total = order | size -%}
+  {%- assign current = 0 -%}
+  {%- for item in order -%}
+    {%- if item.url == page.url -%}
+      {%- assign current = forloop.index -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+  {%- if include.part == 'toc' -%}
+  <details class="post-series">
+    <summary>
+      {{ series.name }}系列{% if current > 0 %}：第 {{ current }} 篇，共 {{ total }} 篇{% endif %}
+    </summary>
+    <p class="post-series-intro">{{ series.intro }}</p>
+    {%- assign number = 1 -%}
+    {%- for group in series.groups -%}
+      {%- assign posts = '' | split: '' -%}
+      {%- for slug in group.posts -%}
+        {%- assign url = '/posts/' | append: slug | append: '/' -%}
+        {%- assign found = site.posts | where: 'url', url | first -%}
+        {%- if found -%}
+          {%- assign posts = posts | push: found -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- if posts.size > 0 -%}
+        <div class="post-series-group">
+          <span class="post-series-group-name">{{ group.name }}</span>
+          <ol start="{{ number }}">
+            {%- for item in posts -%}
+              {%- if item.url == page.url -%}
+                <li class="current">{{ item.title }}</li>
+              {%- else -%}
+                <li><a href="{{ item.url | relative_url }}">{{ item.title }}</a></li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ol>
+        </div>
+        {%- assign number = number | plus: posts.size -%}
+      {%- endif -%}
+    {%- endfor -%}
+  </details>
+  {%- endif -%}
+
+  {%- if include.part == 'nav' and current > 0 -%}
+    {%- assign prev_index = current | minus: 2 -%}
+    <nav class="post-series-nav" aria-label="{{ series.name }}系列">
+      {%- if current > 1 -%}
+        {%- assign prev = order[prev_index] -%}
+        <a href="{{ prev.url | relative_url }}">← 上一篇：{{ prev.title }}</a>
+      {%- else -%}
+        <span></span>
+      {%- endif -%}
+      {%- if current < total -%}
+        {%- assign next = order[current] -%}
+        <a href="{{ next.url | relative_url }}">下一篇：{{ next.title }} →</a>
+      {%- endif -%}
+    </nav>
+  {%- endif -%}
+{%- endif -%}

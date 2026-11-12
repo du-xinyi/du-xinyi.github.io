@@ -1,0 +1,65 @@
+/* Series navigation: table of contents at the top of a post, previous / next at the bottom. */
+.post-series {
+  margin: 0 0 1.5rem;
+  padding: 0.7rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--text-color) 10%, transparent);
+  border-radius: 0.8rem;
+  background: color-mix(in srgb, var(--card-bg) 64%, transparent);
+  font-size: 0.95rem;
+
+  > summary {
+    color: var(--heading-color);
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .post-series-intro {
+    margin: 0.6rem 0 0.4rem;
+    color: var(--text-muted-color);
+  }
+
+  .post-series-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.4rem;
+  }
+
+  .post-series-group-name {
+    flex: 0 0 4.5em;
+    padding-top: 0.1rem;
+    color: var(--text-muted-color);
+  }
+
+  ol {
+    flex: 1;
+    margin: 0;
+    padding-left: 1.6rem;
+  }
+
+  li {
+    margin: 0.1rem 0;
+  }
+
+  li.current {
+    color: var(--heading-color);
+    font-weight: 600;
+  }
+}
+
+.post-series-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  justify-content: space-between;
+  margin-top: 2.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid color-mix(in srgb, var(--text-color) 10%, transparent);
+  font-size: 0.95rem;
+}
+
+@media (max-width: 576px) {
+  .post-series .post-series-group {
+    flex-direction: column;
+    gap: 0;
+  }
+}
