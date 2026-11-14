@@ -22,7 +22,7 @@ deep-learning:
         - experiment-tracking
         - pytorch-distributed-training
     - name: 任务
-      posts: [pytorch-fine-tuning, object-detection, image-segmentation, keypoint-detection, generative-models]
+      posts: [pytorch-fine-tuning, object-detection, object-detection-inference, image-segmentation, keypoint-detection, generative-models]
     - name: 部署
       posts: [pytorch-deployment, model-compression]
 
@@ -40,7 +40,7 @@ cpp:
   intro: C++ 标准库和语言特性的用法整理，以及进程间通信
   groups:
     - name: 语言与标准库
-      posts: [cpp-containers, cpp-lambda-expressions, cpp-multithreading, formatted-output]
+      posts: [cpp-containers, cpp-lambda-expressions, cpp-multithreading, cpp-async-tasks, formatted-output]
     - name: 通信
       posts: [zeromq-messaging]
 
