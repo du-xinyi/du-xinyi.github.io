@@ -8,7 +8,7 @@ series: deep-learning
 math: true
 ---
 
-目标检测要同时回答图像中有什么和在哪里：对每个目标输出一个边界框、一个类别和一个置信度分数。不同的检测模型结构差别很大，但边界框的表示、IoU、非极大值抑制、解码、损失函数和评价指标是通用的，`torchvision.ops`中有对应的实现
+目标检测要同时回答图像中有什么和在哪里：对每个目标输出一个边界框、一个类别和一个置信度分数。不同的检测模型结构差别很大，但边界框的表示、IoU、非极大值抑制、解码、损失函数和评价指标是通用的，`torchvision.ops`中有对应的实现。需要目标逐像素的轮廓时见[Image Segmentation](/posts/image-segmentation/)，需要目标上特定点的位置时见[Keypoint Detection](/posts/keypoint-detection/)
 
 ## 边界框的表示
 

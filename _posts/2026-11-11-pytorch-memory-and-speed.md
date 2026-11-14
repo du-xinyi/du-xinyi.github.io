@@ -15,7 +15,7 @@ series: deep-learning
 
 | 方法                        | 说明 |
 | :-------------------------- | :--- |
-| 减小批大小                  | 最直接的方法，配合梯度累加可以保持等效的批大小不变 |
+| 减小批大小                  | 最直接的方法，配合梯度累积可以保持等效的批大小不变 |
 | 验证时使用`torch.no_grad()` | 不保存中间结果 |
 | 累加损失时使用`loss.item()` | 直接累加`loss`会把每一步的计算图都保留下来，显存随步数不断增长 |
 | 减小输入尺寸或模型          | 卷积网络的中间结果与输入的面积成正比 |
@@ -85,38 +85,7 @@ CUDA out of memory
 - 显存不足时抛出`torch.OutOfMemoryError`，报错信息中包含要申请的大小和当前的占用
 - `memory_allocated`是张量实际占用的显存，`memory_reserved`是 PyTorch 向系统申请后缓存起来的显存，`nvidia-smi`看到的是后者再加上 CUDA 自身的开销。`empty_cache()`只归还没有被使用的缓存，不会释放仍被变量引用的张量
 
-显存放不下需要的批大小时，可以使用梯度累加：连续计算几个小批次的梯度，累加之后再更新一次参数。利用的正是`backward()`会累加梯度这一点
-
-```python
-import torch
-from torch import nn
-
-torch.manual_seed(0)
-model = nn.Sequential(nn.Linear(20, 32), nn.ReLU(), nn.Linear(32, 3))
-criterion = nn.CrossEntropyLoss()
-x = torch.randn(64, 20)
-y = torch.randint(0, 3, (64,))
-
-# 一次计算64个样本
-model.zero_grad()
-criterion(model(x), y).backward()
-full = [p.grad.clone() for p in model.parameters()]
-
-# 分4次计算，每次16个样本，梯度累加
-accumulation_steps = 4
-model.zero_grad()
-for i, (xb, yb) in enumerate(zip(x.split(16), y.split(16)), start=1):
-    loss = criterion(model(xb), yb) / accumulation_steps  # 损失要除以累加的次数
-    loss.backward()
-    if i % accumulation_steps == 0:
-        accumulated = [p.grad.clone() for p in model.parameters()]
-        # 实际训练时在这里调用optimizer.step()和optimizer.zero_grad()
-
-print(all(torch.allclose(a, b, atol=1e-6) for a, b in zip(full, accumulated)))  # True
-```
-{: file='梯度累加'}
-
-损失要除以累加的次数，这样累加出的梯度才与一次计算整个大批次的梯度相同。模型中有`BatchNorm`时两者并不等价，因为每个小批次的统计量是分别计算的
+显存放不下需要的批大小时，可以使用梯度累积：连续计算几个小批次的梯度，累加之后再更新一次参数，效果等同于一个大批次。写法和需要注意的地方见[PyTorch Training](/posts/pytorch-training/)中的梯度累积一节。批大小本身也放不下时，可以把训练分到多张显卡上，见[PyTorch Distributed Training](/posts/pytorch-distributed-training/)
 
 ## 找出速度的瓶颈
 

@@ -5,7 +5,6 @@ date: 2026-11-12 09:00:00 +0800
 categories: [ Deep Learning, Computer Vision ]
 tags: [ Image Segmentation, PyTorch, Computer Vision, Deep Learning ]
 series: deep-learning
-math: true
 ---
 
 图像分割对图像中的每一个像素做分类。与[Object Detection](/posts/object-detection/)中用矩形框描述目标不同，分割的结果能精确到目标的边界，代价是标注、模型输出和后处理都以像素为单位，数据处理中的错误也更隐蔽：插值方式用错、图像和掩码没有同步变换，都不会报错，只会让模型学到错误的标签
@@ -636,11 +635,11 @@ for use_dice in [False, True]:
 | Focal Loss    | 降低已经分对的像素的权重，见[Object Detection](/posts/object-detection/) |
 | 采样          | 裁剪训练图像时优先选择包含前景的区域 |
 
-Dice 损失单独使用时训练初期不稳定，实践中最常见的组合是交叉熵加 Dice。上一节形状数据集的前景约占 8%，并不算极端，在同样的设置下只用交叉熵训练 8 个 epoch 的 mIoU 为 0.9727，只用 Dice 为 0.9713，两者相加为 0.9742，差别不大
+Dice 损失单独使用时训练初期不稳定，实践中最常见的组合是交叉熵加 Dice。示例数据集中的前景约占 8%，并不算极端，在同样的设置下只用交叉熵训练 8 轮 的 mIoU 为 0.9727，只用 Dice 为 0.9713，两者相加为 0.9742，差别不大
 
 ## 训练
 
-训练循环与分类任务相同（DataLoader 的写法见[PyTorch Data Loading](/posts/pytorch-data-loading/)，优化器、学习率调度的写法见[PyTorch Training](/posts/pytorch-training/)），区别只在于输出和标签都是逐像素的。在形状数据集上用交叉熵加 Dice 损失训练 8 个 epoch，每个 epoch 结束后在验证集上累积混淆矩阵，计算像素准确率和 mIoU
+训练循环与分类任务相同（DataLoader 的写法见[PyTorch Data Loading](/posts/pytorch-data-loading/)，优化器、学习率调度的写法见[PyTorch Training](/posts/pytorch-training/)），区别只在于输出和标签都是逐像素的。在形状数据集上用交叉熵加 Dice 损失训练 8 轮，每轮结束后在验证集上累积混淆矩阵，计算像素准确率和 mIoU
 
 ```python
 import json
@@ -716,7 +715,7 @@ epoch  8  loss 0.0404  像素准确率 0.9986  mIoU 0.9742
 
 ![训练损失、验证集上的像素准确率和 mIoU，以及验证集上 6 张图像的标签与预测](posts/2026-11-12-image-segmentation/training.png)
 
-第 2 个 epoch 结束时像素准确率已经是 0.9706，mIoU 只有 0.7449；第 3 个 epoch 像素准确率 0.9911，看起来几乎完美，mIoU 仍只有 0.8255。预测结果中的错误主要在图形的边缘和两个图形相互遮挡的地方
+第 2 轮结束时像素准确率已经是 0.9706，mIoU 只有 0.7449；第 3 轮像素准确率 0.9911，看起来几乎完美，mIoU 仍只有 0.8255。预测结果中的错误主要在图形的边缘和两个图形相互遮挡的地方
 
 ## 评价指标
 

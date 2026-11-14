@@ -5,6 +5,7 @@ date: 2026-11-11 13:30:00 +0800
 categories: [ Deep Learning, PyTorch ]
 tags: [ PyTorch, Python, Deep Learning, ONNX, Deployment ]
 series: deep-learning
+math: true
 ---
 
 训练得到的是一份参数和一段 Python 代码，部署时往往要在没有 Python、没有 PyTorch 的环境里运行，例如机器人上的 C++ 程序。常见的做法是把模型导出为 ONNX，再交给 ONNX Runtime 或 TensorRT 执行。训练部分见[PyTorch Training](/posts/pytorch-training/)
