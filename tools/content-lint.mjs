@@ -2,7 +2,8 @@
 //
 // Recipes (_recipes/**/*.md):
 //   - front matter has a title, and the body has a "制作过程" section
-//   - ingredient tables are well formed and column-aligned
+//   - ingredient tables have a one-cell group-name header (e.g. "| 主料 |")
+//     and are well formed and column-aligned
 //   - numbered steps (and P.S. notes) are numbered 1, 2, 3, ...
 //   - a line followed by a numbered line ends with two spaces, otherwise
 //     Markdown joins the two lines into one
@@ -64,7 +65,7 @@ function renderTable(head, rows) {
   ];
 }
 
-function lintTables(file, lines) {
+function lintTables(file, lines, ingredientEnd = 0) {
   for (let i = 0; i < lines.length; i++) {
     if (!lines[i].startsWith('|') || (i > 0 && lines[i - 1].startsWith('|'))) continue;
 
@@ -75,6 +76,8 @@ function lintTables(file, lines) {
 
     if (block.length < 3 || !/^\|\s*:?-+:?\s*\|/.test(block[1])) {
       report(file, i + 1, 'table needs a header, a separator row and at least one row');
+    } else if (i < ingredientEnd && header.length !== 1) {
+      report(file, i + 1, 'ingredient table header must be the group name only, e.g. "| 主料 |"');
     } else if (header.length === 1) {
       const rows = block.slice(2).map(cells);
       const bad = rows.findIndex((row) => row.length !== 2);
@@ -110,7 +113,7 @@ function lintRecipe(file) {
     report(file, 1, 'missing "制作过程" section');
   }
 
-  lintTables(file, lines);
+  lintTables(file, lines, lines.findIndex((line) => line.startsWith('制作过程')));
 
   let expected = 0;
   lines.forEach((line, i) => {
