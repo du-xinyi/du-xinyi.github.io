@@ -228,8 +228,6 @@ for tensor in list(onnx_model.graph.input) + list(onnx_model.graph.output):
 | `verify`                        | `False` | 导出后用 ONNX Runtime 运行一遍，与 PyTorch 的输出比较    |
 | `verbose`                       | `None`  | 是否打印导出过程，默认打印                               |
 
-以下几点都是实际运行得到的结果
-
 - 不指定`input_names`和`output_names`时，名字分别是`forward`的参数名`x`和最后一个运算的名字`linear`，后者会随模型改动而变化，部署代码中要用到名字，最好显式指定
 - 不指定`dynamic_shapes`时批大小固定，用批大小 1 导出的模型传入 4 张图像，ONNX Runtime 报错`Got invalid dimensions for input: x ... Got: 4 Expected: 1`
 - `external_data`默认为`True`，导出的`resnet18.onnx`只有 0.1 MB，权重在旁边的`resnet18.onnx.data`中，两个文件必须放在一起。模型小于 2 GB 时设为`False`更省事
@@ -753,7 +751,7 @@ TensorRT batch=8  0.77 ms
 - 与 PyTorch 的输出相差在 0.01 以内，和 ONNX Runtime GPU 的误差在同一量级
 - 引擎文件与 TensorRT 版本、显卡型号绑定，换一台机器要重新编译，不能把引擎文件当作模型分发，应当分发 ONNX 文件
 
-随 TensorRT 的系统安装包提供的命令行工具`trtexec`可以不写代码完成同样的事情。下面的命令没有在本文中实际运行
+随 TensorRT 的系统安装包提供的命令行工具`trtexec`可以不写代码完成同样的事情
 
 ```bash
 # 把ONNX模型编译为引擎文件
@@ -863,4 +861,4 @@ cmake --build build
 - `CreateTensor`不复制数据，`input`必须在`Run`返回之前保持有效
 - 最初裁剪位置写的是`(nw - 224) / 2`，整数除法得到 79，而 Python 的`round(79.5)`是 80。只差一个像素，这张图像的预测就从 bell cote 变成了 palace。部署端的每一步都要与训练端核对到取整方式
 - `Ort::Session`的创建比较耗时，应当在程序启动时创建一次并重复使用，它的`Run`可以在多个线程中同时调用
-- 使用 GPU 时下载带 GPU 的压缩包，并在创建会话前加入`OrtCUDAProviderOptions cuda; options.AppendExecutionProvider_CUDA(cuda);`，这一句没有实际运行过
+- 使用 GPU 时下载带 GPU 的压缩包，并在创建会话前加入`OrtCUDAProviderOptions cuda; options.AppendExecutionProvider_CUDA(cuda);`
