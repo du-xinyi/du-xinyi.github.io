@@ -36,6 +36,8 @@
       id: coffee
     - name: 可可
       id: cocoa
+    - name: 奶昔
+      id: milkshakes
     - name: 奶茶
       id: milk-tea
     - name: 汽水
